@@ -1,5 +1,5 @@
 #!/usr/bin/env -S node --enable-source-maps
-import { setAffiliateLink } from "./lib/config";
+import { config, setAffiliateLink } from "./lib/config";
 import { log } from "./lib/log";
 import { ensureDirs } from "./lib/paths";
 import { articles, humanTasks, pins as pinStore, programs, runlog } from "./lib/store";
@@ -232,6 +232,18 @@ async function main(): Promise<void> {
       log.ok(`${slug} のアフィリエイトリンクを登録しました。次のサイトビルドで全記事に反映されます。`);
       buildSite();
       writeChecklist();
+
+      // 「本当にこのリンクで成果が発生するか」を、登録した本人がその場で確認できるようにする
+      const testUrl = `${config().site.baseUrl}/go/${slug}/`;
+      console.log("");
+      log.step("これが本物のリンクとして機能するか、今すぐ自分で確認してください");
+      log.info(`1. シークレット/プライベートウィンドウで開く（広告ブロッカーはオフ）: ${testUrl}`);
+      log.info("2. 相手企業の本物のサイトに、あなたが貼ったURL(?ref=... のような追跡パラメータ付き)で");
+      log.info("   移動することを確認する");
+      log.info("3. そのネットワークの管理画面（Impact / ShareASale 等のダッシュボード）を数分〜数時間後に開き、");
+      log.info("   このテストクリックが1件、自分のアカウントに記録されているか確認する");
+      log.info("4. 記録されていれば追跡は生きています。記録されなければ、貼ったURLが違う可能性があるので");
+      log.info("   ネットワークの管理画面から改めてリンクを発行し直してください");
       break;
     }
 
