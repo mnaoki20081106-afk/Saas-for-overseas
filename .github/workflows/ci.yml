@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+
+      - name: 型チェック
+        run: npm run typecheck
+
+      - name: DRY_RUN でパイプライン全体を通す
+        env:
+          DRY_RUN: "1"
+        run: |
+          npx tsx src/cli.ts doctor
+          npx tsx src/cli.ts bootstrap 1
+          npx tsx src/cli.ts site:build
+          test -f public/index.html
+          test -f public/sitemap.xml
+          ls assets/pins/*.png > /dev/null

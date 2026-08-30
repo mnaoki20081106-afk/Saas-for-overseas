@@ -1,0 +1,30 @@
+{
+  "name": "saas-affiliate-autopilot",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Fully automated overseas SaaS affiliate pipeline: research -> English article -> Pinterest pins -> scheduling -> analytics -> optimization.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "autopilot": "tsx src/cli.ts",
+    "doctor": "tsx src/cli.ts doctor",
+    "daily": "tsx src/cli.ts daily",
+    "typecheck": "tsc --noEmit",
+    "site": "tsx src/cli.ts site:build",
+    "serve": "node scripts/serve.mjs"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.122.0",
+    "dotenv": "^17.2.3",
+    "marked": "^16.4.0",
+    "playwright": "^1.62.1",
+    "zod": "^4.5.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
+  }
+}

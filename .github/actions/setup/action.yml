@@ -1,0 +1,25 @@
+name: Setup autopilot
+description: Node、依存関係、ピン描画用の Chromium をまとめて用意する
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: "22"
+        cache: npm
+
+    - name: 依存関係をインストール
+      shell: bash
+      run: npm ci --no-audit --fund=false
+
+    - name: Playwright のブラウザをキャッシュから復元
+      id: pw-cache
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/ms-playwright
+        key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+    - name: Chromium をインストール（ピン画像の描画に使用）
+      shell: bash
+      run: npx playwright install --with-deps chromium

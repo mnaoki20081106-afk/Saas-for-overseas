@@ -1,0 +1,78 @@
+{
+  "site": {
+    "name": "StackPickr",
+    "tagline": "Honest, hands-on SaaS comparisons for small teams",
+    "baseUrl": "https://example.github.io/saas-for-overseas",
+    "author": "The StackPickr Team",
+    "locale": "en-US",
+    "description": "Independent, experience-based comparisons of subscription software for freelancers, agencies and small teams.",
+    "gaMeasurementId": ""
+  },
+  "niche": {
+    "audience": "freelancers, small agencies and 2-20 person SaaS/e-commerce teams in the US, UK, Canada and Australia",
+    "categories": [
+      "email marketing",
+      "project management",
+      "SEO tools",
+      "website builders",
+      "accounting and invoicing",
+      "customer support helpdesk",
+      "video hosting",
+      "landing page builders",
+      "CRM",
+      "AI writing tools"
+    ],
+    "geoFocus": ["US", "UK", "CA", "AU"],
+    "excludeJapanese": true
+  },
+  "content": {
+    "articlesPerRun": 1,
+    "wordsMin": 2400,
+    "wordsMax": 3200,
+    "internalLinksMin": 3,
+    "toneNotes": "First-person, specific, unglamorous. Written like someone who actually paid for the tools. No hype, no exclamation marks, no 'in today's fast-paced world'.",
+    "bannedPhrases": [
+      "in 2024", "in 2025", "in 2026", "in 2027",
+      "latest 2024", "latest 2025", "latest 2026",
+      "this year", "last year", "next year",
+      "as of today", "currently trending", "recently launched",
+      "at the time of writing", "just released", "brand new",
+      "delve", "in today's fast-paced", "game-changer", "unleash",
+      "revolutionize", "look no further", "supercharge your"
+    ]
+  },
+  "pins": {
+    "perArticle": 10,
+    "width": 1000,
+    "height": 1500,
+    "publishPerDay": 6,
+    "minMinutesBetweenPins": 90,
+    "postingHoursUtc": [13, 15, 17, 19, 21, 23],
+    "boardStrategy": "one board per category"
+  },
+  "programs": {
+    "targetActive": 8,
+    "discoverPerRun": 10,
+    "minMonthlyCommissionUsd": 30,
+    "minAvgRetentionMonths": 10,
+    "requireRecurring": true,
+    "allowedNetworks": ["Impact", "ShareASale", "CJ", "PartnerStack", "Direct", "Rewardful", "FirstPromoter", "Tapfiliate", "Awin"]
+  },
+  "optimizer": {
+    "winnerCtrPct": 3.0,
+    "minImpressionsForJudgement": 300,
+    "expansionPinsPerWinner": 10,
+    "loserCtrPct": 0.5,
+    "maxExpansionsPerRun": 2
+  },
+  "compliance": {
+    "requireDisclosure": true,
+    "affiliateDisclosure": "Some links on this page are affiliate links. If you start a paid plan through them we may earn a commission at no extra cost to you. We only cover tools we have used or tested ourselves, and we say when a tool is a poor fit.",
+    "pinDisclosureSuffix": "#affiliate",
+    "linkRel": "nofollow sponsored noopener"
+  },
+  "growth": {
+    "monthlyRevenueMilestonesUsd": [100, 500, 1000, 3000, 5000],
+    "introducerThresholdUsd": 3000
+  }
+}
