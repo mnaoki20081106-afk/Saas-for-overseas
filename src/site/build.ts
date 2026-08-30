@@ -4,7 +4,7 @@ import { marked } from "marked";
 import { config, affiliateLinks } from "../lib/config";
 import { log } from "../lib/log";
 import { P } from "../lib/paths";
-import { articles as articleStore, programs } from "../lib/store";
+import { articles as articleStore, pins as pinStore, programs } from "../lib/store";
 import type { Article } from "../lib/types";
 import { escapeHtml, slugify } from "../lib/util";
 import { buildAdminPage } from "../admin/page";
@@ -77,6 +77,8 @@ interface PageOpts {
   canonicalPath: string;
   jsonLd?: unknown[];
   noindex?: boolean;
+  /** SNS・リッチピン用のサムネイル画像。絶対URL。 */
+  image?: string;
   body: string;
 }
 
@@ -102,6 +104,8 @@ ${o.noindex ? '<meta name="robots" content="noindex,nofollow">' : `<link rel="ca
 <meta property="og:description" content="${escapeHtml(o.description)}">
 <meta property="og:url" content="${url}">
 <meta property="og:site_name" content="${escapeHtml(c.site.name)}">
+${o.image ? `<meta property="og:image" content="${escapeHtml(o.image)}">
+<meta name="twitter:image" content="${escapeHtml(o.image)}">` : ""}
 <meta name="twitter:card" content="summary_large_image">
 ${c.site.pinterestVerifyCode ? `<meta name="p:domain_verify" content="${escapeHtml(c.site.pinterestVerifyCode)}">` : ""}
 <link rel="alternate" type="application/rss+xml" title="${escapeHtml(c.site.name)}" href="${c.site.baseUrl}/rss.xml">
@@ -164,6 +168,32 @@ function ctaBox(slug: string, label: string): string {
 <p>See if ${escapeHtml(name)} fits your team.</p>
 <a class="cta" href="/go/${slug}/" rel="${c.compliance.linkRel}">${escapeHtml(label)}</a>
 </div>`;
+}
+
+/**
+ * 記事に紐づくピン画像を1枚、SNS共有・リッチピン用のサムネイルとして
+ * public/og/ にコピーする。無ければ何も返さない(og:image を省略)。
+ */
+function articleOgImage(a: Article): string | undefined {
+  const c = config();
+  const candidates = pinStore
+    .all()
+    .filter((p) => p.articleSlug === a.slug && p.imagePath)
+    .sort((x, y) => {
+      const rank = (p: typeof x) => (p.generation === 0 ? 0 : 1) + (p.templateId === "bold-stat" ? 0 : 1);
+      return rank(x) - rank(y);
+    });
+  const pin = candidates[0];
+  if (!pin) return undefined;
+
+  const src = path.join(P.root, pin.imagePath);
+  if (!fs.existsSync(src)) return undefined;
+
+  const destRel = `og/${a.slug}.png`;
+  const dest = path.join(P.publicDir, destRel);
+  fs.mkdirSync(path.dirname(dest), { recursive: true });
+  fs.copyFileSync(src, dest);
+  return `${c.site.baseUrl}/${destRel}`;
 }
 
 function insertCtas(html: string, mainSlug: string): string {
@@ -245,6 +275,7 @@ ${bodyNoH1}`;
     description: a.metaDescription,
     canonicalPath: `/articles/${a.slug}/`,
     jsonLd,
+    image: articleOgImage(a),
     body,
   });
 }
