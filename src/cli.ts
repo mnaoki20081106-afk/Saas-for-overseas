@@ -15,6 +15,7 @@ import { runOptimizer } from "./stages/optimize";
 import { buildGrowthAssets, buildReport } from "./stages/report";
 import { buildSite } from "./site/build";
 import { doctor } from "./stages/doctor";
+import { checkProvider } from "./stages/provider";
 import { runBootstrap, runDaily, runWeekly } from "./orchestrator";
 import {
   authorizeUrl, exchangeCode, PINTEREST_SCOPES, waitForCallback,
@@ -29,6 +30,8 @@ const HELP = `
 
 ── まず最初に ──────────────────────────────────
   doctor                 いま何が自動で動いて何が止まっているかを表示
+  provider:check [model] 接続先のAPIが必要な機能を持っているか実測する
+                         （ANTHROPIC_BASE_URL を向ければ他社の互換エンドポイントも判定できます）
   bootstrap [n]          初回セットアップ（リサーチ + 記事 n 本 + ピン一式）。既定 3
   tasks                  人間しかできない作業を洗い出して TODO-HUMAN.md を更新
 
@@ -87,6 +90,10 @@ async function main(): Promise<void> {
   switch (command) {
     case "doctor":
       await doctor();
+      break;
+
+    case "provider:check":
+      await checkProvider(rest[0]);
       break;
 
     case "bootstrap":

@@ -121,6 +121,7 @@ export async function generatePinsForArticle(
       structured(PinSet, {
         system: PIN_SYSTEM,
         user: pinPrompt(article, body, opts.extraInstruction ?? ""),
+        stage: "pins",
         label: `ピン ${count} 枚の文案: ${article.slug}`,
         effort: "high",
         maxTokens: 12000,

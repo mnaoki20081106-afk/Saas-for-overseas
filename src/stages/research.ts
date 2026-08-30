@@ -224,12 +224,14 @@ export async function runResearch(): Promise<ResearchResult> {
     const notes = await research({
       system: RESEARCH_SYSTEM,
       user: researchPrompt(known),
+      stage: "research",
       label: "案件リサーチ(Web検索あり)",
       maxUses: 18,
     });
     return structured(CandidateList, {
       system: "You convert research notes into strict JSON. Never invent a value that is absent from the notes; use the note's own conservative estimate instead.",
       user: `Convert these research notes into JSON. Keep every program the notes describe.\n\n---\n${notes}\n---`,
+      stage: "brief",
       label: "案件リサーチ → JSON 化",
       effort: "medium",
     });

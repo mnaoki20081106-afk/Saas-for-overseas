@@ -97,6 +97,7 @@ GitHub Actions に登録済みです。リポジトリを push した時点で�
 
 ```bash
 npm run autopilot doctor        # 環境チェック
+npm run autopilot provider:check # 接続先APIが必要な機能を持つか実測
 npm run autopilot bootstrap 3   # 初回セットアップ
 npm run autopilot daily         # 毎日の処理を手動実行
 npm run autopilot weekly        # 週次の処理を手動実行
@@ -119,7 +120,7 @@ npm run serve                   # 生成サイトをローカル確認
 
 | ファイル | 中身 |
 | --- | --- |
-| `config/config.json` | サイト名・URL・扱うカテゴリ・記事の語数・ピンの枚数と投稿ペース・勝ち型のしきい値 |
+| `config/config.json` | サイト名・URL・扱うカテゴリ・記事の語数・ピンの枚数と投稿ペース・勝ち型のしきい値・**工程ごとに使うモデル（`models.profile`）** |
 | `config/scoring.json` | 案件のスコアリング重みと足切り条件 |
 | `config/affiliate-links.json` | 承認済みアフィリエイトリンク（ここに貼るだけで全記事に反映） |
 | `.env` | APIキー類 |
@@ -169,7 +170,7 @@ Pinterest は投稿してから流入が伸び始めるまで **2〜3ヶ月**か
 
 ---
 
-詳細ドキュメント: [セットアップ](docs/SETUP.md) ／ [自動化の境界](docs/AUTOMATION.md) ／ [運用](docs/RUNBOOK.md)
+詳細ドキュメント: [セットアップ](docs/SETUP.md) ／ [自動化の境界](docs/AUTOMATION.md) ／ [運用](docs/RUNBOOK.md) ／ [コスト](docs/COSTS.md)
 
 ---
 

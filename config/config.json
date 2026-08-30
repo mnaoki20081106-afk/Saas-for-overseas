@@ -23,7 +23,12 @@
       "CRM",
       "AI writing tools"
     ],
-    "geoFocus": ["US", "UK", "CA", "AU"],
+    "geoFocus": [
+      "US",
+      "UK",
+      "CA",
+      "AU"
+    ],
     "excludeJapanese": true
   },
   "content": {
@@ -33,13 +38,29 @@
     "internalLinksMin": 3,
     "toneNotes": "First-person, specific, unglamorous. Written like someone who actually paid for the tools. No hype, no exclamation marks, no 'in today's fast-paced world'.",
     "bannedPhrases": [
-      "in 2024", "in 2025", "in 2026", "in 2027",
-      "latest 2024", "latest 2025", "latest 2026",
-      "this year", "last year", "next year",
-      "as of today", "currently trending", "recently launched",
-      "at the time of writing", "just released", "brand new",
-      "delve", "in today's fast-paced", "game-changer", "unleash",
-      "revolutionize", "look no further", "supercharge your"
+      "in 2024",
+      "in 2025",
+      "in 2026",
+      "in 2027",
+      "latest 2024",
+      "latest 2025",
+      "latest 2026",
+      "this year",
+      "last year",
+      "next year",
+      "as of today",
+      "currently trending",
+      "recently launched",
+      "at the time of writing",
+      "just released",
+      "brand new",
+      "delve",
+      "in today's fast-paced",
+      "game-changer",
+      "unleash",
+      "revolutionize",
+      "look no further",
+      "supercharge your"
     ]
   },
   "pins": {
@@ -48,7 +69,14 @@
     "height": 1500,
     "publishPerDay": 6,
     "minMinutesBetweenPins": 90,
-    "postingHoursUtc": [13, 15, 17, 19, 21, 23],
+    "postingHoursUtc": [
+      13,
+      15,
+      17,
+      19,
+      21,
+      23
+    ],
     "boardStrategy": "one board per category"
   },
   "programs": {
@@ -57,7 +85,17 @@
     "minMonthlyCommissionUsd": 30,
     "minAvgRetentionMonths": 10,
     "requireRecurring": true,
-    "allowedNetworks": ["Impact", "ShareASale", "CJ", "PartnerStack", "Direct", "Rewardful", "FirstPromoter", "Tapfiliate", "Awin"]
+    "allowedNetworks": [
+      "Impact",
+      "ShareASale",
+      "CJ",
+      "PartnerStack",
+      "Direct",
+      "Rewardful",
+      "FirstPromoter",
+      "Tapfiliate",
+      "Awin"
+    ]
   },
   "optimizer": {
     "winnerCtrPct": 3.0,
@@ -73,7 +111,43 @@
     "linkRel": "nofollow sponsored noopener"
   },
   "growth": {
-    "monthlyRevenueMilestonesUsd": [100, 500, 1000, 3000, 5000],
+    "monthlyRevenueMilestonesUsd": [
+      100,
+      500,
+      1000,
+      3000,
+      5000
+    ],
     "introducerThresholdUsd": 3000
+  },
+  "models": {
+    "profile": "balanced",
+    "_readme": "profile を quality / balanced / budget から選ぶ。CLAUDE_MODEL 環境変数を設定すると、全工程がそのモデルで上書きされます。",
+    "presets": {
+      "quality": {
+        "research": "claude-opus-5",
+        "brief": "claude-opus-5",
+        "article": "claude-opus-5",
+        "repair": "claude-opus-5",
+        "pins": "claude-opus-5",
+        "growth": "claude-opus-5"
+      },
+      "balanced": {
+        "research": "claude-opus-5",
+        "brief": "claude-sonnet-5",
+        "article": "claude-opus-5",
+        "repair": "claude-opus-5",
+        "pins": "claude-haiku-4-5",
+        "growth": "claude-sonnet-5"
+      },
+      "budget": {
+        "research": "claude-sonnet-5",
+        "brief": "claude-haiku-4-5",
+        "article": "claude-sonnet-5",
+        "repair": "claude-sonnet-5",
+        "pins": "claude-haiku-4-5",
+        "growth": "claude-haiku-4-5"
+      }
+    }
   }
 }

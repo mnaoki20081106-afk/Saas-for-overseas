@@ -319,6 +319,7 @@ ${brief.title}
 
 ## Draft
 ${markdown}`,
+    stage: "repair",
     label: "記事の自動修正",
     effort: "high",
     maxTokens: 32000,
@@ -392,6 +393,7 @@ export async function writeOneArticle(): Promise<WriteResult | null> {
       structured(Brief, {
         system: WRITER_SYSTEM,
         user: briefPrompt(main, others, type, existing),
+        stage: "brief",
         label: "記事の設計（ペイン + 構成）",
         effort: "high",
         maxTokens: 12000,
@@ -414,6 +416,7 @@ export async function writeOneArticle(): Promise<WriteResult | null> {
       longform({
         system: WRITER_SYSTEM,
         user: writePrompt(brief, main, others, existing),
+        stage: "article",
         label: `本文執筆: ${brief.title}`,
         effort: "high",
         maxTokens: 32000,

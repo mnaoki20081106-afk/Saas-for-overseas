@@ -213,6 +213,7 @@ Our honest status: brand-new site, small but growing traffic.
 
 Write answers a reviewer would approve. Be specific about what we will publish about ${p.name}.
 Do not invent traffic numbers.`,
+        stage: "growth",
         label: `応募文の下書き: ${p.name}`,
         effort: "medium",
         maxTokens: 4000,

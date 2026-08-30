@@ -1,7 +1,8 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import type { z } from "zod";
-import { env } from "./config";
+import { env, modelFor } from "./config";
+import { estimateUsd, shapeFor, type Stage } from "./models";
 import { log } from "./log";
 import { sleep } from "./util";
 
@@ -16,6 +17,8 @@ function getClient(): Anthropic {
 export interface AskOptions {
   system: string;
   user: string;
+  /** どの工程か。config/config.json の models.presets でモデルが決まる */
+  stage?: Stage;
   /** low | medium | high | xhigh | max */
   effort?: "low" | "medium" | "high" | "xhigh" | "max";
   maxTokens?: number;
@@ -50,13 +53,16 @@ function textOf(message: Anthropic.Message): string {
 export async function longform(opts: AskOptions): Promise<string> {
   const label = opts.label ?? "longform";
   if (env.dryRun) throw new DryRunSignal(label);
-  log.info(`Claude(${env.model}) ← ${label}`);
+  log.info(`Claude(${modelFor(opts.stage ?? "article")}) ← ${label}`);
+
+  const model = modelFor(opts.stage ?? "article");
+  const shape = shapeFor(model);
 
   const stream = getClient().messages.stream({
-    model: env.model,
+    model,
     max_tokens: opts.maxTokens ?? 32000,
-    thinking: { type: "adaptive" },
-    output_config: { effort: opts.effort ?? "high" },
+    ...(shape.adaptiveThinking ? { thinking: { type: "adaptive" as const } } : {}),
+    ...(shape.effort ? { output_config: { effort: opts.effort ?? "high" } } : {}),
     system: [{ type: "text", text: opts.system, cache_control: { type: "ephemeral" } }],
     messages: [{ role: "user", content: opts.user }],
     ...(opts.webSearch ? { tools: webSearchTool(opts.webSearch) } : {}),
@@ -65,7 +71,7 @@ export async function longform(opts: AskOptions): Promise<string> {
   const message = await stream.finalMessage();
   guardStop(message, label);
   const out = textOf(message);
-  log.ok(`${label}: ${out.length.toLocaleString()} chars (in ${message.usage.input_tokens} / out ${message.usage.output_tokens} tok)`);
+  log.ok(`${label}: ${out.length.toLocaleString()} chars — ${usageLine(model, message.usage)}`);
   return out;
 }
 
@@ -80,13 +86,19 @@ export async function structured<T extends z.ZodType>(
 ): Promise<z.infer<T>> {
   const label = opts.label ?? "structured";
   if (env.dryRun) throw new DryRunSignal(label);
-  log.info(`Claude(${env.model}) ← ${label} [structured]`);
+  log.info(`Claude(${modelFor(opts.stage ?? "brief")}) ← ${label} [structured]`);
+
+  const model = modelFor(opts.stage ?? "brief");
+  const shape = shapeFor(model);
 
   const response = await getClient().messages.parse({
-    model: env.model,
+    model,
     max_tokens: opts.maxTokens ?? 16000,
-    thinking: { type: "adaptive" },
-    output_config: { effort: opts.effort ?? "high", format: zodOutputFormat(schema) },
+    ...(shape.adaptiveThinking ? { thinking: { type: "adaptive" as const } } : {}),
+    output_config: {
+      ...(shape.effort ? { effort: opts.effort ?? "high" } : {}),
+      format: zodOutputFormat(schema),
+    },
     system: [{ type: "text", text: opts.system, cache_control: { type: "ephemeral" } }],
     messages: [{ role: "user", content: opts.user }],
   });
@@ -95,7 +107,7 @@ export async function structured<T extends z.ZodType>(
   if (!response.parsed_output) {
     throw new Error(`${label}: 構造化出力のパースに失敗しました`);
   }
-  log.ok(`${label}: JSON 取得 (out ${response.usage.output_tokens} tok)`);
+  log.ok(`${label}: JSON 取得 — ${usageLine(model, response.usage)}`);
   return response.parsed_output as z.infer<T>;
 }
 
@@ -103,11 +115,19 @@ export async function structured<T extends z.ZodType>(
 export async function research(opts: Omit<AskOptions, "webSearch"> & { maxUses?: number }): Promise<string> {
   return longform({
     ...opts,
+    stage: opts.stage ?? "research",
     webSearch: { maxUses: opts.maxUses ?? 14 },
     effort: opts.effort ?? "high",
     maxTokens: opts.maxTokens ?? 24000,
     label: opts.label ?? "research",
   });
+}
+
+/** 使用トークンと概算コストを1行で出す（どの工程が高いのか分かるように） */
+function usageLine(model: string, usage: { input_tokens: number; output_tokens: number }): string {
+  const cost = estimateUsd(model, usage.input_tokens, usage.output_tokens);
+  const money = cost > 0 ? ` ≈ $${cost.toFixed(3)}` : "";
+  return `in ${usage.input_tokens.toLocaleString()} / out ${usage.output_tokens.toLocaleString()} tok${money}`;
 }
 
 function guardStop(message: Anthropic.Message, label: string): void {
