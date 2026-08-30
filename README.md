@@ -29,7 +29,7 @@ SaaS もアフィリエイトも初めてとのことなので、最初にここ
 | SEO | メタタグ、canonical、JSON-LD（Article / FAQPage / BreadcrumbList）、sitemap.xml、RSS、内部リンクを自動生成 |
 | ピン画像10枚 | 5種類のデザインテンプレート × 8配色で、1000×1500 の PNG をプログラムで描画。文字量に応じて級数も自動調整 |
 | ピン文案 | 10枚それぞれ違う切り口（価格の壁／隠れた上限／乗り換えコスト／買うべきでない人…）でタイトルと説明文 |
-| 予約投稿 | 1日6枚まで、90分以上あけて、米国の夕方帯に自動投稿 |
+| 予約投稿 | 1日6枚まで、90分以上あけて、米国の夕方帯に自動投稿（Pinterest API の Standard access が必要。審査待ちの間は `pins:export` で手動/外部ツール投稿に切り替えられます） |
 | 数値計測 | ピン→記事のクリック率／申込数／平均継続月数を API から自動取得 |
 | 勝ち型の横展開 | **クリック率3%以上のピンを勝ち型と判定し、その"型"を別カテゴリの記事へ自動で10枚展開** |
 | サイト公開 | GitHub Pages に静的サイトを自動デプロイ（無料） |
@@ -104,6 +104,7 @@ npm run autopilot research      # 案件リサーチだけ
 npm run autopilot article       # 記事1本だけ
 npm run autopilot pins          # ピン10枚だけ
 npm run autopilot pins:publish  # 予約分を投稿
+npm run autopilot pins:export   # 手動投稿用に CSV と画像を書き出す
 npm run autopilot analytics     # 数値取得
 npm run autopilot optimize      # 勝ち型の横展開
 npm run autopilot report        # レポート更新
@@ -152,8 +153,14 @@ REPORT.md               週次レポート
 - 案件選定の**基準**（継続報酬・$30以上・継続10ヶ月以上を機械的に強制）
 - 何が効いたかの**計測**（推測ではなく API の実数）
 
-コントロールできないのは、Pinterest のアルゴリズム、審査の可否、
-競合の動き、そして**成果が出るまでの時間**です。
+コントロールできないのは、Pinterest のアルゴリズム、**Pinterest API の審査**、
+アフィリエイト審査の可否、競合の動き、そして**成果が出るまでの時間**です。
+
+とくに **Pinterest API は Standard access の審査を通らないと、API で作ったピンが
+自分にしか見えません**（Trial access では Sandbox 扱いになります）。
+審査は数日〜数週間かかることがあるので、その間は `npm run autopilot pins:export` で
+書き出して手動投稿するか、Tailwind などの外部予約ツールに流してください。
+記事・ピン・サイトの生成は、この審査とは無関係に動き続けます。
 
 Pinterest は投稿してから流入が伸び始めるまで **2〜3ヶ月**かかるのが普通です。
 最初の1〜2ヶ月、数字がほぼゼロなのは異常ではありません。ここで止めないことだけが、

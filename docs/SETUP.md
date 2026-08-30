@@ -177,101 +177,151 @@ npm run autopilot site:build
 
 ---
 
-# 3. Pinterest（30分・ここが一番手間）
+# 3. Pinterest（60分＋審査待ち・ここが一番重い）
 
-## 3-1. ビジネスアカウント（5分）
+> **先に読んでください。** Pinterest はこのプロジェクトで唯一、
+> 「自分の努力だけでは終わらない」工程です。API を使って自動投稿するには
+> Pinterest の審査が要り、**数日〜数週間かかることがあります。**
+> ただし**審査待ちの間もパイプラインは止まりません**（3-6 に逃げ道を用意しました）。
 
-1. https://www.pinterest.com/business/create/ を開く
-2. メールアドレスで登録（**個人アカウントとは別に作ってください**）
-3. **言語 = English (US)、国 = United States** にする
-   → 英語圏の人に配信するためです。日本語設定だと日本人にしか出ません
-4. プロフィールの Website 欄に 2-3 の URL を入れる
+## 3-1. ビジネスアカウントを作る（15分）
 
-## 3-2. サイトの所有権を確認（10分）
+**必ず PC で行ってください。** 新規のビジネスアカウント作成はスマホアプリからはできません。
+
+1. **使うメールアドレスを決める**
+   → **すでに Pinterest で使っているアドレスは使えません。** 新規に作る場合は別のアドレスを用意してください
+2. `pinterest.com` を開き、右上の **「登録 / Sign up」**
+3. 登録フォームの**下にある小さいリンク**「**ビジネスアカウントを作成 / Create a business account**」を押す
+   → 見つからなければ `business.pinterest.com` を開いて右上の **Sign up** からでも同じ画面に入れます
+4. メールアドレス・パスワード・生年月日を入力して作成
+5. プロフィールを入力
+   - ビジネス名（＝サイト名）
+   - ロゴ画像
+   - ウェブサイト URL（2-3 で控えた GitHub Pages の URL）
+   - **国 = United States、言語 = English**
+     → 英語圏の人に配信するためです。日本語設定だと日本人にしか出ません
+6. 「広告を出しますか」は **今はしない** で構いません
+
+> **すでに個人アカウントを持っている場合**は、新規に作らず
+> プロフィールメニューからビジネスアカウントへの**切り替え**、または
+> **ビジネスアカウントの追加**もできます。どちらでも構いません。
+
+## 3-2. サイトの所有権を確認する（10分）
 
 これをやると、あなたのサイトへのピンが優先的に扱われます。
 
-1. Pinterest 右上のアイコン → **Settings** → **Claimed accounts**
-2. **Websites** の **Claim** ボタン → 自分のサイト URL を入力
-3. 認証方法で **Add HTML tag** を選ぶ
-4. こういうタグが表示されます：
+1. Pinterest 右上の **v** アイコン → **設定 / Settings**
+2. 左メニューの **「Pinterest にリンク / Link to Pinterest」**
+   → **Websites** の横の **「申請する / Claim」**
+   （※ 「リンク済みアカウント / Claimed accounts」は*確認結果を見る*場所で、申請はこちらです）
+3. 認証方法で **「HTML タグを追加 / Add HTML tag」** を選ぶ
+4. こういうタグが出ます：
 
 ```html
-<meta name="p:domain_verify" content="a1b2c3d4e5f6...">
+<meta name="p:domain_verify" content="a1b2c3d4e5f6..."/>
 ```
 
-5. `content="..."` の**中身だけ**（`a1b2c3d4e5f6...` の部分）をコピー
-6. `config/config.json` の `site.pinterestVerifyCode` に貼る：
+5. `content="..."` の**中身だけ**をコピーして、`config/config.json` に貼る：
 
 ```json
 "gaMeasurementId": "",
 "pinterestVerifyCode": "a1b2c3d4e5f6..."
 ```
 
-7. 反映する：
+6. 反映する：
 
 ```bash
 npm run autopilot site:build
-git add -A && git commit -m "Pinterest のサイト所有権確認コードを追加" && git push
+git add -A && git commit -m "Pinterest の確認コードを追加" && git push
 ```
 
-8. GitHub の **Actions** タブでデプロイが緑になるのを待つ（2〜3分）
-9. Pinterest の画面に戻って **Verify** を押す
+7. GitHub の **Actions** タブが緑になるのを待つ（2〜3分）
+8. Pinterest の画面に戻り、自分のサイト URL を入れて **確認 / Verify**
 
-> ここは「サイトがまだ公開されていない」と失敗します。5 を先に済ませてから戻ってきても構いません。
+> サイトがまだ公開されていないと失敗します。その場合は先に「5. 起動する」まで進めてから戻ってきてください。
 
-## 3-3. API アプリを作る（10分）
+## 3-3. API アプリを作って Trial access を申請する（10分＋待ち）
 
-1. https://developers.pinterest.com/apps/ を開く（Pinterest アカウントでログイン）
-2. **Create app** → アプリ名（`autopilot` など）と用途を入力
-3. 作成後、アプリの設定画面で **App ID** と **App secret key** を控える
+1. https://developers.pinterest.com/apps/ を開く（3-1 のビジネスアカウントでログイン）
+2. **Create app** → アプリ名（`autopilot` など）と用途を入力して申請
+3. **Trial access の審査結果を待ちます**
+   → コミュニティの報告では**数日〜2週間程度**かかることがあります
+   → **App secret と Redirect URI は、Trial が承認されるまで設定できません**
 
-## 3-4. Redirect URI を登録する（5分）
+## 3-4. 認可して Refresh Token を取る（10分・Trial 承認後）
 
-先にコマンドを走らせて、登録すべき URL を出させます。
+1. App 設定で **App ID** と **App secret** を控える
+2. 登録すべき Redirect URI をコマンドに出させます：
 
 ```bash
 PINTEREST_APP_ID=あなたのAppID PINTEREST_APP_SECRET=あなたのSecret npm run autopilot pinterest:auth
 ```
 
-すると**登録すべき Redirect URI がそのまま画面に出ます**。
+- ローカル PC： `http://localhost:8788/callback`
+- Codespaces： `https://xxxxx-8788.app.github.dev/callback`（自動検出されます。
+  VS Code 下部の **PORTS** タブで `8788` を **Public** にしてください）
 
-- ローカル PC の場合： `http://localhost:8788/callback`
-- Codespaces の場合： `https://xxxxx-8788.app.github.dev/callback`（自動検出されます）
-
-1. その URL を Pinterest の App 設定の **Redirect URIs** に**一字一句そのまま**貼って保存
-2. Codespaces の場合は、VS Code 下部の **PORTS** タブで `8788` 行を右クリック →
-   **Port Visibility** → **Public** にする
-3. さきほどのコマンドをもう一度実行
-4. 表示された長い URL をブラウザで開く → Pinterest の承認画面 → **Allow**
-5. ターミナルに `PINTEREST_REFRESH_TOKEN=...` が出ます。コピー
-
-## 3-5. GitHub に登録（3分）
-
-**Settings** → **Secrets and variables** → **Actions** → **New repository secret** を3回：
+3. その URL を App の **Redirect URIs** に**一字一句そのまま**登録
+4. コマンドを再実行 → 表示された URL をブラウザで開く → **Allow**
+5. ターミナルに出た `PINTEREST_REFRESH_TOKEN=...` をコピー
+6. GitHub Secrets に3つ登録：
 
 | Name | Value |
 | --- | --- |
-| `PINTEREST_APP_ID` | 3-3 の App ID |
-| `PINTEREST_APP_SECRET` | 3-3 の App secret |
-| `PINTEREST_REFRESH_TOKEN` | 3-4 で出たトークン |
+| `PINTEREST_APP_ID` | App ID |
+| `PINTEREST_APP_SECRET` | App secret |
+| `PINTEREST_REFRESH_TOKEN` | 上で出たトークン |
 
-> **この作業は一生に1回です。** アクセストークンは短命ですが、
-> リフレッシュトークンから毎回自動発行する作りにしてあります。
+> トークンの更新は以後すべて自動です。この作業は一生に1回だけです。
 
-**❌ よくある失敗**
+## 3-5. Standard access を申請する（重要）
 
-| 症状 | 原因 |
-| --- | --- |
-| `redirect_uri mismatch` | 貼った URL が1文字違う。末尾の `/callback` とスキーム（http/https）を確認 |
-| ブラウザが「接続できません」 | Codespaces で PORTS を Public にしていない |
-| `401 Unauthorized` が後で出る | App の権限（スコープ）不足。App を作り直して再認可 |
+**ここを飛ばすと、自動投稿しても意味がありません。**
 
-### Pinterest の API 審査について
+Trial access のまま API で作ったピンとボードは、**Sandbox 扱いになり、
+作成したあなた本人にしか見えません。** 他の人の検索結果にもフィードにも出ないので、
+流入源になりません。
 
-作った App は最初「トライアル」状態ですが、**自分のアカウントには投稿できます**。
-本番申請が必要なのは他人のアカウントを扱う場合だけなので、この用途では
-トライアルのまま動きます。
+公開されるピンを API で作るには **Standard access** が必要です。
+
+- 前提：Trial access が承認済みであること
+- 提出物：**あなたのアプリが OAuth フローを通す様子を画面録画した動画**
+  （「自分ひとりでしか使わない」場合でも動画の提出が必要です）
+- 費用：Trial も Standard も**無料**
+
+申請は developers.pinterest.com のアプリ設定画面から行います。
+
+## 3-6. 審査待ちの間の回し方（ここが本題）
+
+**待っている間もパイプラインは止めません。** 記事もピンも作られ続けます。
+できたピンを書き出して、手動か外部ツールで投稿してください。
+
+```bash
+npm run autopilot pins:export --days 14
+```
+
+`export/pins-YYYY-MM-DD/` に、こう出ます：
+
+```
+pins.csv      1行=1ピン。投稿予定の早い順。タイトル・説明・alt・リンク先つき
+images/       同じ順番の連番画像（001_..., 002_...）
+はじめに.txt  手順
+```
+
+**手で投稿する場合**：1枚あたり約40秒。Pinterest で「作成」→ 画像をドラッグ →
+CSV の同じ行からタイトル・説明・リンクを貼るだけ。1日6枚で **4分/日**です。
+
+**外部の予約ツールを使う場合**：Tailwind / Buffer / Later などは既に Standard access を
+持っているので、そこに流し込めば予約投稿できます。
+
+投稿し終えたら、二重投稿を防ぐために記録します：
+
+```bash
+npm run autopilot pins:export --mark
+```
+
+Standard access が下りたら、Secrets を入れるだけで**自動投稿に切り替わります。**
+それまでに作った記事とピンは全部そのまま使えます。
 
 ---
 
@@ -333,8 +383,9 @@ npm run autopilot doctor
 
 - [ ] `✓ Anthropic API キー: 疎通OK`
 - [ ] `✓ サイト URL`（example. が消えている）
-- [ ] `✓ Pinterest API`
 - [ ] `✓ Pinterest のサイト所有権確認`
+- [ ] `✓ Pinterest API`（Standard access が下りるまでは未設定のままで構いません。
+      その間は `npm run autopilot pins:export` で回してください）
 - [ ] `✓ Chromium`
 - [ ] GitHub Actions が全部緑
 - [ ] 公開 URL でサイトが見える

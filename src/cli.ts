@@ -9,6 +9,7 @@ import { refreshHumanTasks, writeChecklist } from "./stages/humantasks";
 import { writeOneArticle } from "./stages/content";
 import { generatePinsForArticle, schedule, schedulingSummary } from "./stages/pins";
 import { publishDuePins, requeueFailedPins } from "./stages/publish";
+import { exportPins } from "./stages/export";
 import { collectAnalytics } from "./stages/analytics";
 import { runOptimizer } from "./stages/optimize";
 import { buildGrowthAssets, buildReport } from "./stages/report";
@@ -40,6 +41,8 @@ const HELP = `
   article                英語記事を1本書く（設計→執筆→品質ゲート）
   pins [article-slug]    ピン10枚を生成して予約（省略時は最新記事）
   pins:publish [--limit N] [--force]   予約時刻を過ぎたピンを投稿
+  pins:export [--days N] [--mark]      手動投稿・外部予約ツール用に CSV と画像を書き出す
+                         （Pinterest API の審査待ちでも止まらないための逃げ道）
   pins:requeue           投稿に失敗したピンを再予約
   pins:list              予約状況を表示
   analytics [days]       Pinterest とアフィリエイトの数値を取得。既定 30 日
@@ -130,6 +133,12 @@ async function main(): Promise<void> {
         limit: limit ? Number(limit) : undefined,
         force: rest.includes("--force"),
       });
+      break;
+    }
+
+    case "pins:export": {
+      const days = arg(rest, "--days");
+      exportPins({ days: days ? Number(days) : undefined, mark: rest.includes("--mark") });
       break;
     }
 
