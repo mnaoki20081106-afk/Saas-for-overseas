@@ -1,0 +1,233 @@
+[
+  {
+    "id": "cred-anthropic",
+    "kind": "credential",
+    "title": "Anthropic API キーを取得して GitHub Secrets に登録する",
+    "whyItCannotBeAutomated": "API キーの発行は本人のアカウント操作でしか行えません（1回だけ）。",
+    "minutes": 10,
+    "url": "https://console.anthropic.com/settings/keys",
+    "steps": [
+      "https://console.anthropic.com/ にログイン（アカウントが無ければ作成）",
+      "Billing で最低 $20 ほどクレジットを購入（記事1本あたり概ね $1〜3 の想定）",
+      "Settings → API keys → Create Key。表示されたキーをコピー（再表示できません）",
+      "GitHub のこのリポジトリ → Settings → Secrets and variables → Actions → New repository secret",
+      "Name に ANTHROPIC_API_KEY、Secret に貼り付けて Add secret"
+    ],
+    "blocks": [
+      "記事生成",
+      "案件リサーチ",
+      "ピン文案生成"
+    ],
+    "status": "open",
+    "createdAt": "2026-08-30T10:48:38.499Z"
+  },
+  {
+    "id": "setup-pages",
+    "kind": "account_setup",
+    "title": "GitHub Pages を有効にして、サイトの URL を設定する",
+    "whyItCannotBeAutomated": "リポジトリ設定の変更は所有者の操作が必要です（1回だけ）。",
+    "minutes": 5,
+    "steps": [
+      "このリポジトリ → Settings → Pages → Build and deployment の Source を「GitHub Actions」にする",
+      "同じく Settings → Actions → General → Workflow permissions を「Read and write permissions」にする",
+      "公開 URL（例: https://<ユーザー名>.github.io/<リポジトリ名>）を控える",
+      "Settings → Secrets and variables → Actions → Variables タブ → New repository variable",
+      "Name に SITE_BASE_URL、Value にその URL を入れて保存",
+      "（ローカルで動かす場合は config/config.json の site.baseUrl も同じ値に）",
+      "ついでに site.name / site.tagline / site.description を自分のサイト名に変えておくと良いです"
+    ],
+    "blocks": [
+      "記事の公開",
+      "ピンのリンク先",
+      "sitemap と canonical"
+    ],
+    "status": "open",
+    "createdAt": "2026-08-30T10:48:38.499Z"
+  },
+  {
+    "id": "cred-pinterest",
+    "kind": "account_setup",
+    "title": "Pinterest のビジネスアカウントを作る",
+    "whyItCannotBeAutomated": "アカウント作成は本人操作が必須です（1回だけ）。",
+    "minutes": 15,
+    "url": "https://www.pinterest.com/",
+    "steps": [
+      "【PC で行ってください】新規のビジネスアカウント作成はスマホアプリからはできません",
+      "使うメールアドレスを決める。既に Pinterest で使っているアドレスは使えません（新規なら別アドレスを用意）",
+      "⚠ pinterest.com を開くと、アクセス元の場所から自動判定されて jp.pinterest.com に転送されることがあります。そのまま登録すると国が日本に設定されるおそれがあるため、URL 欄が jp.pinterest.com になっていないか必ず確認してください",
+      "jp.pinterest.com になっていたら、ページ下部（フッター）の言語/国切り替えリンクを探して United States / English に変更するか、ブラウザのシークレットウィンドウで https://www.pinterest.com/ を開き直してください",
+      "www.pinterest.com の状態で、右上の「Sign up / 登録」→ 登録フォームの下にある「ビジネスアカウントを作成 / Create a business account」のリンクを押す",
+      "（見つからない場合）business.pinterest.com を開いて右上の「Sign up」からでも同じ画面に入れます",
+      "メールアドレス・パスワード・生年月日を入力して作成",
+      "プロフィール（ビジネス名・ロゴ・ウェブサイトURL・国・言語）を入力。国は必ず United States、言語は English を選ぶ（英語圏に配信するため）",
+      "⚠ 国の設定は登録後の変更が効かない、または扱いが不安定という報告があります。ここで妥協せず、必ず United States になっていることを確認してから次に進んでください",
+      "広告を出すか聞かれたら「今はしない」で構いません",
+      "※ 既に個人アカウントを持っている場合は、プロフィールメニューからビジネスアカウントへの切り替え・追加もできます（その場合も設定 → Personal information で国が United States になっているか確認）"
+    ],
+    "blocks": [
+      "ピンの投稿全般"
+    ],
+    "status": "open",
+    "createdAt": "2026-08-30T10:48:38.499Z"
+  },
+  {
+    "id": "setup-pinterest-claim",
+    "kind": "account_setup",
+    "title": "Pinterest でサイトの所有権を確認する（Claim）",
+    "whyItCannotBeAutomated": "Pinterest の管理画面での操作が必要です。確認コードの埋め込み側は自動化済みです。",
+    "minutes": 10,
+    "steps": [
+      "Pinterest 右上の v アイコン →「設定 / Settings」",
+      "左メニューの「Pinterest にリンク / Link to Pinterest」→ Websites の「申請する / Claim」",
+      "認証方法で「HTML タグを追加 / Add HTML tag」を選ぶ",
+      "表示された <meta name=\"p:domain_verify\" content=\"XXXX\"> の XXXX の部分だけをコピー",
+      "config/config.json の site.pinterestVerifyCode に貼る",
+      "npm run autopilot site:build → git push → GitHub Actions が緑になるまで待つ",
+      "Pinterest の画面に戻って自分のサイト URL を入れて「確認 / Verify」",
+      "※ 確認できたかは 設定 →「リンク済みアカウント / Claimed accounts」で見られます"
+    ],
+    "blocks": [
+      "ピンの表示優先度",
+      "リンクの信頼度",
+      "アナリティクスの精度"
+    ],
+    "status": "open",
+    "createdAt": "2026-08-30T10:48:38.499Z"
+  },
+  {
+    "id": "cred-pinterest-api",
+    "kind": "credential",
+    "title": "Pinterest API アプリを作り、Standard access まで通す",
+    "whyItCannotBeAutomated": "アプリ作成・OAuth 承認・審査申請は本人操作が必須です。さらに Trial access のまま API で作ったピンは『自分にしか見えない Sandbox ピン』になるため、流入源にするには Standard access の審査を通す必要があります（審査には OAuth フローの録画提出が必要で、数日〜数週間かかることがあります）。",
+    "minutes": 40,
+    "url": "https://developers.pinterest.com/apps/",
+    "steps": [
+      "developers.pinterest.com/apps/ で App を作成（ビジネスアカウントでログイン）",
+      "Trial access の審査を申請し、承認を待つ（App secret と Redirect URI は承認後に設定できるようになります）",
+      "承認されたら App ID と App secret を控える",
+      "`npm run autopilot pinterest:auth` を実行すると、登録すべき Redirect URI が表示されます",
+      "その URL を App の Redirect URIs に一字一句そのまま登録",
+      "もう一度 pinterest:auth を実行 → 表示された URL をブラウザで開いて承認 → PINTEREST_REFRESH_TOKEN を控える",
+      "GitHub Secrets に PINTEREST_APP_ID / PINTEREST_APP_SECRET / PINTEREST_REFRESH_TOKEN を登録",
+      "続けて Standard access を申請する（OAuth フローを画面録画した動画の提出が必要。自分ひとりで使う場合でも必要です）",
+      "★ 審査待ちの間も止まりません: `npm run autopilot pins:export` で CSV と画像を書き出し、手動投稿か外部の予約ツール（Tailwind など）で回せます"
+    ],
+    "blocks": [
+      "ピンの自動投稿",
+      "ピンの数値取得",
+      "勝ち型の自動検出"
+    ],
+    "status": "open",
+    "createdAt": "2026-08-30T10:48:38.499Z"
+  },
+  {
+    "id": "cred-networks",
+    "kind": "credential",
+    "title": "アフィリエイトネットワークの API キーを登録する（成果の自動集計用）",
+    "whyItCannotBeAutomated": "各ネットワークの管理画面でしか発行できません。未登録でも記事とピンの自動化は動きます（売上集計だけ手入力になります）。",
+    "minutes": 20,
+    "steps": [
+      "Impact: 管理画面 → Settings → API → Account SID と Auth Token を控えて IMPACT_ACCOUNT_SID / IMPACT_AUTH_TOKEN に登録",
+      "ShareASale: Tools → Merchant Data Feeds → API → SHAREASALE_AFFILIATE_ID / SHAREASALE_API_TOKEN / SHAREASALE_API_SECRET",
+      "PartnerStack: Settings → Integrations → API keys → PARTNERSTACK_API_KEY / PARTNERSTACK_API_SECRET",
+      "どれか1つでも入れれば、その分だけ自動集計されます"
+    ],
+    "blocks": [
+      "売上の自動集計",
+      "平均継続期間の実測",
+      "週次レポートの収益セクション"
+    ],
+    "status": "open",
+    "createdAt": "2026-08-30T10:48:38.499Z"
+  },
+  {
+    "id": "apply-sample-kanbanly",
+    "kind": "affiliate_application",
+    "title": "Sample Kanbanly のアフィリエイトプログラムに応募する（PartnerStack）",
+    "whyItCannotBeAutomated": "相手企業の審査担当者が人間なので、応募フォームの送信と本人確認・税務情報の入力だけは自動化できません。回答文は全部こちらで書いてあります。",
+    "minutes": 12,
+    "url": "https://sample-kanbanly.example.com/affiliates",
+    "steps": [
+      "PartnerStack のプログラムページから直接サインアップ（審査が緩く早い）",
+      "応募先: https://sample-kanbanly.example.com/affiliates",
+      "下の「回答の下書き」をフォームにコピペする",
+      "サイト URL には自分の GitHub Pages の URL を入れる（記事が1本でも公開されていれば通りやすい）",
+      "承認されたら、発行されたアフィリエイトリンクを控える",
+      "承認後にこれを実行: npm run autopilot link:set sample-kanbanly \"<アフィリエイトリンク>\"",
+      "→ 次回のサイトビルドで、全記事のリンクが自動的に差し替わります"
+    ],
+    "prefilledAnswers": {
+      "How will you promote us? / プロモーション方法": "We publish long-form, experience-based comparison articles for freelancers, small agencies and 2-20 person SaaS/e-commerce teams in the US, UK, Canada and Australia, and distribute them through Pinterest, where we build category boards around specific buying problems. For Sample Kanbanly we plan a dedicated review plus at least two comparison articles against Competitor A and Competitor B, each with a clear disclosure and a genuine assessment of who the tool is not for. Our traffic is evergreen rather than news-driven, so a published article keeps sending qualified trial signups for months.",
+      "Describe your audience / 読者層": "freelancers, small agencies and 2-20 person SaaS/e-commerce teams in the US, UK, Canada and Australia. They are hands-on operators, usually the person who both chooses and pays for the tool, and they read comparisons before starting a trial.",
+      "Monthly traffic / 月間トラフィック": "This is a new site, so traffic is still small and growing. Our distribution is Pinterest plus organic search on evergreen comparison queries, and we would rather show you real numbers as they build than quote a figure we cannot back up.",
+      "Promotional methods / 手法（チェックボックス）": "Content / blog / Social media (Pinterest) / SEO / Comparison and review content",
+      "Bio / プロフィール": "We run Worked For Us, an independent site that compares subscription software for small teams. We buy and use the tools we write about, and we publish the cases where a tool is the wrong choice.",
+      "Website URL": "https://example.github.io/saas-for-overseas"
+    },
+    "blocks": [
+      "Sample Kanbanly の報酬発生（記事とピンは応募前でも先に作れます）"
+    ],
+    "status": "open",
+    "createdAt": "2026-08-30T10:48:38.552Z"
+  },
+  {
+    "id": "apply-sample-rankwise",
+    "kind": "affiliate_application",
+    "title": "Sample Rankwise のアフィリエイトプログラムに応募する（PartnerStack）",
+    "whyItCannotBeAutomated": "相手企業の審査担当者が人間なので、応募フォームの送信と本人確認・税務情報の入力だけは自動化できません。回答文は全部こちらで書いてあります。",
+    "minutes": 12,
+    "url": "https://sample-rankwise.example.com/affiliates",
+    "steps": [
+      "PartnerStack のプログラムページから直接サインアップ（審査が緩く早い）",
+      "応募先: https://sample-rankwise.example.com/affiliates",
+      "下の「回答の下書き」をフォームにコピペする",
+      "サイト URL には自分の GitHub Pages の URL を入れる（記事が1本でも公開されていれば通りやすい）",
+      "承認されたら、発行されたアフィリエイトリンクを控える",
+      "承認後にこれを実行: npm run autopilot link:set sample-rankwise \"<アフィリエイトリンク>\"",
+      "→ 次回のサイトビルドで、全記事のリンクが自動的に差し替わります"
+    ],
+    "prefilledAnswers": {
+      "How will you promote us? / プロモーション方法": "We publish long-form, experience-based comparison articles for freelancers, small agencies and 2-20 person SaaS/e-commerce teams in the US, UK, Canada and Australia, and distribute them through Pinterest, where we build category boards around specific buying problems. For Sample Rankwise we plan a dedicated review plus at least two comparison articles against Competitor A and Competitor B, each with a clear disclosure and a genuine assessment of who the tool is not for. Our traffic is evergreen rather than news-driven, so a published article keeps sending qualified trial signups for months.",
+      "Describe your audience / 読者層": "freelancers, small agencies and 2-20 person SaaS/e-commerce teams in the US, UK, Canada and Australia. They are hands-on operators, usually the person who both chooses and pays for the tool, and they read comparisons before starting a trial.",
+      "Monthly traffic / 月間トラフィック": "This is a new site, so traffic is still small and growing. Our distribution is Pinterest plus organic search on evergreen comparison queries, and we would rather show you real numbers as they build than quote a figure we cannot back up.",
+      "Promotional methods / 手法（チェックボックス）": "Content / blog / Social media (Pinterest) / SEO / Comparison and review content",
+      "Bio / プロフィール": "We run Worked For Us, an independent site that compares subscription software for small teams. We buy and use the tools we write about, and we publish the cases where a tool is the wrong choice.",
+      "Website URL": "https://example.github.io/saas-for-overseas"
+    },
+    "blocks": [
+      "Sample Rankwise の報酬発生（記事とピンは応募前でも先に作れます）"
+    ],
+    "status": "open",
+    "createdAt": "2026-08-30T10:48:38.604Z"
+  },
+  {
+    "id": "apply-sample-flowdesk",
+    "kind": "affiliate_application",
+    "title": "Sample Flowdesk のアフィリエイトプログラムに応募する（PartnerStack）",
+    "whyItCannotBeAutomated": "相手企業の審査担当者が人間なので、応募フォームの送信と本人確認・税務情報の入力だけは自動化できません。回答文は全部こちらで書いてあります。",
+    "minutes": 12,
+    "url": "https://sample-flowdesk.example.com/affiliates",
+    "steps": [
+      "PartnerStack のプログラムページから直接サインアップ（審査が緩く早い）",
+      "応募先: https://sample-flowdesk.example.com/affiliates",
+      "下の「回答の下書き」をフォームにコピペする",
+      "サイト URL には自分の GitHub Pages の URL を入れる（記事が1本でも公開されていれば通りやすい）",
+      "承認されたら、発行されたアフィリエイトリンクを控える",
+      "承認後にこれを実行: npm run autopilot link:set sample-flowdesk \"<アフィリエイトリンク>\"",
+      "→ 次回のサイトビルドで、全記事のリンクが自動的に差し替わります"
+    ],
+    "prefilledAnswers": {
+      "How will you promote us? / プロモーション方法": "We publish long-form, experience-based comparison articles for freelancers, small agencies and 2-20 person SaaS/e-commerce teams in the US, UK, Canada and Australia, and distribute them through Pinterest, where we build category boards around specific buying problems. For Sample Flowdesk we plan a dedicated review plus at least two comparison articles against Competitor A and Competitor B, each with a clear disclosure and a genuine assessment of who the tool is not for. Our traffic is evergreen rather than news-driven, so a published article keeps sending qualified trial signups for months.",
+      "Describe your audience / 読者層": "freelancers, small agencies and 2-20 person SaaS/e-commerce teams in the US, UK, Canada and Australia. They are hands-on operators, usually the person who both chooses and pays for the tool, and they read comparisons before starting a trial.",
+      "Monthly traffic / 月間トラフィック": "This is a new site, so traffic is still small and growing. Our distribution is Pinterest plus organic search on evergreen comparison queries, and we would rather show you real numbers as they build than quote a figure we cannot back up.",
+      "Promotional methods / 手法（チェックボックス）": "Content / blog / Social media (Pinterest) / SEO / Comparison and review content",
+      "Bio / プロフィール": "We run Worked For Us, an independent site that compares subscription software for small teams. We buy and use the tools we write about, and we publish the cases where a tool is the wrong choice.",
+      "Website URL": "https://example.github.io/saas-for-overseas"
+    },
+    "blocks": [
+      "Sample Flowdesk の報酬発生（記事とピンは応募前でも先に作れます）"
+    ],
+    "status": "open",
+    "createdAt": "2026-08-30T10:48:38.655Z"
+  }
+]
