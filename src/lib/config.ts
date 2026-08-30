@@ -19,6 +19,10 @@ export interface AppConfig {
   pins: {
     perArticle: number; width: number; height: number; publishPerDay: number;
     minMinutesBetweenPins: number; postingHoursUtc: number[]; boardStrategy: string;
+    /** 新規アカウントの信頼度が低いうちは投稿数を抑える。何日かけて publishPerDay まで増やすか。 */
+    rampUpDays: number;
+    /** ランプアップ初日の1日あたり投稿数。 */
+    rampUpStartPerDay: number;
   };
   programs: {
     targetActive: number; discoverPerRun: number; minMonthlyCommissionUsd: number;

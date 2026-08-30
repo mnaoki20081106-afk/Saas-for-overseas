@@ -83,7 +83,9 @@
       21,
       23
     ],
-    "boardStrategy": "one board per category"
+    "boardStrategy": "one board per category",
+    "rampUpDays": 21,
+    "rampUpStartPerDay": 2
   },
   "programs": {
     "targetActive": 8,

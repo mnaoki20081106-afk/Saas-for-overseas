@@ -128,6 +128,7 @@ const emptyState: PipelineState = {
   lastResearchAt: null, lastArticleAt: null, lastPinPublishAt: null,
   lastAnalyticsAt: null, lastReportAt: null,
   publishedCategories: [], cursor: 0, milestonesHit: [],
+  campaignStartedAt: null,
 };
 export const state = {
   get: (): PipelineState => ({ ...emptyState, ...readJson<Partial<PipelineState>>(P.state, {}) }),
