@@ -119,9 +119,14 @@ npm run autopilot doctor
 
 ---
 
-# 2. GitHub Pages を有効にする（5分・無料）
+# 2. GitHub Pages を有効にする（5分・無料 ＋ 独自ドメイン推奨）
 
-記事を公開する場所です。独自ドメインは不要です。
+記事を公開する場所です。
+
+> **独自ドメインを強く勧めます。** `xxx.github.io` のままだと、
+> Pinterest の API 審査で「Its URL is registered with an entity in your company」
+> という条件を満たせず**却下されます**（実際に起きました。2-6 で対応します）。
+> 年間 $10〜15 程度で、Cloudflare Registrar などで取得できます。
 
 ### 2-1. Pages をオンにする
 
@@ -154,7 +159,32 @@ https://mnaoki20081106-afk.github.io/Saas-for-overseas
 
 手元でも動かすなら、`config/config.json` の `site.baseUrl` も同じ値に書き換えてください。
 
-### 2-5. サイトの名前を自分のものにする
+### 2-5. 独自ドメインをつなぐ（推奨）
+
+ドメインを取得したら（例: `worked-for-us.com`）：
+
+1. ドメインの管理画面（レジストラ側）で **DNS レコード**を追加する
+   - apex ドメイン（`worked-for-us.com` そのもの、`www` 無し）の場合は **A レコード**を4つ追加：
+     ```
+     185.199.108.153
+     185.199.109.153
+     185.199.110.153
+     185.199.111.153
+     ```
+   - `www.worked-for-us.com` も使いたい場合は、別途 **CNAME レコード**：
+     `www` → `<GitHubのユーザー名>.github.io`
+   - apex ドメインに CNAME は張れません（DNSの仕様上）。A レコード4つが正解です
+2. **リポジトリの Settings → Pages → Custom domain** に取得したドメインを入力して Save
+   - ⚠ このプロジェクトは GitHub Actions でデプロイしているため、**リポジトリに `CNAME` ファイルを置く必要はありません**（置いても無視されます）。ドメインの設定は Settings 側だけで完結します
+3. DNS の反映と HTTPS証明書の自動発行を待つ（数分〜最大24時間程度）。
+   Settings → Pages の画面で **「Enforce HTTPS」のチェックボックスが選べる状態**になったら準備完了です
+4. `config/config.json` の `site.baseUrl` と、2-4 で登録した GitHub の **Variables → `SITE_BASE_URL`** を、
+   両方とも新しいドメイン（`https://worked-for-us.com`）に更新する
+5. Actions タブから **rebuild-site** を手動実行してサイトを再公開する
+6. 自分のブラウザで新しいドメインが実際に開けることを確認してから、
+   Pinterest への再申請（3章）に進む
+
+### 2-6. サイトの名前を自分のものにする
 
 `config/config.json` の先頭を編集します。**読者は英語圏の人なので英語で**書いてください。
 
@@ -167,7 +197,7 @@ https://mnaoki20081106-afk.github.io/Saas-for-overseas
 
 思いつかなければ既定のままで構いません。あとから変えても記事は壊れません。
 
-### 2-6. 確認
+### 2-7. 確認
 
 ```bash
 npm run autopilot site:build
@@ -263,13 +293,59 @@ git add -A && git commit -m "Pinterest の確認コードを追加" && git push
 
 > サイトがまだ公開されていないと失敗します。その場合は先に「5. 起動する」まで進めてから戻ってきてください。
 
-## 3-3. API アプリを作って Trial access を申請する（10分＋待ち）
+## 3-3. API アプリを作って Trial access を申請する（15分＋待ち）
+
+> **申請前に必ず済ませておくこと。** 却下の主因はほぼ100%ここです。
+> - 2-5 の独自ドメインの設定が終わっていて、`https://worked-for-us.com/` が
+>   実際にブラウザで開けること
+> - `https://worked-for-us.com/privacy/` が実際に開けて、"Privacy Policy" と
+>   はっきり書かれていること（このリポジトリのコードは既に対応済み）
+> - Actions タブから **rebuild-site** を実行して、上記が最新の内容で
+>   公開されていること
 
 1. https://developers.pinterest.com/apps/ を開く（3-1 のビジネスアカウントでログイン）
-2. **Create app** → アプリ名（`autopilot` など）と用途を入力して申請
-3. **Trial access の審査結果を待ちます**
+2. 「**Create app**」または「**アプリをリンク / Connect app**」（表記はどちらも見られます）
+3. 基本情報を入力：
+
+   | 項目 | 入力する値 |
+   | --- | --- |
+   | アプリ名 | `Worked For Us`（**「Pinterest」という単語は使えません**） |
+   | 会社名 | `Worked For Us` |
+   | 会社のウェブサイト / アプリのリンク | `https://worked-for-us.com` |
+   | プライバシーポリシーへのリンク | `https://worked-for-us.com/privacy/` |
+   | アプリの目的（英語） | 下記の文案 |
+
+   ```
+   Worked For Us is an independent editorial website publishing hands-on comparison
+   articles about business software (SaaS) for small teams. This app will publish
+   Pins that link back to our own articles on our website, and will read Pin
+   analytics (impressions, outbound clicks, saves) to measure performance.
+   ```
+
+4. 追加の質問（複数ページに分かれて出ることがあります）：
+
+   | 質問 | 選ぶもの |
+   | --- | --- |
+   | デベロッパーの目的 | **個人用APIアクセス（単一、個人使用）** |
+   | 使用目的（複数選択） | **ピン作成・予約投稿** と **レポート** の2つだけ |
+   | オーディエンス（複数選択） | **ビジネス** |
+   | ピンデータやボードデータを読み取る | **「はい、自分用です」**（初期値は「いいえ」なので必ず変更する） |
+
+5. 送信して **Trial access の審査結果を待ちます**
    → コミュニティの報告では**数日〜2週間程度**かかることがあります
    → **App secret と Redirect URI は、Trial が承認されるまで設定できません**
+
+### もし却下メールが来たら
+
+Pinterest からのメールに、だいたい次のような理由が書かれます：
+
+- ウェブサイトが「オンラインでアクセスできる」「SNSではない」「会社名義で登録されたドメインである」こと
+- プライバシーポリシーが「公開されている」「完全に表示される」「会社と明確に紐づくドメインにある」「プライバシーポリシーだと明確に分かる」こと
+- アプリの説明が完全で正確であること
+
+**`xxx.github.io` のような無料サブドメインは「会社名義で登録されたドメイン」と見なされず、これだけで却下されます。** 独自ドメイン（2-5）を先に済ませてください。
+
+却下されたアプリは、多くの場合その場で編集・再申請ができません（フィールドがロックされ、再申請ボタンが消えるという報告が複数あります）。その場合は**新しいアプリを作り直してください**。アプリ名が重複してエラーになったら `Worked For Us App` のように少し変えれば通ります。
 
 ## 3-4. 認可して Refresh Token を取る（10分・Trial 承認後）
 

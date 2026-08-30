@@ -413,12 +413,26 @@ export function buildSite(): BuildResult {
     "How this site is funded and how affiliate links are handled.",
   ));
   write("privacy/index.html", staticPage(
-    "Privacy", "/privacy/",
-    `<h1>Privacy</h1>
-<p>This is a static site. We do not ask for or store personal information.</p>
-<p>${c.site.gaMeasurementId ? "We use Google Analytics to count page views in aggregate." : "We do not run analytics scripts on this site."}</p>
-<p>Affiliate networks may set a cookie when you follow one of our outbound links, so the vendor can attribute a signup to us. You can block cookies in your browser without affecting anything on this site.</p>`,
-    "Privacy information.",
+    "Privacy Policy", "/privacy/",
+    `<h1>Privacy Policy</h1>
+<p class="meta">Last updated: ${new Date().toISOString().slice(0, 10)}</p>
+<p>This Privacy Policy explains how ${escapeHtml(c.site.name)} (${escapeHtml(c.site.baseUrl)}) handles information
+when you visit this website.</p>
+<h2>Information we collect</h2>
+<p>This is a static site. We do not operate accounts, forms, or logins, and we do not ask visitors for personal
+information such as names, email addresses, or payment details.</p>
+<p>${c.site.gaMeasurementId
+      ? "We use Google Analytics to measure aggregate page views. Google Analytics may use cookies as described in Google's own privacy policy."
+      : "We do not run any analytics or tracking scripts on this site."}</p>
+<h2>Cookies and third-party links</h2>
+<p>Some links on this site are affiliate links to third-party software vendors (see our
+<a href="/disclosure/">affiliate disclosure</a>). When you follow one of those links, the vendor's own site may
+set a cookie so they can attribute a signup to us. That cookie is set by the vendor, not by this site, and is
+governed by the vendor's own privacy policy. You can block cookies in your browser without affecting anything
+on this site.</p>
+<h2>Contact</h2>
+<p>Questions about this policy can be sent through our <a href="${escapeHtml(c.site.baseUrl)}/about/">About page</a>.</p>`,
+    `Privacy Policy for ${c.site.name}.`,
   ));
   pages += 3;
 
