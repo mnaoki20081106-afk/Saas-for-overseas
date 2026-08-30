@@ -160,7 +160,7 @@ https://mnaoki20081106-afk.github.io/Saas-for-overseas
 
 ```json
 "site": {
-  "name": "StackPickr",                                      ← サイト名
+  "name": "Worked For Us",                                  ← サイト名（決めた場合はそのまま）
   "tagline": "Honest, hands-on SaaS comparisons for small teams",  ← 一行説明
   "description": "Independent, experience-based comparisons of ...", ← 説明文
 ```
@@ -206,7 +206,11 @@ npm run autopilot site:build
    → 見つからなければ `business.pinterest.com` を開いて右上の **Sign up** からでも同じ画面に入れます
 5. メールアドレス・パスワード・生年月日を入力して作成
 6. プロフィールを入力
-   - ビジネス名（＝サイト名）
+   - **ビジネス名（表示名）**： `Worked For Us`
+     → **ユーザー名を聞かれたら** `workedforus`（スペース・記号なしの半角英数字）。
+       これが `pinterest.com/workedforus` という URL になります
+     → 変えたい場合は、決めたあとに `config/config.json` の `site.name` /
+       `site.author` も同じ名前に直してください（サイト全体のメタタグに反映されます）
    - ロゴ画像
    - ウェブサイト URL（2-3 で控えた GitHub Pages の URL）
    - **国 = United States、言語 = English** ← ここは必ず確認してください

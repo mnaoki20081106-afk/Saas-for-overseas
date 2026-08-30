@@ -1,9 +1,9 @@
 {
   "site": {
-    "name": "StackPickr",
+    "name": "Worked For Us",
     "tagline": "Honest, hands-on SaaS comparisons for small teams",
     "baseUrl": "https://example.github.io/saas-for-overseas",
-    "author": "The StackPickr Team",
+    "author": "The Worked For Us Team",
     "locale": "en-US",
     "description": "Independent, experience-based comparisons of subscription software for freelancers, agencies and small teams.",
     "gaMeasurementId": "",
