@@ -108,7 +108,8 @@
     "requireDisclosure": true,
     "affiliateDisclosure": "Some links on this page are affiliate links. If you start a paid plan through them we may earn a commission at no extra cost to you. We only cover tools we have used or tested ourselves, and we say when a tool is a poor fit.",
     "pinDisclosureSuffix": "#affiliate",
-    "linkRel": "nofollow sponsored noopener"
+    "linkRel": "nofollow sponsored noopener",
+    "pinDisclosurePrefix": "Affiliate links included — "
   },
   "growth": {
     "monthlyRevenueMilestonesUsd": [

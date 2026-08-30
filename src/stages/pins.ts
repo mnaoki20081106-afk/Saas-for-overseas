@@ -13,7 +13,7 @@ import { templateRanking } from "./optimize";
 const PinCopy = z.object({
   templateId: z.enum(TEMPLATE_IDS).describe("Which visual template fits this angle"),
   title: z.string().describe("Pinterest pin title. <=95 characters. Must contain a number or a concrete noun. No emoji. No year."),
-  description: z.string().describe("Pinterest description, 180-380 characters, keyword-rich but readable, written to a person not a crawler. Ends with 2-4 lowercase hashtags."),
+  description: z.string().describe("Pinterest description body, 140-320 characters, keyword-rich but readable, written to a person not a crawler. Ends with 2-4 lowercase hashtags. Do NOT write your own affiliate/sponsored disclosure or use the words affiliate/sponsored/ad anywhere in this field — a compliant disclosure is prepended automatically outside this field."),
   overlayTop: z.string().describe("Small uppercase kicker on the image. <=28 characters."),
   overlayMain: z.string().describe("The big headline on the image. <=60 characters. This is what makes the click happen."),
   overlayBottom: z.string().describe("Supporting line on the image, <=90 characters. For the 'checklist' template use 3-5 short items separated by | . For 'versus' put the differentiator here."),
@@ -35,7 +35,11 @@ What you know about this surface:
   the free-plan trap, and the "who should not buy this" angle.
 - Never date the pin. No years, no "new", no "latest". A pin must still make sense in two years.
 - No emoji in titles. Hashtags only at the end of the description, lowercase, 2-4 of them.
-- Overlay text is set in a 1000x1500 graphic. Long lines shrink and look weak — respect the limits.`;
+- Overlay text is set in a 1000x1500 graphic. Long lines shrink and look weak — respect the limits.
+- A short affiliate disclosure is prepended to every description outside of what you write, so that
+  it appears before the fold (Pinterest and the FTC require disclosure to be visible without a click).
+  Never write your own disclosure and never use the words "affiliate", "sponsored", or "ad" — that
+  would duplicate it and read as spam.`;
 
 /** これまでの実測 CTR を生成プロンプトに戻し、効いているテンプレートを厚くする */
 function performanceHint(): string {
@@ -44,6 +48,16 @@ function performanceHint(): string {
   const best = ranking.slice(0, 2).map((r) => `${r.templateId} (${r.ctrPct}%)`).join(", ");
   const worst = ranking[ranking.length - 1];
   return `- Our own measured results so far: best templates are ${best}; weakest is ${worst.templateId} (${worst.ctrPct}%). Weight the mix toward the best ones and use the weakest at most once.`;
+}
+
+/**
+ * FTC / Pinterest は「開示はリンクの手前・折りたたまれる前」に必要とする。
+ * モデルの言葉選びに委ねず、常にプログラム側で説明文の先頭に固定で挿入する。
+ */
+function withDisclosure(body: string): string {
+  const prefix = config().compliance.pinDisclosurePrefix;
+  const budget = Math.max(0, 500 - prefix.length);
+  return `${prefix}${body.trim().slice(0, budget)}`;
 }
 
 function boardFor(category: string): string {
@@ -99,7 +113,8 @@ ${performanceHint()}
 - For templateId "checklist", overlayBottom must be 3-5 short items separated by " | ".
 - For templateId "versus", overlayMain must be exactly "A vs B" using the two product names.
 - Descriptions must not promise results. Describe what the reader will learn.
-- Every description ends with ${c.compliance.pinDisclosureSuffix} plus 2-3 topical lowercase hashtags.`;
+- Every description body ends with ${c.compliance.pinDisclosureSuffix} plus 2-3 topical lowercase hashtags.
+- Do not open with a disclosure — "${c.compliance.pinDisclosurePrefix.trim()}" is added automatically before your text.`;
 }
 
 export interface PinGenResult { created: number; pins: Pin[] }
@@ -138,7 +153,7 @@ export async function generatePinsForArticle(
     articleSlug: article.slug,
     templateId: p.templateId,
     title: p.title.slice(0, 100),
-    description: p.description.slice(0, 500),
+    description: withDisclosure(p.description),
     overlayTop: p.overlayTop.slice(0, 32),
     overlayMain: p.overlayMain.slice(0, 72),
     overlayBottom: p.overlayBottom.slice(0, 110),

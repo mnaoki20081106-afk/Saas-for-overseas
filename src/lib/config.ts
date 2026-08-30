@@ -30,7 +30,7 @@ export interface AppConfig {
   };
   compliance: {
     requireDisclosure: boolean; affiliateDisclosure: string;
-    pinDisclosureSuffix: string; linkRel: string;
+    pinDisclosureSuffix: string; pinDisclosurePrefix: string; linkRel: string;
   };
   growth: { monthlyRevenueMilestonesUsd: number[]; introducerThresholdUsd: number };
   models: {
