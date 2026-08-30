@@ -77,19 +77,66 @@ function credentialTasks(): HumanTask[] {
   if (!env.pinterest.configured) {
     add({
       id: "cred-pinterest",
+      kind: "account_setup",
+      title: "Pinterest のビジネスアカウントを作る",
+      whyItCannotBeAutomated: "アカウント作成は本人操作が必須です（1回だけ）。",
+      minutes: 15,
+      url: "https://www.pinterest.com/",
+      steps: [
+        "【PC で行ってください】新規のビジネスアカウント作成はスマホアプリからはできません",
+        "使うメールアドレスを決める。既に Pinterest で使っているアドレスは使えません（新規なら別アドレスを用意）",
+        "⚠ pinterest.com を開くと、アクセス元の場所から自動判定されて jp.pinterest.com に転送されることがあります。" +
+          "そのまま登録すると国が日本に設定されるおそれがあるため、URL 欄が jp.pinterest.com になっていないか必ず確認してください",
+        "jp.pinterest.com になっていたら、ページ下部（フッター）の言語/国切り替えリンクを探して United States / English に変更するか、" +
+          "ブラウザのシークレットウィンドウで https://www.pinterest.com/ を開き直してください",
+        "www.pinterest.com の状態で、右上の「Sign up / 登録」→ 登録フォームの下にある「ビジネスアカウントを作成 / Create a business account」のリンクを押す",
+        "（見つからない場合）business.pinterest.com を開いて右上の「Sign up」からでも同じ画面に入れます",
+        "メールアドレス・パスワード・生年月日を入力して作成",
+        "プロフィール（ビジネス名・ロゴ・ウェブサイトURL・国・言語）を入力。国は必ず United States、言語は English を選ぶ（英語圏に配信するため）",
+        "⚠ 国の設定は登録後の変更が効かない、または扱いが不安定という報告があります。ここで妥協せず、必ず United States になっていることを確認してから次に進んでください",
+        "広告を出すか聞かれたら「今はしない」で構いません",
+        "※ 既に個人アカウントを持っている場合は、プロフィールメニューからビジネスアカウントへの切り替え・追加もできます（その場合も設定 → Personal information で国が United States になっているか確認）",
+      ],
+      blocks: ["ピンの投稿全般"],
+    });
+
+    add({
+      id: "setup-pinterest-claim",
+      kind: "account_setup",
+      title: "Pinterest でサイトの所有権を確認する（Claim）",
+      whyItCannotBeAutomated: "Pinterest の管理画面での操作が必要です。確認コードの埋め込み側は自動化済みです。",
+      minutes: 10,
+      steps: [
+        "Pinterest 右上の v アイコン →「設定 / Settings」",
+        "左メニューの「Pinterest にリンク / Link to Pinterest」→ Websites の「申請する / Claim」",
+        "認証方法で「HTML タグを追加 / Add HTML tag」を選ぶ",
+        '表示された <meta name="p:domain_verify" content="XXXX"> の XXXX の部分だけをコピー',
+        "config/config.json の site.pinterestVerifyCode に貼る",
+        "npm run autopilot site:build → git push → GitHub Actions が緑になるまで待つ",
+        "Pinterest の画面に戻って自分のサイト URL を入れて「確認 / Verify」",
+        "※ 確認できたかは 設定 →「リンク済みアカウント / Claimed accounts」で見られます",
+      ],
+      blocks: ["ピンの表示優先度", "リンクの信頼度", "アナリティクスの精度"],
+    });
+
+    add({
+      id: "cred-pinterest-api",
       kind: "credential",
-      title: "Pinterest のビジネスアカウントと API アプリを作る",
-      whyItCannotBeAutomated: "アカウント作成と OAuth 承認は本人操作が必須です（1回だけ）。",
-      minutes: 30,
+      title: "Pinterest API アプリを作り、Standard access まで通す",
+      whyItCannotBeAutomated:
+        "アプリ作成・OAuth 承認・審査申請は本人操作が必須です。さらに Trial access のまま API で作ったピンは『自分にしか見えない Sandbox ピン』になるため、流入源にするには Standard access の審査を通す必要があります（審査には OAuth フローの録画提出が必要で、数日〜数週間かかることがあります）。",
+      minutes: 40,
       url: "https://developers.pinterest.com/apps/",
       steps: [
-        "pinterest.com でビジネスアカウントを作成（無料）",
-        "サイトの所有権を確認（Settings → Claimed accounts → Claim website）。npm run autopilot site:build で生成される public/ を GitHub Pages に置き、Pinterest が出すメタタグを config/config.json の site に足す形でも可",
-        "https://developers.pinterest.com/apps/ で App を作成し、Redirect URI に http://localhost:8788/callback を登録",
-        "App ID と App secret を控える",
-        "ローカルで: PINTEREST_APP_ID=... PINTEREST_APP_SECRET=... npm run autopilot pinterest:auth",
-        "表示された URL をブラウザで開いて承認 → 端末に出た PINTEREST_REFRESH_TOKEN を控える",
+        "developers.pinterest.com/apps/ で App を作成（ビジネスアカウントでログイン）",
+        "Trial access の審査を申請し、承認を待つ（App secret と Redirect URI は承認後に設定できるようになります）",
+        "承認されたら App ID と App secret を控える",
+        "`npm run autopilot pinterest:auth` を実行すると、登録すべき Redirect URI が表示されます",
+        "その URL を App の Redirect URIs に一字一句そのまま登録",
+        "もう一度 pinterest:auth を実行 → 表示された URL をブラウザで開いて承認 → PINTEREST_REFRESH_TOKEN を控える",
         "GitHub Secrets に PINTEREST_APP_ID / PINTEREST_APP_SECRET / PINTEREST_REFRESH_TOKEN を登録",
+        "続けて Standard access を申請する（OAuth フローを画面録画した動画の提出が必要。自分ひとりで使う場合でも必要です）",
+        "★ 審査待ちの間も止まりません: `npm run autopilot pins:export` で CSV と画像を書き出し、手動投稿か外部の予約ツール（Tailwind など）で回せます",
       ],
       blocks: ["ピンの自動投稿", "ピンの数値取得", "勝ち型の自動検出"],
     });
@@ -171,6 +218,7 @@ Our honest status: brand-new site, small but growing traffic.
 
 Write answers a reviewer would approve. Be specific about what we will publish about ${p.name}.
 Do not invent traffic numbers.`,
+        stage: "growth",
         label: `応募文の下書き: ${p.name}`,
         effort: "medium",
         maxTokens: 4000,

@@ -1,5 +1,5 @@
 #!/usr/bin/env -S node --enable-source-maps
-import { setAffiliateLink } from "./lib/config";
+import { config, setAffiliateLink } from "./lib/config";
 import { log } from "./lib/log";
 import { ensureDirs } from "./lib/paths";
 import { articles, humanTasks, pins as pinStore, programs, runlog } from "./lib/store";
@@ -9,11 +9,13 @@ import { refreshHumanTasks, writeChecklist } from "./stages/humantasks";
 import { writeOneArticle } from "./stages/content";
 import { generatePinsForArticle, schedule, schedulingSummary } from "./stages/pins";
 import { publishDuePins, requeueFailedPins } from "./stages/publish";
+import { exportPins } from "./stages/export";
 import { collectAnalytics } from "./stages/analytics";
 import { runOptimizer } from "./stages/optimize";
 import { buildGrowthAssets, buildReport } from "./stages/report";
 import { buildSite } from "./site/build";
 import { doctor } from "./stages/doctor";
+import { checkProvider } from "./stages/provider";
 import { runBootstrap, runDaily, runWeekly } from "./orchestrator";
 import {
   authorizeUrl, exchangeCode, PINTEREST_SCOPES, waitForCallback,
@@ -28,6 +30,8 @@ const HELP = `
 
 ── まず最初に ──────────────────────────────────
   doctor                 いま何が自動で動いて何が止まっているかを表示
+  provider:check [model] 接続先のAPIが必要な機能を持っているか実測する
+                         （ANTHROPIC_BASE_URL を向ければ他社の互換エンドポイントも判定できます）
   bootstrap [n]          初回セットアップ（リサーチ + 記事 n 本 + ピン一式）。既定 3
   tasks                  人間しかできない作業を洗い出して TODO-HUMAN.md を更新
 
@@ -40,6 +44,8 @@ const HELP = `
   article                英語記事を1本書く（設計→執筆→品質ゲート）
   pins [article-slug]    ピン10枚を生成して予約（省略時は最新記事）
   pins:publish [--limit N] [--force]   予約時刻を過ぎたピンを投稿
+  pins:export [--days N] [--mark]      手動投稿・外部予約ツール用に CSV と画像を書き出す
+                         （Pinterest API の審査待ちでも止まらないための逃げ道）
   pins:requeue           投稿に失敗したピンを再予約
   pins:list              予約状況を表示
   analytics [days]       Pinterest とアフィリエイトの数値を取得。既定 30 日
@@ -56,6 +62,22 @@ const HELP = `
   status                 いまの状態をまとめて表示
 `;
 
+/** GitHub Codespaces 上か（ローカルに Node を入れなくてもブラウザだけで完結する） */
+function isCodespaces(): boolean {
+  return Boolean(process.env.CODESPACE_NAME && process.env.GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN);
+}
+
+/**
+ * OAuth のコールバック URL。
+ * Codespaces では localhost が Pinterest から見えないので、転送された HTTPS の URL を使う。
+ */
+function defaultRedirectUri(port: number): string {
+  if (isCodespaces()) {
+    return `https://${process.env.CODESPACE_NAME}-${port}.${process.env.GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}/callback`;
+  }
+  return `http://localhost:${port}/callback`;
+}
+
 function arg(args: string[], flag: string): string | undefined {
   const i = args.indexOf(flag);
   return i === -1 ? undefined : args[i + 1];
@@ -68,6 +90,10 @@ async function main(): Promise<void> {
   switch (command) {
     case "doctor":
       await doctor();
+      break;
+
+    case "provider:check":
+      await checkProvider(rest[0]);
       break;
 
     case "bootstrap":
@@ -114,6 +140,12 @@ async function main(): Promise<void> {
         limit: limit ? Number(limit) : undefined,
         force: rest.includes("--force"),
       });
+      break;
+    }
+
+    case "pins:export": {
+      const days = arg(rest, "--days");
+      exportPins({ days: days ? Number(days) : undefined, mark: rest.includes("--mark") });
       break;
     }
 
@@ -167,8 +199,12 @@ async function main(): Promise<void> {
 
     case "pinterest:auth": {
       const port = Number(process.env.PINTEREST_CALLBACK_PORT) || 8788;
-      const redirectUri = process.env.PINTEREST_REDIRECT_URI ?? `http://localhost:${port}/callback`;
+      const redirectUri = process.env.PINTEREST_REDIRECT_URI ?? defaultRedirectUri(port);
       log.step("Pinterest の認可を1回だけ行います");
+      if (isCodespaces()) {
+        log.info("GitHub Codespaces を検出しました。ブラウザだけで完結します。");
+        log.info(`VS Code 下部の PORTS タブで ${port} 番の Visibility を Public にしてから続けてください。`);
+      }
       log.info(`必要なスコープ: ${PINTEREST_SCOPES}`);
       log.info("Pinterest の App 設定で、Redirect URI に次を登録しておいてください:");
       log.info(`  ${redirectUri}`);
@@ -196,6 +232,18 @@ async function main(): Promise<void> {
       log.ok(`${slug} のアフィリエイトリンクを登録しました。次のサイトビルドで全記事に反映されます。`);
       buildSite();
       writeChecklist();
+
+      // 「本当にこのリンクで成果が発生するか」を、登録した本人がその場で確認できるようにする
+      const testUrl = `${config().site.baseUrl}/go/${slug}/`;
+      console.log("");
+      log.step("これが本物のリンクとして機能するか、今すぐ自分で確認してください");
+      log.info(`1. シークレット/プライベートウィンドウで開く（広告ブロッカーはオフ）: ${testUrl}`);
+      log.info("2. 相手企業の本物のサイトに、あなたが貼ったURL(?ref=... のような追跡パラメータ付き)で");
+      log.info("   移動することを確認する");
+      log.info("3. そのネットワークの管理画面（Impact / ShareASale 等のダッシュボード）を数分〜数時間後に開き、");
+      log.info("   このテストクリックが1件、自分のアカウントに記録されているか確認する");
+      log.info("4. 記録されていれば追跡は生きています。記録されなければ、貼ったURLが違う可能性があるので");
+      log.info("   ネットワークの管理画面から改めてリンクを発行し直してください");
       break;
     }
 

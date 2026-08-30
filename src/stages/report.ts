@@ -206,6 +206,7 @@ to check every claim. The Japanese post must read as a Japanese person's own wri
    arrangement (flat fee per closed account) on top of the standard affiliate program. Reference the
    real numbers. Short, concrete, easy to say yes to.
 3. consultingOutline — 日本語の箇条書き。実際にやった工程だけを扱う有料コンサルの構成案。`,
+        stage: "growth",
         label: "実績発信素材の生成",
         effort: "high",
         maxTokens: 8000,

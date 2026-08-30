@@ -9,6 +9,7 @@ export interface AppConfig {
   site: {
     name: string; tagline: string; baseUrl: string; author: string;
     locale: string; description: string; gaMeasurementId: string;
+    pinterestVerifyCode: string;
   };
   niche: { audience: string; categories: string[]; geoFocus: string[]; excludeJapanese: boolean };
   content: {
@@ -29,9 +30,14 @@ export interface AppConfig {
   };
   compliance: {
     requireDisclosure: boolean; affiliateDisclosure: string;
-    pinDisclosureSuffix: string; linkRel: string;
+    pinDisclosureSuffix: string; pinDisclosurePrefix: string; linkRel: string;
   };
   growth: { monthlyRevenueMilestonesUsd: number[]; introducerThresholdUsd: number };
+  models: {
+    profile: string;
+    presets: Record<string, Record<string, string>>;
+  };
+  admin: { branch: string };
 }
 
 export interface ScoringConfig {
@@ -47,6 +53,8 @@ let cached: AppConfig | null = null;
 export function config(): AppConfig {
   if (!cached) cached = readJson<AppConfig>(P.config, null as unknown as AppConfig);
   if (!cached) throw new Error("config/config.json が見つかりません");
+  const envVerify = process.env.PINTEREST_VERIFY_CODE;
+  if (envVerify) cached.site.pinterestVerifyCode = envVerify;
   const envBase = process.env.SITE_BASE_URL?.replace(/\/+$/, "");
   if (envBase) cached.site.baseUrl = envBase;
   cached.site.baseUrl = cached.site.baseUrl.replace(/\/+$/, "");
@@ -73,11 +81,26 @@ export function setAffiliateLink(slug: string, url: string): void {
 }
 
 /* ------------------------------------------------------------------- env */
+/**
+ * 工程ごとに使うモデルを返す。
+ * CLAUDE_MODEL が設定されていれば、それが全工程を上書きする。
+ */
+export function modelFor(stage: string): string {
+  const override = process.env.CLAUDE_MODEL;
+  if (override) return override;
+  const m = config().models;
+  const preset = m.presets[m.profile] ?? m.presets.balanced ?? {};
+  return preset[stage] ?? "claude-opus-5";
+}
+
 export const env = {
   get anthropicKey(): string | undefined {
     return process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_AUTH_TOKEN;
   },
-  get model(): string { return process.env.CLAUDE_MODEL || "claude-opus-5"; },
+  /** doctor の疎通確認などで使う代表モデル */
+  get model(): string { return process.env.CLAUDE_MODEL || modelFor("article"); },
+  get baseUrl(): string | undefined { return process.env.ANTHROPIC_BASE_URL; },
+  get usingCustomEndpoint(): boolean { return Boolean(process.env.ANTHROPIC_BASE_URL); },
   get dryRun(): boolean {
     if (process.env.DRY_RUN === "0" || process.env.DRY_RUN === "false") return false;
     if (process.env.DRY_RUN) return true;

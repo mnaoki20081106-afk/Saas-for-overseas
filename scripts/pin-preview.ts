@@ -48,7 +48,7 @@ async function main(): Promise<void> {
       overlayTop: SAMPLES[id].top,
       overlayMain: SAMPLES[id].main,
       overlayBottom: SAMPLES[id].bottom,
-      siteName: "StackPickr",
+      siteName: "Worked For Us",
       width: 1000,
       height: 1500,
       paletteIndex: i,

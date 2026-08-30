@@ -7,6 +7,7 @@ import { P } from "../lib/paths";
 import { articles as articleStore, programs } from "../lib/store";
 import type { Article } from "../lib/types";
 import { escapeHtml, slugify } from "../lib/util";
+import { buildAdminPage } from "../admin/page";
 import { readArticleBody } from "../stages/content";
 
 marked.setOptions({ gfm: true, breaks: false });
@@ -98,6 +99,7 @@ ${o.noindex ? '<meta name="robots" content="noindex,nofollow">' : `<link rel="ca
 <meta property="og:url" content="${url}">
 <meta property="og:site_name" content="${escapeHtml(c.site.name)}">
 <meta name="twitter:card" content="summary_large_image">
+${c.site.pinterestVerifyCode ? `<meta name="p:domain_verify" content="${escapeHtml(c.site.pinterestVerifyCode)}">` : ""}
 <link rel="alternate" type="application/rss+xml" title="${escapeHtml(c.site.name)}" href="${c.site.baseUrl}/rss.xml">
 <style>${CSS}</style>
 ${(o.jsonLd ?? []).map((j) => `<script type="application/ld+json">${JSON.stringify(j)}</script>`).join("\n")}
@@ -420,9 +422,11 @@ export function buildSite(): BuildResult {
   ));
   pages += 3;
 
+  write("admin/index.html", buildAdminPage(c.admin.branch));
+
   write("sitemap.xml", sitemap(list));
   write("rss.xml", rss(list));
-  write("robots.txt", `User-agent: *\nAllow: /\nDisallow: /go/\n\nSitemap: ${c.site.baseUrl}/sitemap.xml\n`);
+  write("robots.txt", `User-agent: *\nAllow: /\nDisallow: /go/\nDisallow: /admin/\n\nSitemap: ${c.site.baseUrl}/sitemap.xml\n`);
   write(".nojekyll", "");
 
   const result: BuildResult = {
