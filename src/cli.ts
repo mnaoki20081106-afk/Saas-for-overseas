@@ -56,6 +56,22 @@ const HELP = `
   status                 いまの状態をまとめて表示
 `;
 
+/** GitHub Codespaces 上か（ローカルに Node を入れなくてもブラウザだけで完結する） */
+function isCodespaces(): boolean {
+  return Boolean(process.env.CODESPACE_NAME && process.env.GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN);
+}
+
+/**
+ * OAuth のコールバック URL。
+ * Codespaces では localhost が Pinterest から見えないので、転送された HTTPS の URL を使う。
+ */
+function defaultRedirectUri(port: number): string {
+  if (isCodespaces()) {
+    return `https://${process.env.CODESPACE_NAME}-${port}.${process.env.GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}/callback`;
+  }
+  return `http://localhost:${port}/callback`;
+}
+
 function arg(args: string[], flag: string): string | undefined {
   const i = args.indexOf(flag);
   return i === -1 ? undefined : args[i + 1];
@@ -167,8 +183,12 @@ async function main(): Promise<void> {
 
     case "pinterest:auth": {
       const port = Number(process.env.PINTEREST_CALLBACK_PORT) || 8788;
-      const redirectUri = process.env.PINTEREST_REDIRECT_URI ?? `http://localhost:${port}/callback`;
+      const redirectUri = process.env.PINTEREST_REDIRECT_URI ?? defaultRedirectUri(port);
       log.step("Pinterest の認可を1回だけ行います");
+      if (isCodespaces()) {
+        log.info("GitHub Codespaces を検出しました。ブラウザだけで完結します。");
+        log.info(`VS Code 下部の PORTS タブで ${port} 番の Visibility を Public にしてから続けてください。`);
+      }
       log.info(`必要なスコープ: ${PINTEREST_SCOPES}`);
       log.info("Pinterest の App 設定で、Redirect URI に次を登録しておいてください:");
       log.info(`  ${redirectUri}`);

@@ -4,6 +4,7 @@ import { log } from "../lib/log";
 import { P } from "../lib/paths";
 import { articles, humanTasks, pins, programs } from "../lib/store";
 import { getBrowser, closeBrowser } from "../pins/render";
+import { verifyKey } from "../lib/claude";
 
 interface Check { name: string; ok: boolean; detail: string; blocks: string }
 
@@ -17,10 +18,12 @@ export async function doctor(): Promise<DoctorResult> {
   const push = (name: string, ok: boolean, detail: string, blocks: string) =>
     checks.push({ name, ok, detail, blocks });
 
+  // キーの有無ではなく、実際に通るかを確かめる（countTokens は無料）
+  const key = await verifyKey();
   push(
     "Anthropic API キー",
-    Boolean(env.anthropicKey),
-    env.anthropicKey ? `設定済み（モデル: ${env.model}）` : "未設定 → DRY_RUN（サンプル出力）で動作します",
+    key.ok,
+    key.ok ? key.detail : `${key.detail} → いまは DRY_RUN（サンプル出力）で動作します`,
     "案件リサーチ / 記事生成 / ピン文案",
   );
 
@@ -56,6 +59,15 @@ export async function doctor(): Promise<DoctorResult> {
     "ピンのリンク先 / canonical / sitemap",
   );
 
+  push(
+    "Pinterest のサイト所有権確認",
+    Boolean(c.site.pinterestVerifyCode),
+    c.site.pinterestVerifyCode
+      ? "確認コードを埋め込み済み"
+      : "未設定 → Pinterest の Claim website で出るコードを config の site.pinterestVerifyCode に入れてください（未設定でも投稿はできますが、リンクの信頼度が下がります）",
+    "ピンの表示優先度 / リンクの信頼度",
+  );
+
   let chromiumOk = false;
   let chromiumDetail = "";
   try {
@@ -79,10 +91,11 @@ export async function doctor(): Promise<DoctorResult> {
   const openTasks = humanTasks.open();
   const weights: Record<string, number> = {
     "Anthropic API キー": 45,
-    "Pinterest API": 30,
+    "Pinterest API": 28,
     "アフィリエイトネットワーク API": 10,
     "サイト URL": 8,
-    "Chromium（ピン画像の描画）": 7,
+    "Pinterest のサイト所有権確認": 4,
+    "Chromium（ピン画像の描画）": 5,
   };
   const automationPct = Math.round(
     checks.reduce((s, ch) => s + (ch.ok ? weights[ch.name] ?? 0 : 0), 0),

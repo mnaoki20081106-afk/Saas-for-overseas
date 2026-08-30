@@ -98,6 +98,7 @@ ${o.noindex ? '<meta name="robots" content="noindex,nofollow">' : `<link rel="ca
 <meta property="og:url" content="${url}">
 <meta property="og:site_name" content="${escapeHtml(c.site.name)}">
 <meta name="twitter:card" content="summary_large_image">
+${c.site.pinterestVerifyCode ? `<meta name="p:domain_verify" content="${escapeHtml(c.site.pinterestVerifyCode)}">` : ""}
 <link rel="alternate" type="application/rss+xml" title="${escapeHtml(c.site.name)}" href="${c.site.baseUrl}/rss.xml">
 <style>${CSS}</style>
 ${(o.jsonLd ?? []).map((j) => `<script type="application/ld+json">${JSON.stringify(j)}</script>`).join("\n")}

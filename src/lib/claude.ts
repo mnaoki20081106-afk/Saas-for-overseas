@@ -122,6 +122,32 @@ function guardStop(message: Anthropic.Message, label: string): void {
   }
 }
 
+/**
+ * API キーが本当に通るかを確かめる。トークン数え上げは無料なので課金されない。
+ * 「キーは設定したのに動かない」を doctor の時点で潰すため。
+ */
+export async function verifyKey(): Promise<{ ok: boolean; detail: string }> {
+  if (!env.anthropicKey) return { ok: false, detail: "未設定" };
+  try {
+    await getClient().messages.countTokens({
+      model: env.model,
+      messages: [{ role: "user", content: "ping" }],
+    });
+    return { ok: true, detail: `疎通OK（モデル: ${env.model}）` };
+  } catch (err) {
+    if (err instanceof Anthropic.AuthenticationError) {
+      return { ok: false, detail: "キーが無効です。console.anthropic.com で作り直してください" };
+    }
+    if (err instanceof Anthropic.NotFoundError) {
+      return { ok: false, detail: `モデル ${env.model} が使えません。CLAUDE_MODEL を見直してください` };
+    }
+    if (err instanceof Anthropic.APIError) {
+      return { ok: false, detail: `API エラー ${err.status}: ${err.message.slice(0, 120)}` };
+    }
+    return { ok: false, detail: `接続できません: ${(err as Error).message.slice(0, 120)}` };
+  }
+}
+
 /** DRY_RUN のときに投げられ、呼び出し側がフィクスチャで代替する */
 export class DryRunSignal extends Error {
   constructor(public label: string) {

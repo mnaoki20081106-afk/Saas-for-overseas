@@ -6,7 +6,8 @@
     "author": "The StackPickr Team",
     "locale": "en-US",
     "description": "Independent, experience-based comparisons of subscription software for freelancers, agencies and small teams.",
-    "gaMeasurementId": ""
+    "gaMeasurementId": "",
+    "pinterestVerifyCode": ""
   },
   "niche": {
     "audience": "freelancers, small agencies and 2-20 person SaaS/e-commerce teams in the US, UK, Canada and Australia",
