@@ -58,6 +58,10 @@ code{background:var(--accent-soft);padding:.1rem .35rem;border-radius:.25rem;fon
   color:var(--accent);font-weight:700;margin-bottom:.4rem}
 .cta{display:inline-block;background:var(--accent);color:#fff;padding:.7rem 1.15rem;border-radius:.5rem;
   text-decoration:none;font-weight:600;font-size:.95rem}
+.cta-box{margin:1.6rem 0;padding:1.1rem 1.25rem;background:var(--accent-soft);
+  border:1px solid var(--line);border-radius:.6rem;text-align:center}
+.cta-box p{margin:0 0 .65rem;font-size:.9rem;color:var(--muted)}
+.cta:hover{opacity:.92;text-decoration:none}
 footer.site{border-top:1px solid var(--line);margin-top:3rem;padding-block:2rem;color:var(--muted);font-size:.86rem}
 footer.site a{color:var(--muted)}
 .grid-cats{display:flex;flex-wrap:wrap;gap:.5rem;margin:0 0 2rem;padding:0;list-style:none}
@@ -148,6 +152,32 @@ function markAffiliateLinks(html: string): string {
   return html.replace(/<a href="(\/go\/[a-z0-9-]+\/)"/g, `<a href="$1" rel="${rel}"`);
 }
 
+/**
+ * 本文中の文字リンクだけでは押されるかどうか運任せになるため、
+ * 目立つボタンを冒頭直後と末尾にプログラム側で確実に挿入する。
+ * AI の書き方や配置判断には委ねない。
+ */
+function ctaBox(slug: string, label: string): string {
+  const c = config();
+  const name = programs.bySlug(slug)?.name ?? "their site";
+  return `<div class="cta-box">
+<p>See if ${escapeHtml(name)} fits your team.</p>
+<a class="cta" href="/go/${slug}/" rel="${c.compliance.linkRel}">${escapeHtml(label)}</a>
+</div>`;
+}
+
+function insertCtas(html: string, mainSlug: string): string {
+  const top = ctaBox(mainSlug, "Check current pricing →");
+  const bottom = ctaBox(mainSlug, "Start a free trial →");
+
+  const firstParaEnd = html.indexOf("</p>");
+  const withTop = firstParaEnd === -1
+    ? `${top}\n${html}`
+    : `${html.slice(0, firstParaEnd + 4)}\n${top}${html.slice(firstParaEnd + 4)}`;
+
+  return `${withTop}\n${bottom}`;
+}
+
 /* ------------------------------------------------------------- page types */
 
 function articlePage(a: Article): string {
@@ -157,7 +187,8 @@ function articlePage(a: Article): string {
   const { html: withIds, toc } = addHeadingIds(rawHtml);
   const html = markAffiliateLinks(wrapTables(withIds));
 
-  const bodyNoH1 = html.replace(/<h1>[\s\S]*?<\/h1>/, "");
+  const strippedH1 = html.replace(/<h1>[\s\S]*?<\/h1>/, "");
+  const bodyNoH1 = a.programSlugs.length > 0 ? insertCtas(strippedH1, a.programSlugs[0]) : strippedH1;
   const faqPairs = a.brief?.faq ?? [];
 
   const jsonLd: unknown[] = [
