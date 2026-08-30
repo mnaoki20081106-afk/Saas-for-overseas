@@ -14,7 +14,15 @@ runs:
         set -euo pipefail
         git config user.name  "autopilot[bot]"
         git config user.email "autopilot@users.noreply.github.com"
-        git add -A data content assets config/affiliate-links.json TODO-HUMAN.md REPORT.md docs 2>/dev/null || true
+        # 存在するパスだけを add する。`git add -A a b c` は複数パスのうち
+        # 1つでも存在しないと全体を黙って失敗させる（2>/dev/null で握りつぶすと
+        # 気づけない）。daily では REPORT.md が作られないため、これが原因で
+        # 記事・ピン・データが一度もコミットされていなかった。
+        for path in data content assets config/affiliate-links.json TODO-HUMAN.md REPORT.md docs; do
+          if [ -e "$path" ]; then
+            git add -A -- "$path"
+          fi
+        done
         if git diff --cached --quiet; then
           echo "変更なし"
           exit 0
