@@ -13,7 +13,8 @@
     "daily": "tsx src/cli.ts daily",
     "typecheck": "tsc --noEmit",
     "site": "tsx src/cli.ts site:build",
-    "serve": "node scripts/serve.mjs"
+    "serve": "node scripts/serve.mjs",
+    "admin": "tsx src/admin/server.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.122.0",
