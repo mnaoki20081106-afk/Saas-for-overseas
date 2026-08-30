@@ -15,7 +15,10 @@ const ARTICLE_TYPES = ["comparison", "alternatives", "best-for-pain", "deep-revi
 type ArticleType = (typeof ARTICLE_TYPES)[number];
 
 const Brief = z.object({
-  title: z.string().describe("Article H1. Specific, no year, no clickbait. Under 70 characters if possible."),
+  title: z.string().describe("Article H1. Specific, no year, no clickbait. Under 70 characters if possible. " +
+    "Vary the pattern across articles -- a direct comparison ('X vs Y'), a first-person narrative " +
+    "('Why I Switched From X to Y'), and a decision-framed title ('X for Teams Under 10 People') are " +
+    "all legitimate; using the same pattern for every article reads as templated."),
   metaTitle: z.string().describe("<=60 characters, includes the primary keyword"),
   metaDescription: z.string().describe("140-158 characters, states the concrete takeaway"),
   slug: z.string().describe("lowercase-hyphenated URL slug, no year"),
@@ -44,6 +47,11 @@ How you write:
 - You lead with the decision, not with a history of the category.
 - You always name who a tool is WRONG for. That is the section readers trust you for.
 - You use concrete numbers, real workflows, and small specific details (what broke, what took 20 minutes).
+- You never make an unsubstantiated superlative or absolute claim ("the best", "#1", "guaranteed",
+  "nothing else comes close", "the only tool you'll ever need"). Every strong claim is qualified by
+  who it's true for ("the best fit if your team is under 10 people", not "the best"). This matters
+  for both reader trust and affiliate-program compliance -- most networks prohibit unsubstantiated
+  superlatives in the terms you agreed to when you got approved.
 - You never use: exclamation marks, "in today's fast-paced world", "game-changer", "delve", "unleash",
   "revolutionize", "look no further", "supercharge", or any phrase that dates the article
   (no years, no "latest", no "recently", no "at the time of writing").
