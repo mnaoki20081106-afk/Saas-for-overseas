@@ -7,6 +7,7 @@ import { P } from "../lib/paths";
 import { articles as articleStore, programs } from "../lib/store";
 import type { Article } from "../lib/types";
 import { escapeHtml, slugify } from "../lib/util";
+import { buildAdminPage } from "../admin/page";
 import { readArticleBody } from "../stages/content";
 
 marked.setOptions({ gfm: true, breaks: false });
@@ -421,9 +422,11 @@ export function buildSite(): BuildResult {
   ));
   pages += 3;
 
+  write("admin/index.html", buildAdminPage(c.admin.branch));
+
   write("sitemap.xml", sitemap(list));
   write("rss.xml", rss(list));
-  write("robots.txt", `User-agent: *\nAllow: /\nDisallow: /go/\n\nSitemap: ${c.site.baseUrl}/sitemap.xml\n`);
+  write("robots.txt", `User-agent: *\nAllow: /\nDisallow: /go/\nDisallow: /admin/\n\nSitemap: ${c.site.baseUrl}/sitemap.xml\n`);
   write(".nojekyll", "");
 
   const result: BuildResult = {

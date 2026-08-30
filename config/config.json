@@ -150,5 +150,9 @@
         "growth": "claude-haiku-4-5"
       }
     }
+  },
+  "admin": {
+    "branch": "main",
+    "_readme": "管理画面(/admin/)が読み書きするブランチ。GitHub Pages にデプロイされる本番ブランチと合わせてください。"
   }
 }

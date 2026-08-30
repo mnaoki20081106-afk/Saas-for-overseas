@@ -37,6 +37,7 @@ export interface AppConfig {
     profile: string;
     presets: Record<string, Record<string, string>>;
   };
+  admin: { branch: string };
 }
 
 export interface ScoringConfig {

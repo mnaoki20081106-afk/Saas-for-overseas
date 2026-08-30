@@ -1,0 +1,36 @@
+name: 管理画面からの再公開（記事は作らない・Claudeを呼ばない）
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci --no-audit --fund=false
+
+      - name: サイトだけを再ビルド（記事生成やAPI呼び出しは一切しない）
+        env:
+          SITE_BASE_URL: ${{ vars.SITE_BASE_URL }}
+        run: npx tsx src/cli.ts site:build
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+      - uses: actions/deploy-pages@v4
