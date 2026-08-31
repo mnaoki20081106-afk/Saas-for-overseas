@@ -14,5 +14,55 @@
     "minAvgRetentionMonths": 10,
     "maxJapaneseCompetition": 3
   },
-  "notes": "japaneseCompetition is 1-10 where 1 = essentially no Japanese-language creators covering it. englishCompetition is 1-10 where 1 = existing English-language coverage is thin or outdated (a genuine content gap, not just a Japanese blind spot) - both invert in the score, lower is better for each."
+  "notes": "japaneseCompetition is 1-10 where 1 = essentially no Japanese-language creators covering it. englishCompetition is 1-10 where 1 = existing English-language coverage is thin or outdated (a genuine content gap, not just a Japanese blind spot) - both invert in the score, lower is better for each.",
+  "phases": {
+    "_readme": [
+      "事業の段階によって、案件に求める条件は変わります。",
+      "実績ゼロの時期に高LTVだが審査の厳しい案件ばかり並べると、1件も承認されず在庫がゼロになります。",
+      "初期は『審査の通りやすさ』をLTVと同じくらい重く見て、まず在庫を作ります。",
+      "承認済みが5件を超えたら growth に切り替えます（data/state.json の phase）。"
+    ],
+    "bootstrap": {
+      "description": "承認実績ゼロ〜4件。まず提携を1件取ることが最優先。",
+      "minMonthlyCommissionUsd": 15,
+      "minAvgRetentionMonths": 8,
+      "minLtvUsd": 150,
+      "maxJapaneseCompetition": 5,
+      "maxApprovalDifficulty": 6,
+      "extraWeights": {
+        "approvalEase": 25
+      }
+    },
+    "growth": {
+      "description": "承認済み5件以上。ここからLTV重視に切り替える。",
+      "minMonthlyCommissionUsd": 30,
+      "minAvgRetentionMonths": 10,
+      "minLtvUsd": 300,
+      "maxJapaneseCompetition": 3,
+      "maxApprovalDifficulty": 8,
+      "extraWeights": {
+        "approvalEase": 10
+      }
+    },
+    "scale": {
+      "description": "収益が安定。高LTVだけを狙う。",
+      "minMonthlyCommissionUsd": 50,
+      "minAvgRetentionMonths": 12,
+      "minLtvUsd": 600,
+      "maxJapaneseCompetition": 3,
+      "maxApprovalDifficulty": 10,
+      "extraWeights": {
+        "approvalEase": 5
+      }
+    }
+  },
+  "phaseSwitch": {
+    "_readme": "phase を自動で切り替える条件。切り替え自体は CEO が承認依頼を出して人間が決める。",
+    "toGrowth": {
+      "approvedPrograms": 5
+    },
+    "toScale": {
+      "monthlyRecurringUsd": 500
+    }
+  }
 }

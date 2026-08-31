@@ -267,13 +267,24 @@ function fixtureArticle(brief: ArticleBrief, main: Program, existing: Article[])
 
 export interface QualityReport { ok: boolean; issues: string[]; words: number }
 
-export function checkQuality(markdown: string, brief: ArticleBrief, existingCount: number): QualityReport {
+/**
+ * @param wordRange 記事ごとの目標語数。省略すると config の固定値を使う。
+ *   記事の適切な長さは検索意図と競合の分量で変わるので、企画側で決めた値を渡せるようにしている。
+ *   （比較記事は読者が結論を急いでいるので短く、ロundup は比較対象が多いので長い）
+ */
+export function checkQuality(
+  markdown: string,
+  brief: ArticleBrief,
+  existingCount: number,
+  wordRange?: [number, number],
+): QualityReport {
   const c = config();
   const issues: string[] = [];
   const words = wordCount(markdown);
 
-  if (words < c.content.wordsMin - 150) issues.push(`短すぎ: ${words} words (目標 ${c.content.wordsMin}+)`);
-  if (words > c.content.wordsMax + 900) issues.push(`長すぎ: ${words} words`);
+  const [wordsMin, wordsMax] = wordRange ?? [c.content.wordsMin, c.content.wordsMax];
+  if (words < wordsMin - 150) issues.push(`短すぎ: ${words} words (目標 ${wordsMin}〜${wordsMax})`);
+  if (words > wordsMax + 900) issues.push(`長すぎ: ${words} words (目標 ${wordsMin}〜${wordsMax})`);
 
   const lower = markdown.toLowerCase();
   for (const phrase of c.content.bannedPhrases) {

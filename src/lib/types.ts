@@ -74,7 +74,11 @@ export interface Article {
   brief?: ArticleBrief;
 }
 
-export type PinStatus = "queued" | "scheduled" | "published" | "failed" | "skipped";
+/**
+ * draft = Designer が作っただけ。QA と人間の承認を通るまで予約もされない。
+ * 既存の queued 以降の流れは変わらない。
+ */
+export type PinStatus = "draft" | "queued" | "scheduled" | "published" | "failed" | "skipped";
 
 export interface Pin {
   id: string;
@@ -97,6 +101,26 @@ export interface Pin {
   generation: number;           // 0 = original, 1+ = 横展開
   lastError?: string;
   metrics?: PinMetrics;
+
+  /* ── 実験と重複検出のための変数（既存のピンには migrate で付与される） ── */
+  /** 切り口の種別。price-objection / hidden-limit / switching-cost など */
+  angleType?: string;
+  /** 使った配色。何色が効いたかを後から分析するために記録する。 */
+  paletteIndex?: number | null;
+  hasNumber?: boolean;
+  hasVersus?: boolean;
+  hasCta?: boolean;
+  /** 画像バイトの SHA-256。同じ画像の再投稿を防ぐ。 */
+  imageHash?: string | null;
+  /** overlayMain の正規化ハッシュ。同じ文案の再投稿を防ぐ。 */
+  copyHash?: string | null;
+  experimentId?: string | null;
+  variant?: string | null;
+  /**
+   * ★これが無いピンは投稿されない。
+   * 承認ゲートの実体。co で予約すれば必ず付き、手で書き換えれば guard が検出する。
+   */
+  approvalId?: string | null;
 }
 
 export interface PinMetrics {

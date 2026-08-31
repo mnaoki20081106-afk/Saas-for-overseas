@@ -96,10 +96,10 @@ export function findHeadingDuplicate(
 /** ピンの文案が既存と同じでないか */
 export function findPinCopyDuplicate(
   overlayMain: string,
-  existing: { id: string; copyHash?: string; overlayMain: string }[],
+  existing: { id: string; copyHash?: string | null; overlayMain: string }[],
 ): DuplicateHit | null {
   const h = hashText(overlayMain);
-  const hit = existing.find((p) => (p.copyHash ?? hashText(p.overlayMain)) === h);
+  const hit = existing.find((p) => (p.copyHash || hashText(p.overlayMain)) === h);
   if (!hit) return null;
   return {
     kind: "pinCopy",
@@ -112,7 +112,7 @@ export function findPinCopyDuplicate(
 /** ピン画像のバイトが既存と同じでないか */
 export function findPinImageDuplicate(
   imagePath: string,
-  existing: { id: string; imageHash?: string }[],
+  existing: { id: string; imageHash?: string | null }[],
 ): DuplicateHit | null {
   if (!fs.existsSync(imagePath)) return null;
   const h = hashFile(imagePath);

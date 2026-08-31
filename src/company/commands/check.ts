@@ -68,17 +68,29 @@ function checkApprovalGate(issues: CheckIssue[]): number {
   for (const pin of pinStore.all() as unknown as Record<string, unknown>[]) {
     const status = String(pin.status);
     // draft / queued は「外に出ていない」ので承認不要。
-    // scheduled 以降（＝投稿の対象になる）には必ず承認が必要。
     if (!["scheduled", "published"].includes(status)) continue;
     const approvalId = pin.approvalId as string | null | undefined;
-    if (!approvalId || !approvedIds.has(approvalId)) {
+    if (approvalId && approvedIds.has(approvalId)) continue;
+
+    if (status === "published") {
+      // ★実際に外へ出てしまっている。これが本当の事故。
       violations++;
       issues.push({
         severity: "error",
         where: `data/pins.json#${pin.id}`,
         message:
-          `承認のないピンが ${status} になっています（approvalId=${approvalId ?? "null"}）。` +
-          "承認ゲートが破れています。co で予約すれば必ず承認IDが付きます。手で書き換えないでください。",
+          `承認のないピンが投稿されています（approvalId=${approvalId ?? "null"}）。` +
+          "承認ゲートが破れています。killSwitch を入れて原因を調べてください。",
+      });
+    } else {
+      // まだ外には出ていない。publish.ts が投稿を拒否するので実害はない。
+      // 旧経路（stages/pins.ts）が作ったピンはここに該当する。
+      issues.push({
+        severity: "warn",
+        where: `data/pins.json#${pin.id}`,
+        message:
+          "承認のないピンが予約されています。投稿はされません（publish が拒否します）。" +
+          "旧経路（bootstrap / daily）で作られたピンか、承認がまだ取れていないピンです。",
       });
     }
   }

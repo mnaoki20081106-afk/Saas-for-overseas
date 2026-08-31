@@ -17,6 +17,12 @@ import {
   APPROVAL_TEMPLATE, decideApproval, expireApprovals, renderApproval, requestApproval,
 } from "./commands/approvals";
 import { addDecision, handleError, pruneErrors, recordOutcome, renderDecisions, renderErrors } from "./commands/records";
+import { RESEARCH_TEMPLATE, researcherContext, researcherSubmit } from "./commands/researcher";
+import { writerContext, writerCheck, writerSubmit } from "./commands/writer";
+import { REVIEW_TEMPLATE, editorContext, editorSubmit } from "./commands/editor";
+import { PIN_TEMPLATE, designerContext, designerSubmit, renderMissingPins } from "./commands/designer";
+import { qaCheck } from "./commands/qa";
+import { closeBrowser } from "../pins/render";
 import type { EmployeeId, TaskKind } from "./schemas";
 
 /**
@@ -64,6 +70,28 @@ AI会社の司令台
   error:list [--all]                      失敗の一覧
   error:handle <id> --resolution "..."    処理済みにする
   error:prune [--days N]                  古い処理済みエラーを捨てる
+
+── AI社員の仕事 ────────────────────────────────
+  researcher:context                      調査の前提を読む
+  researcher:template                     提出用JSONの雛形
+  researcher:submit <file.json>           調査結果を提出（足切り・スコアリング）
+
+  writer:context <ideaId>                 執筆に必要な情報を読む
+  writer:check <slug>                     品質ゲート（既存の checkQuality と同一基準）
+  writer:submit <slug>                    提出 → Editor のタスクが作られる
+
+  editor:context <slug>                   検品する（本文だけが渡される）
+  editor:template                         提出用JSONの雛形
+  editor:submit <file.json>               検品結果を提出（pass なら記事へ昇格）
+
+  designer:context <slug>                 ピンを設計する
+  designer:template                       提出用JSONの雛形
+  designer:submit <file.json>             ピン文案を提出（draft として登録）
+
+  qa:check <slug>                         最終検品（自動判定10項目 + AI判定4項目）
+
+── 機械的な処理（Actions が実行する） ──────────
+  pins:render                             画像のないピンを Chromium で描画
 `;
 
 type Handler = (args: string[]) => Promise<number> | number;
@@ -73,6 +101,11 @@ const READ_ONLY = new Set([
   "status", "check", "help", "--help", "-h",
   "task:list", "task:next", "approval:list", "approval:show", "approval:template",
   "decision:list", "error:list",
+  "researcher:context", "researcher:template",
+  "writer:context", "writer:check",
+  "editor:context", "editor:template",
+  "designer:context", "designer:template",
+  "qa:check",
 ]);
 
 /**
@@ -274,6 +307,76 @@ const COMMANDS: Record<string, Handler> = {
     return 0;
   },
 
+  /* ------------------------------------------------------- employees */
+
+  "researcher:context"() {
+    researcherContext();
+    return 0;
+  },
+
+  "researcher:template"() {
+    console.log(JSON.stringify(RESEARCH_TEMPLATE, null, 2));
+    return 0;
+  },
+
+  "researcher:submit"(args) {
+    researcherSubmit(requirePositional(args, 0, "JSONファイル"));
+    return 0;
+  },
+
+  "writer:context"(args) {
+    writerContext(requirePositional(args, 0, "企画ID"));
+    return 0;
+  },
+
+  "writer:check"(args) {
+    return writerCheck(requirePositional(args, 0, "記事のslug")).ok ? 0 : 1;
+  },
+
+  "writer:submit"(args) {
+    writerSubmit(requirePositional(args, 0, "記事のslug"));
+    return 0;
+  },
+
+  "editor:context"(args) {
+    editorContext(requirePositional(args, 0, "記事のslug"));
+    return 0;
+  },
+
+  "editor:template"() {
+    console.log(JSON.stringify(REVIEW_TEMPLATE, null, 2));
+    return 0;
+  },
+
+  "editor:submit"(args) {
+    editorSubmit(requirePositional(args, 0, "JSONファイル"));
+    return 0;
+  },
+
+  "designer:context"(args) {
+    designerContext(requirePositional(args, 0, "記事のslug"));
+    return 0;
+  },
+
+  "designer:template"() {
+    console.log(JSON.stringify(PIN_TEMPLATE, null, 2));
+    return 0;
+  },
+
+  async "designer:submit"(args) {
+    await designerSubmit(requirePositional(args, 0, "JSONファイル"));
+    return 0;
+  },
+
+  "qa:check"(args) {
+    return qaCheck(requirePositional(args, 0, "記事のslug")).failed === 0 ? 0 : 1;
+  },
+
+  async "pins:render"() {
+    await renderMissingPins();
+    return 0;
+  },
+
   help() {
     console.log(HELP);
     return 0;
@@ -298,11 +401,17 @@ async function main(): Promise<void> {
     if (!SELF_INITIALISING.has(command)) ensureCompanyDirs();
   }
 
-  const code = await handler(rest);
-  if (code !== 0) process.exitCode = code;
+  try {
+    const code = await handler(rest);
+    if (code !== 0) process.exitCode = code;
+  } finally {
+    // pins:render / designer:submit が Chromium を起動することがあるので、必ず閉じる
+    await closeBrowser();
+  }
 }
 
-main().catch((err) => {
+main().catch(async (err) => {
+  await closeBrowser().catch(() => undefined);
   reportError(err, "cli");
   try {
     runlog.add({

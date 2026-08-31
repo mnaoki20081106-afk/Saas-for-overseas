@@ -44,12 +44,30 @@ export interface AppConfig {
   admin: { branch: string };
 }
 
+export interface PhaseThresholds {
+  description: string;
+  minMonthlyCommissionUsd: number;
+  minAvgRetentionMonths: number;
+  minLtvUsd: number;
+  maxJapaneseCompetition: number;
+  maxApprovalDifficulty: number;
+  extraWeights: { approvalEase: number };
+}
+
 export interface ScoringConfig {
   weights: Record<string, number>;
+  /** 既存の stages/research.ts が読む足切り。互換のため残す。 */
   hardFilters: {
     mustBeRecurring: boolean; minMonthlyCommissionUsd: number;
     minAvgRetentionMonths: number; maxJapaneseCompetition: number;
   };
+  /**
+   * 事業の段階ごとの足切り（AI会社側の researcher が使う）。
+   * 実績ゼロの時期に高LTVだが審査の厳しい案件ばかり並べると、
+   * 1件も承認されず在庫がゼロになるため、初期は審査の通りやすさを重く見る。
+   */
+  phases?: Record<string, PhaseThresholds>;
+  phaseSwitch?: Record<string, Record<string, number>>;
   notes: string;
 }
 
