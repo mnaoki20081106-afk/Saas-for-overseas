@@ -67,5 +67,76 @@
         "sample-kanbanly"
       ]
     }
+  },
+  {
+    "slug": "sample-rankwise-vs-competitor-a",
+    "title": "Sample Rankwise vs Competitor A: which one small teams actually keep",
+    "metaTitle": "Sample Rankwise vs Competitor A: an honest comparison",
+    "metaDescription": "A hands-on comparison of Sample Rankwise and its main alternative for small teams, including the setup costs and the cases where neither is the right answer.",
+    "primaryKeyword": "sample rankwise vs competitor a",
+    "secondaryKeywords": [
+      "Sample Rankwise pricing",
+      "Sample Rankwise review",
+      "seo tools for small teams"
+    ],
+    "category": "seo tools",
+    "programSlugs": [
+      "sample-rankwise"
+    ],
+    "filePath": "content/articles/sample-rankwise-vs-competitor-a.md",
+    "words": 2845,
+    "status": "published",
+    "createdAt": "2026-08-31T09:01:41.260Z",
+    "updatedAt": "2026-08-31T09:01:41.260Z",
+    "qualityIssues": [],
+    "internalLinks": [
+      "sample-kanbanly-vs-competitor-a"
+    ],
+    "brief": {
+      "title": "Sample Rankwise vs Competitor A: which one small teams actually keep",
+      "metaTitle": "Sample Rankwise vs Competitor A: an honest comparison",
+      "metaDescription": "A hands-on comparison of Sample Rankwise and its main alternative for small teams, including the setup costs and the cases where neither is the right answer.",
+      "slug": "sample-rankwise-vs-competitor-a",
+      "primaryKeyword": "sample rankwise vs competitor a",
+      "secondaryKeywords": [
+        "Sample Rankwise pricing",
+        "Sample Rankwise review",
+        "seo tools for small teams"
+      ],
+      "searchIntent": "Choosing between two shortlisted tools before starting a trial.",
+      "painPoints": [
+        "paying for three overlapping tools",
+        "cannot see which channel actually produced revenue",
+        "onboarding a new contractor takes a full day"
+      ],
+      "angle": "Sample DRY_RUN brief. Not for publication.",
+      "outline": [
+        {
+          "heading": "The short answer",
+          "purpose": "state the recommendation",
+          "bullets": [
+            "who each tool suits"
+          ]
+        },
+        {
+          "heading": "Who should not buy it",
+          "purpose": "honesty",
+          "bullets": [
+            "team size limits",
+            "migration cost"
+          ]
+        }
+      ],
+      "faq": [
+        {
+          "q": "Is there a free plan?",
+          "a": "Sample answer for DRY_RUN mode."
+        }
+      ],
+      "audience": "freelancers, small agencies and 2-20 person SaaS/e-commerce teams in the US, UK, Canada and Australia",
+      "programSlugs": [
+        "sample-rankwise"
+      ]
+    }
   }
 ]
