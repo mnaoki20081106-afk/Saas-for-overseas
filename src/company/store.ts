@@ -69,7 +69,7 @@ export const errors = listStore<ErrorRecord>(CP.errors);
 /* ------------------------------------------------------------- employees */
 
 export interface EmployeeConfig {
-  role: "CEO" | "CMO" | "CTO";
+  role: "CEO" | "CMO" | "CTO" | "CQO";
   displayName: string;
   /** 1=オーナー 2=CEO 3=実務 */
   layer: number;
@@ -93,18 +93,21 @@ export interface EmployeeConfig {
   timeoutMinutes: number;
   maxRetries: number;
   active: boolean;
-  /** CMOとCTOは false。部下を持たないプレイングマネージャー。 */
+  /** 英世・一葉・梅子は false。部下を持たないプレイングマネージャー。 */
   hasSubordinates: boolean;
   /** 実行実績（co が自動で記録する） */
   runs: { date: string; count: number }[];
 }
 
 /**
- * 3層構造の社員台帳。
+ * 社員台帳。
  *
- * 人は3人だけです。旧構成の6役職（Researcher / Analyst / Writer / Editor /
- * Designer / QA）は、無駄な多重下請けだったため廃止し、この3人に統合しました。
- * CMOとCTOはプレイングマネージャーで、部下を持ちません。
+ * 人は4人です。旧構成の6役職（Researcher / Analyst / Writer / Editor /
+ * Designer / QA）は多重下請けだったため廃止しましたが、
+ * **検品だけは書き手と別人格に戻しました**（CQO 梅子）。
+ * 自分が書いた文章を自分で検品すると、無意識に擁護してしまうためです。
+ *
+ * 英世・一葉・梅子はプレイングマネージャーで、部下を持ちません。
  *
  * co のコマンド名（researcher: / writer: など）は「道具の名前」であって
  * 「人の名前」ではありません。誰がどの道具を使うかは owns に書いてあります。
@@ -117,20 +120,28 @@ export const DEFAULT_EMPLOYEES: Record<string, EmployeeConfig> = {
     maxRunsPerDay: 3, maxNewTasksPerRun: 5, timeoutMinutes: 20, maxRetries: 2,
     active: true, hasSubordinates: true, runs: [],
   },
-  sara: {
-    role: "CMO", displayName: "サラ", layer: 3,
+  hideyo: {
+    role: "CMO", displayName: "英世", layer: 3,
     owns: ["researcher", "designer", "pins"],
-    absorbs: ["researcher", "designer", "growth"],
+    absorbs: ["researcher", "designer", "growth", "sara"],
     maxRunsPerDay: 2, maxCandidatesPerRun: 10, maxWebFetches: 30, maxPinsPerRun: 10,
     timeoutMinutes: 25, maxRetries: 2,
     active: true, hasSubordinates: false, runs: [],
   },
-  ken: {
-    role: "CTO", displayName: "ケン", layer: 3,
-    owns: ["writer", "editor", "qa"],
-    absorbs: ["writer", "editor", "qa"],
-    maxRunsPerDay: 2, maxArticlesPerRun: 1, maxRoundsPerArticle: 2,
+  ichiyo: {
+    role: "CTO", displayName: "一葉", layer: 3,
+    owns: ["writer"],
+    absorbs: ["writer", "ken"],
+    maxRunsPerDay: 2, maxArticlesPerRun: 1,
     timeoutMinutes: 30, maxRetries: 2,
+    active: true, hasSubordinates: false, runs: [],
+  },
+  umeko: {
+    role: "CQO", displayName: "梅子", layer: 3,
+    owns: ["editor", "qa"],
+    absorbs: ["editor", "qa"],
+    maxRunsPerDay: 4, maxRoundsPerArticle: 2,
+    timeoutMinutes: 20, maxRetries: 1,
     active: true, hasSubordinates: false, runs: [],
   },
 };
@@ -168,7 +179,7 @@ export const employees = {
 
   get(id: string): EmployeeConfig {
     const found = employees.personFor(id);
-    if (!found) throw new Error(`知らない社員です: ${id}（いるのは 諭吉 / サラ / ケン の3人だけです）`);
+    if (!found) throw new Error(`知らない社員です: ${id}（いるのは 諭吉 / 英世 / 一葉 / 梅子 の4人だけです）`);
     return found.config;
   },
 

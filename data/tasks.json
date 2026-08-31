@@ -1,1 +1,44 @@
-[]
+[
+  {
+    "id": "task_mthbvq00fh43xj",
+    "idempotencyKey": "edit_article:test-slug:2026-08-31",
+    "kind": "edit_article",
+    "assignee": "umeko",
+    "status": "cancelled",
+    "priority": 3,
+    "targetRef": "test-slug",
+    "input": {},
+    "output": null,
+    "requiresApprovalId": null,
+    "dependsOn": [],
+    "attempts": 0,
+    "maxAttempts": 3,
+    "createdAt": "2026-08-31T14:22:58.656Z",
+    "startedAt": null,
+    "finishedAt": "2026-08-31T14:23:24.097Z",
+    "expiresAt": "2026-09-07T14:22:58.656Z",
+    "lastError": "検品の割り当てを確認するためのテスト。実データではありません",
+    "createdBy": "yukichi"
+  },
+  {
+    "id": "task_mthbvrwd269gmg",
+    "idempotencyKey": "write_article:idea_test:2026-08-31",
+    "kind": "write_article",
+    "assignee": "ichiyo",
+    "status": "cancelled",
+    "priority": 3,
+    "targetRef": "idea_test",
+    "input": {},
+    "output": null,
+    "requiresApprovalId": null,
+    "dependsOn": [],
+    "attempts": 0,
+    "maxAttempts": 3,
+    "createdAt": "2026-08-31T14:23:01.117Z",
+    "startedAt": null,
+    "finishedAt": "2026-08-31T14:23:25.343Z",
+    "expiresAt": "2026-09-07T14:23:01.117Z",
+    "lastError": "担当の自動割り当てを確認するためのテスト。実データではありません",
+    "createdBy": "yukichi"
+  }
+]

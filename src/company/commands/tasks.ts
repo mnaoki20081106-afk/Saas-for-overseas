@@ -21,22 +21,36 @@ import { approvals, tasks } from "../store";
 /**
  * 誰がその種類の仕事をするか。AI が勝手に担当を決められないようにする。
  *
- * 3層構造なので、担当は 諭吉 / サラ / ケン / Actions の4つだけです。
- * サラとケンは部下を持たないので、下に振り直すことはできません。
+ * 担当は 諭吉 / 英世 / 一葉 / 梅子 / Actions だけです。
+ * 3人（英世・一葉・梅子）は部下を持たないので、下に振り直すことはできません。
+ *
+ * ★ 検品（edit_article / qa_release）は、書いた人ではなく **梅子** に渡ります。
+ *   自分が書いた文章を自分で検品すると、無意識に擁護してしまうためです。
  */
 const DEFAULT_ASSIGNEE: Record<TaskKindT, EmployeeIdT> = {
-  research: "sara",           // CMO サラ（自分で調べる）
+  research: "hideyo",         // CMO 英世（自分で調べる）
   plan_article: "yukichi",    // CEO 諭吉（企画は諭吉が決める）
-  write_article: "ken",       // CTO ケン（自分で書く）
-  edit_article: "ken",        // CTO ケン（自分で検品する。そのあと諭吉が独立して読む）
-  design_pins: "sara",        // CMO サラ（自分でピン文案を作る）
-  qa_release: "ken",          // CTO ケン（事実とリンクの照合）
+  write_article: "ichiyo",    // CTO 一葉（自分で書く）
+  edit_article: "umeko",      // ★CQO 梅子（書いていない人が読む）
+  design_pins: "hideyo",      // CMO 英世（自分でピン文案を作る）
+  qa_release: "umeko",        // ★CQO 梅子（事実・出典・リンクの照合）
   publish_article: "actions", // 実行は GitHub Actions（オーナーの GO の後）
   publish_pins: "actions",
   post_x: "actions",
   collect_metrics: "actions",
   analyze: "yukichi",         // CEO 諭吉（分析して次を決める）
   fix_error: "yukichi",
+};
+
+/**
+ * 検品の仕事は、この担当以外に割り当てられません（`co` が拒否します）。
+ *
+ * 書き手（一葉）と検品者（梅子）を別人格に保つための安全装置です。
+ * 手順書に書くだけでは守られないので、コードで止めています。
+ */
+const INSPECTION_ONLY_ASSIGNEE: Partial<Record<TaskKindT, EmployeeIdT>> = {
+  edit_article: "umeko",
+  qa_release: "umeko",
 };
 
 /** その仕事は外に出るか（＝人間の承認が要るか） */
@@ -134,6 +148,24 @@ export function addTask(input: AddTaskInput): TaskT {
     (t) => t.idempotencyKey === key && ["blocked", "ready", "running", "done"].includes(t.status),
   );
   if (existing) throw new DuplicateTaskError(existing);
+
+  // ★ 検品の独立性を、コードで強制する。
+  //
+  //   自分が書いた文章を自分で検品すると、無意識に擁護してしまいます。
+  //   これは能力ではなく構造の問題なので、手順書ではなくここで止めます。
+  //   検品（edit_article / qa_release）は書き手ではなく梅子にしか渡せません。
+  const forced = INSPECTION_ONLY_ASSIGNEE[kind];
+  if (forced && input.assignee && input.assignee !== forced) {
+    throw new Error(
+      `[${kind}] は検品の仕事なので、${forced} 以外には割り当てられません。\n` +
+      `指定された担当: ${input.assignee}\n` +
+      "検品は、本文を書いていない梅子だけが行います。\n" +
+      "書いた人が自分で検品すると、無意識に自分を擁護してしまうためです。\n" +
+      "これは能力ではなく構造の問題で、手順や気合では直りません。\n" +
+      "どう直すか: --assignee を外してください（自動で梅子に渡ります）。\n" +
+      "理由の詳細: skills/quality-gate.md",
+    );
+  }
 
   const gate = GATE_FOR_KIND[kind];
   const needsApproval = gate ? (l.gates[gate]?.requiresApproval ?? true) : false;

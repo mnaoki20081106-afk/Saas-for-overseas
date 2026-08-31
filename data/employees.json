@@ -1,9 +1,9 @@
 {
   "_readme": [
-    "3層構造の社員台帳。人は3人だけ（諭吉・サラ・ケン）。",
+    "社員台帳。人は4人（諭吉・英世・一葉・梅子）。",
     "owns は、その人が使う co コマンドの接頭辞。コマンド名は道具の名前で、人の名前ではない。",
-    "旧役職（researcher/writer/editor/designer/qa/analyst/growth）は廃止したが、",
-    "data/tasks.json の assignee として過去データに残っているため、機能IDとして解釈する。"
+    "★検品（editor / qa）は梅子が持つ。書き手（一葉）とは別人格でなければ、",
+    "  自分の文章を自分で擁護してしまい、検品が機能しないため。"
   ],
   "yukichi": {
     "role": "CEO",
@@ -30,9 +30,9 @@
     "hasSubordinates": true,
     "runs": []
   },
-  "sara": {
+  "hideyo": {
     "role": "CMO",
-    "displayName": "サラ",
+    "displayName": "英世",
     "layer": 3,
     "owns": [
       "researcher",
@@ -42,7 +42,8 @@
     "absorbs": [
       "researcher",
       "designer",
-      "growth"
+      "growth",
+      "sara"
     ],
     "maxRunsPerDay": 2,
     "maxCandidatesPerRun": 10,
@@ -54,25 +55,41 @@
     "hasSubordinates": false,
     "runs": []
   },
-  "ken": {
+  "ichiyo": {
     "role": "CTO",
-    "displayName": "ケン",
+    "displayName": "一葉",
     "layer": 3,
     "owns": [
+      "writer"
+    ],
+    "absorbs": [
       "writer",
+      "ken"
+    ],
+    "maxRunsPerDay": 2,
+    "maxArticlesPerRun": 1,
+    "timeoutMinutes": 30,
+    "maxRetries": 2,
+    "active": true,
+    "hasSubordinates": false,
+    "runs": []
+  },
+  "umeko": {
+    "role": "CQO",
+    "displayName": "梅子",
+    "layer": 3,
+    "owns": [
       "editor",
       "qa"
     ],
     "absorbs": [
-      "writer",
       "editor",
       "qa"
     ],
-    "maxRunsPerDay": 2,
-    "maxArticlesPerRun": 1,
+    "maxRunsPerDay": 4,
     "maxRoundsPerArticle": 2,
-    "timeoutMinutes": 30,
-    "maxRetries": 2,
+    "timeoutMinutes": 20,
+    "maxRetries": 1,
     "active": true,
     "hasSubordinates": false,
     "runs": []

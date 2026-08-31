@@ -168,9 +168,9 @@ export function assertNotRecentlyRejected(kind: string, subject: string | null):
 /** 社員ごとの実行回数の上限 */
 export function assertCanRun(employeeId: string): void {
   // 機能ID（researcher / writer など）で呼ばれても、担当する人に解決する。
-  // 人は 諭吉 / サラ / ケン の3人だけ。
+  // 人は 諭吉 / 英世 / 一葉 / 梅子 の4人だけ。
   const found = employees.personFor(employeeId);
-  if (!found) throw new Error(`知らない社員です: ${employeeId}（いるのは 諭吉 / サラ / ケン の3人だけです）`);
+  if (!found) throw new Error(`知らない社員です: ${employeeId}（いるのは 諭吉 / 英世 / 一葉 / 梅子 の4人だけです）`);
   const { id: personId, config: cfg } = found;
   if (!cfg.active) {
     throw new LimitExceeded(

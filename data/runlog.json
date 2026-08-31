@@ -1,5 +1,17 @@
 [
   {
+    "at": "2026-08-31T14:22:59.891Z",
+    "command": "co task:add --kind qa_release --target test-slug --assignee yukichi",
+    "ok": false,
+    "summary": "[qa_release] は検品の仕事なので、umeko 以外には割り当てられません。\n指定された担当: yukichi\n書いた人が自分で検品すると、無意識に自分を擁護してしまうためです。\nこれは能力ではなく構造の問題で、手順や気合では直りません。\nどう直すか: --assignee を外してください（自動で梅子に渡ります）。\n理由の詳細: skills/quality-gate.md"
+  },
+  {
+    "at": "2026-08-31T14:22:57.366Z",
+    "command": "co task:add --kind edit_article --target test-slug --assignee ichiyo",
+    "ok": false,
+    "summary": "[edit_article] は検品の仕事なので、umeko 以外には割り当てられません。\n指定された担当: ichiyo\n書いた人が自分で検品すると、無意識に自分を擁護してしまうためです。\nこれは能力ではなく構造の問題で、手順や気合では直りません。\nどう直すか: --assignee を外してください（自動で梅子に渡ります）。\n理由の詳細: skills/quality-gate.md"
+  },
+  {
     "at": "2026-08-31T09:01:53.393Z",
     "command": "daily",
     "ok": true,

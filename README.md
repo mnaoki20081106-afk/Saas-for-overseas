@@ -20,13 +20,13 @@
    ↑↓  ← 対話するのはここだけ
 第2層  AI CEO 諭吉（YUKICHI）      全体統括・オーナーとの唯一の窓口
    ↑↓
-第3層  AI CMO サラ ／ AI CTO ケン   自ら手を動かす。部下は持たない
+第3層  AI CMO 英世 ／ AI CTO 一葉   自ら手を動かす。部下は持たない
 ```
 
 | 見るもの | 中身 |
 | --- | --- |
 | **[rules.md](rules.md)** | 全員が絶対に守る鉄のルール（4条）。**まずこれ** |
-| [organization/README.md](organization/README.md) | 組織図・3人のプロフィール・旧構成からの変更 |
+| [organization/README.md](organization/README.md) | 組織図・4人のプロフィール・旧構成からの変更 |
 | [skills/README.md](skills/README.md) | 業務ノウハウ。誰がどれを読むかの一覧 |
 | [communications.md](communications.md) | オーナーと諭吉の決定事項の記録 |
 

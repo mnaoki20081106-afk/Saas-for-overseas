@@ -134,7 +134,7 @@ export function companyStatus(): void {
     : "ありません。");
 
   const emp = employees.all();
-  section("組織（3層構造）", [
+  section("組織（3層構造・4人）", [
     "第1層  オーナー（なおきさん）  GO / STOP・経営判断・換金の判断",
     "         ↑↓ 対話するのはここだけ",
     ...Object.entries(emp)

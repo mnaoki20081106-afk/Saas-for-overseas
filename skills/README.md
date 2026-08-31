@@ -7,22 +7,28 @@
 
 ## 誰がどれを読むか
 
-| スキル | 諭吉<br>(CEO) | サラ<br>(CMO) | ケン<br>(CTO) | 中身 |
-| --- | :---: | :---: | :---: | --- |
-| [business-model.md](business-model.md) | ★必読 | ★必読 | ★必読 | この事業がどう稼ぐのか。全員の共通前提 |
-| [cold-start.md](cold-start.md) | ★必読 | ★必読 | ★必読 | データがない最初の3ヶ月の振る舞い |
-| [risk-checklist.md](risk-checklist.md) | ★必読 | ★必読 | ★必読 | 提出前のセルフチェック（鉄のルール第4条） |
-| [web-content-safety.md](web-content-safety.md) | 読む | ★必読 | 読む | 取得したWebページの扱い方 |
-| [saas-research.md](saas-research.md) | 読む | ★必読 | — | 案件の調べ方・出典の取り方・足切り |
-| [pinterest-growth.md](pinterest-growth.md) | 読む | ★必読 | — | ピンの設計・10の切り口・スパム回避 |
-| [english-writing.md](english-writing.md) | 読む | — | ★必読 | 英語記事の書き方・禁止事項 |
-| [quality-gate.md](quality-gate.md) | 読む | — | ★必読 | 品質ゲートと自己検品の手順 |
-| [decision-making.md](decision-making.md) | ★必読 | — | — | 何を根拠に優先順位を決めるか |
-| [owner-communication.md](owner-communication.md) | ★必読 | — | — | オーナーへの伝え方（A案/B案の作り方） |
+| スキル | 諭吉<br>(CEO) | 英世<br>(CMO) | 一葉<br>(CTO) | 梅子<br>(CQO) | 中身 |
+| --- | :---: | :---: | :---: | :---: | --- |
+| [business-model.md](business-model.md) | ★必読 | ★必読 | ★必読 | ★必読 | この事業がどう稼ぐのか。全員の共通前提 |
+| [cold-start.md](cold-start.md) | ★必読 | ★必読 | ★必読 | ★必読 | データがない最初の3ヶ月の振る舞い |
+| [risk-checklist.md](risk-checklist.md) | ★必読 | ★必読 | ★必読 | ★必読 | 提出前のセルフチェック（鉄のルール第4条） |
+| [web-content-safety.md](web-content-safety.md) | 読む | ★必読 | 読む | 読む | 取得したWebページの扱い方 |
+| [saas-research.md](saas-research.md) | 読む | ★必読 | — | 読む | 案件の調べ方・出典の取り方・足切り |
+| [pinterest-growth.md](pinterest-growth.md) | 読む | ★必読 | — | — | ピンの設計・10の切り口・スパム回避 |
+| [english-writing.md](english-writing.md) | 読む | — | ★必読 | ★必読 | 英語記事の書き方・禁止事項 |
+| [quality-gate.md](quality-gate.md) | 読む | — | 読む | ★必読 | 検品の手順・10のチェック項目・判定 |
+| [decision-making.md](decision-making.md) | ★必読 | — | — | — | 何を根拠に優先順位を決めるか |
+| [owner-communication.md](owner-communication.md) | ★必読 | — | — | — | オーナーへの伝え方（A案/B案の作り方） |
 
 ★必読 = その役職の中核。読まずに仕事を始めてはいけない
 読む = 必要になったら参照する
 — = 読まなくてよい（担当外）
+
+**一葉の `quality-gate.md` が「読む」なのは、** 検品するのは梅子だからです。
+ただし「何で落とされるか」を先に知っておくと書き直しが減るので、目は通してください。
+
+**梅子の `saas-research.md` が「読む」なのは、** 出典URLの見方（何が一次情報で、
+何がアフィリエイト記事の孫引きか）を照合に使うためです。案件調査はしません。
 
 ---
 
@@ -39,12 +45,18 @@
 | `decision:*` | **諭吉** | 決めたことの記録 |
 | `release:*` | **諭吉** | GO後の公開・ピン予約 |
 | `error:*` | **諭吉** | 失敗の後始末 |
-| `researcher:*` | **サラ** | 案件リサーチの提出 |
-| `designer:*` | **サラ** | ピン文案の提出 |
-| `pins:render` | **サラ** | ピン画像の描画（$0） |
-| `writer:*` | **ケン** | 執筆と品質ゲート |
-| `editor:*` | **ケン** | セルフ検品の提出 |
-| `qa:check` | **ケン** | 事実とリンクの照合 |
+| `researcher:*` | **英世** | 案件リサーチの提出 |
+| `designer:*` | **英世** | ピン文案の提出 |
+| `pins:render` | **英世** | ピン画像の描画（$0） |
+| `writer:*` | **一葉** | 執筆と機械の品質ゲート |
+| `editor:*` | **梅子** | 独立検品の受け取りと提出 |
+| `qa:check` | **梅子** | 事実・出典・リンクの照合 |
+
+### ★ `editor:*` と `qa:check` を一葉が使ってはいけません
+
+**書いた人が自分で検品すると、無意識に自分を擁護します。**
+だから検品の道具は梅子だけが持ちます。
+`co` は `edit_article` と `qa_release` の仕事を、自動的に **梅子** に割り当てます。
 
 全コマンド一覧: `npm run co -- help`
 

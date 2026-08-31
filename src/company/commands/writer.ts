@@ -271,7 +271,7 @@ export function writerSubmit(slug: string): Article {
   ideas.replace((i) => i.id === idea.id, { status: "writing" });
 
   // 次の工程（検品）を自動で積む。AI が積み忘れることを許さない。
-  const task = addTask({ kind: "edit_article", targetRef: slug, createdBy: "ken" });
+  const task = addTask({ kind: "edit_article", targetRef: slug, createdBy: "ichiyo" });
   log.ok(`提出しました: ${slug}（${article.words} 語）`);
   log.info(`検品タスクを作成: ${task.id} → editor`);
   return article;

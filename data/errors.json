@@ -1,1 +1,28 @@
-[]
+[
+  {
+    "id": "err_mthbvp05lq93el",
+    "at": "2026-08-31T14:22:57.365Z",
+    "where": "cli",
+    "taskId": null,
+    "kind": "unknown",
+    "message": "[edit_article] は検品の仕事なので、umeko 以外には割り当てられません。\n指定された担当: ichiyo\n書いた人が自分で検品すると、無意識に自分を擁護してしまうためです。\nこれは能力ではなく構造の問題で、手順や気合では直りません。\nどう直すか: --assignee を外してください（自動で梅子に渡ります）。\n理由の詳細: skills/quality-gate.md",
+    "detail": null,
+    "recoverable": false,
+    "handled": true,
+    "handledAt": "2026-08-31T14:23:42.330Z",
+    "resolution": "検品の割り当て制限が効くことを確認するための意図的なテスト。安全装置は正常に動作した"
+  },
+  {
+    "id": "err_mthbvqybz3cn25",
+    "at": "2026-08-31T14:22:59.891Z",
+    "where": "cli",
+    "taskId": null,
+    "kind": "unknown",
+    "message": "[qa_release] は検品の仕事なので、umeko 以外には割り当てられません。\n指定された担当: yukichi\n書いた人が自分で検品すると、無意識に自分を擁護してしまうためです。\nこれは能力ではなく構造の問題で、手順や気合では直りません。\nどう直すか: --assignee を外してください（自動で梅子に渡ります）。\n理由の詳細: skills/quality-gate.md",
+    "detail": null,
+    "recoverable": false,
+    "handled": true,
+    "handledAt": "2026-08-31T14:23:43.660Z",
+    "resolution": "同上。qa_release でも梅子以外への割り当てが拒否されることを確認した"
+  }
+]
