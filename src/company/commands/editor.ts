@@ -185,7 +185,7 @@ export function editorSubmit(file: string): ReviewT {
     });
     log.ok(`検品合格: ${slug} → ${rel}`);
     log.info("次はピンの作成です。");
-    const task = addTask({ kind: "design_pins", targetRef: slug, createdBy: "editor" });
+    const task = addTask({ kind: "design_pins", targetRef: slug, createdBy: "ken" });
     log.info(`ピン作成タスク: ${task.id} → designer`);
   } else if (verdict === "needs_human") {
     articles.upsert({ ...a, status: "needs_review", qualityIssues: review.findings.map((f) => f.problem), updatedAt: nowISO() });

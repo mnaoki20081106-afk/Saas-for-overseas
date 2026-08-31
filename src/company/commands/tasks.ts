@@ -18,20 +18,25 @@ import { approvals, tasks } from "../store";
  *   - 落ちたセッションの running タスクを自動で回収する
  */
 
-/** 誰がその種類の仕事をするか。AI が勝手に担当を決められないようにする。 */
+/**
+ * 誰がその種類の仕事をするか。AI が勝手に担当を決められないようにする。
+ *
+ * 3層構造なので、担当は 諭吉 / サラ / ケン / Actions の4つだけです。
+ * サラとケンは部下を持たないので、下に振り直すことはできません。
+ */
 const DEFAULT_ASSIGNEE: Record<TaskKindT, EmployeeIdT> = {
-  research: "researcher",
-  plan_article: "ceo",       // Phase 1 は CEO が企画を兼務（Analyst はまだ稼働しない）
-  write_article: "writer",
-  edit_article: "editor",
-  design_pins: "designer",
-  qa_release: "qa",
-  publish_article: "actions",
+  research: "sara",           // CMO サラ（自分で調べる）
+  plan_article: "yukichi",    // CEO 諭吉（企画は諭吉が決める）
+  write_article: "ken",       // CTO ケン（自分で書く）
+  edit_article: "ken",        // CTO ケン（自分で検品する。そのあと諭吉が独立して読む）
+  design_pins: "sara",        // CMO サラ（自分でピン文案を作る）
+  qa_release: "ken",          // CTO ケン（事実とリンクの照合）
+  publish_article: "actions", // 実行は GitHub Actions（オーナーの GO の後）
   publish_pins: "actions",
   post_x: "actions",
   collect_metrics: "actions",
-  analyze: "analyst",
-  fix_error: "ceo",
+  analyze: "yukichi",         // CEO 諭吉（分析して次を決める）
+  fix_error: "yukichi",
 };
 
 /** その仕事は外に出るか（＝人間の承認が要るか） */
@@ -160,7 +165,7 @@ export function addTask(input: AddTaskInput): TaskT {
     finishedAt: null,
     expiresAt: new Date(Date.now() + l.quality.taskExpiryDays * 86_400_000).toISOString(),
     lastError: null,
-    createdBy: validate(EmployeeId, input.createdBy ?? "ceo", "task:add createdBy"),
+    createdBy: validate(EmployeeId, input.createdBy ?? "yukichi", "task:add createdBy"),
   };
 
   validate(Task, task, "task:add");

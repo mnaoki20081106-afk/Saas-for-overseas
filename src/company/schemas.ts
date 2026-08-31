@@ -14,8 +14,24 @@ import { z } from "zod";
 const iso = z.string().describe("ISO8601 の日時文字列");
 const isoOrNull = z.string().nullable();
 
+/**
+ * この会社にいる人（3層構造）。
+ *
+ *   yukichi … CEO 諭吉。オーナーと対話する唯一の役職
+ *   sara    … CMO サラ。案件リサーチと Pinterest（部下なし）
+ *   ken     … CTO ケン。記事の構成・執筆・自己検品（部下なし）
+ *
+ * 人ではないもの:
+ *   actions … GitHub Actions（投稿・公開・数値取得を実行する）
+ *   cli     … co コマンド自身（自動記録用）
+ *   human   … オーナー
+ *
+ * 旧構成の6役職（researcher / writer / editor / designer / qa / analyst）は
+ * 廃止しました。それらは「道具の名前」として co のコマンド名に残っていますが、
+ * **人ではありません。** 担当者としては使えません。
+ */
 export const EMPLOYEE_IDS = [
-  "ceo", "researcher", "analyst", "writer", "editor", "designer", "growth", "qa",
+  "yukichi", "sara", "ken",
   "actions", "cli", "human",
 ] as const;
 export const EmployeeId = z.enum(EMPLOYEE_IDS);
@@ -263,6 +279,13 @@ export const Review = z.object({
   id: z.string(),
   targetType: z.enum(["article", "pin", "release"]),
   targetRef: z.string(),
+  /**
+   * 検品の「種類」であって、人の名前ではありません。
+   * 3層構造では、どちらも CTO ケンが行います。
+   *   editor … 文章として自然か（読み物としての質）
+   *   qa     … 事実・出典・リンク・メタデータが正しいか
+   * 範囲を分けているのは、片方が「もう片方が見ているはず」と手を抜かないためです。
+   */
   reviewer: z.enum(["editor", "qa"]),
   /** ★AI が自己申告しない。co が「既存レビュー件数 + 1」で採番する */
   round: z.number().int().min(1),

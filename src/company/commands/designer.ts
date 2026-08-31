@@ -224,7 +224,7 @@ export async function designerSubmit(file: string): Promise<Pin[]> {
   const idea = ideas.all().find((i) => i.programSlug === article.programSlugs[0] && i.status === "writing");
   if (idea) ideas.replace((i) => i.id === idea.id, { status: "published" });
 
-  const task = addTask({ kind: "qa_release", targetRef: article.slug, createdBy: "designer" });
+  const task = addTask({ kind: "qa_release", targetRef: article.slug, createdBy: "sara" });
   log.info(`最終検品タスク: ${task.id}`);
   return newPins;
 }

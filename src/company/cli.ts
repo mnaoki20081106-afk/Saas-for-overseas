@@ -193,7 +193,7 @@ const COMMANDS: Record<string, Handler> = {
       requiresApprovalId: flag(args, "approval") ?? null,
       dependsOn: depends ? depends.split(",").map((s) => s.trim()).filter(Boolean) : [],
       input: flag(args, "input") ? (JSON.parse(flag(args, "input")!) as Record<string, unknown>) : {},
-      createdBy: (flag(args, "by") as EmployeeId | undefined) ?? "ceo",
+      createdBy: (flag(args, "by") as EmployeeId | undefined) ?? "yukichi",
     });
     log.ok(`タスクを作成: ${task.id} [${task.status}] ${task.kind} → ${task.assignee}`);
     if (task.status === "blocked") {
