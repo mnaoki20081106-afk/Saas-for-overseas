@@ -11,6 +11,7 @@ import { refreshHumanTasks, writeChecklist } from "./stages/humantasks";
 import { writeOneArticle } from "./stages/content";
 import { generatePinsForArticle, schedule, schedulingSummary } from "./stages/pins";
 import { publishDuePins, requeueFailedPins } from "./stages/publish";
+import { processTakedowns } from "./stages/takedown";
 import { exportPins } from "./stages/export";
 import { collectAnalytics } from "./stages/analytics";
 import { runOptimizer } from "./stages/optimize";
@@ -160,6 +161,10 @@ async function main(): Promise<void> {
     }
 
     case "pins:publish": {
+      // ★投稿より先に「取り消し」を処理する。
+      //   なおきさんが管理画面で取り消したものを、投稿より先に消しておかないと、
+      //   「消したはずのものが残ったまま次が増える」状態になるため。
+      await processTakedowns();
       const limit = arg(rest, "--limit");
       await publishDuePins({
         limit: limit ? Number(limit) : undefined,

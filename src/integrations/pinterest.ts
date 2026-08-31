@@ -169,6 +169,27 @@ export async function createPin(input: CreatePinInput): Promise<string> {
   return created.id;
 }
 
+/**
+ * 投稿済みのピンを Pinterest から削除する。
+ *
+ * なおきさんが管理画面で「Pinterestから削除する」を押したときだけ呼ばれます。
+ * AI がこれを自分で呼ぶことはありません（外部への操作は必ず人の指示が起点）。
+ *
+ * すでに手動で消えている場合（404）は「消えている」という結果は同じなので、
+ * エラーにせず成功として扱います。
+ */
+export async function deletePin(pinId: string): Promise<{ deleted: boolean; alreadyGone: boolean }> {
+  try {
+    await call<unknown>("DELETE", `/pins/${encodeURIComponent(pinId)}`);
+    return { deleted: true, alreadyGone: false };
+  } catch (err) {
+    if (err instanceof PinterestError && err.status === 404) {
+      return { deleted: true, alreadyGone: true };
+    }
+    throw err;
+  }
+}
+
 /* --------------------------------------------------------------- analytics */
 
 export interface RawPinAnalytics {

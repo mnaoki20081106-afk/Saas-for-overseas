@@ -36,10 +36,12 @@ const CSS = `
   --line:#232e3b;--accent:#3b82f6;--good:#16a34a;--warn:#f59e0b;--bad:#dc2626}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);
-  font:14px/1.55 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
-.wrap{max-width:1080px;margin:0 auto;padding:1.5rem 1.25rem 4rem}
-header{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1.25rem;flex-wrap:wrap}
+  font:14px/1.55 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  -webkit-text-size-adjust:100%}
+.wrap{max-width:1080px;margin:0 auto;padding:1.5rem 1.25rem 5rem}
+header{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1rem;flex-wrap:wrap}
 h1{font-size:1.3rem;margin:0}
+h4{margin:0 0 .3rem;font-size:.86rem;color:var(--muted);font-weight:700;letter-spacing:.03em}
 .sub{color:var(--muted);font-size:.85rem;margin-top:.2rem}
 .pill{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.02em;
   padding:.2rem .55rem;border-radius:99px;color:#fff;white-space:nowrap}
@@ -59,9 +61,13 @@ a:hover{text-decoration:underline}
 input[type=url],input[type=text],input[type=password]{flex:1;min-width:220px;background:var(--surface2);
   border:1px solid var(--line);color:var(--ink);border-radius:.4rem;padding:.5rem .65rem;font-size:.86rem}
 button,select{background:var(--surface2);border:1px solid var(--line);color:var(--ink);
-  border-radius:.4rem;padding:.5rem .8rem;font-size:.84rem;cursor:pointer}
+  border-radius:.4rem;padding:.5rem .8rem;font-size:.84rem;cursor:pointer;min-height:38px}
 button:disabled{opacity:.5;cursor:wait}
 button.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+button.warn{border-color:var(--warn);color:var(--warn)}
+/* 取り消し系は「押せるが、目立ちすぎない」。眺めるだけの画面で誤タップさせないため。 */
+button.danger{border-color:var(--bad);color:var(--bad);background:transparent;font-weight:600}
+button.danger:hover{background:var(--bad);color:#fff}
 .current-link{background:var(--surface2);border-radius:.4rem;padding:.5rem .65rem;
   font-size:.82rem;word-break:break-all;color:var(--muted)}
 .empty{color:var(--muted);text-align:center;padding:3rem 0}
@@ -72,6 +78,79 @@ li{margin-bottom:.4rem}
 .spin{display:inline-block;width:.8em;height:.8em;border:2px solid var(--muted);
   border-top-color:var(--ink);border-radius:50%;animation:spin .7s linear infinite;margin-right:.4em}
 @keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── タブ ───────────────────────────────────────────────── */
+.tabs{display:flex;gap:.4rem;margin-bottom:1.1rem;overflow-x:auto;padding-bottom:.2rem;
+  border-bottom:1px solid var(--line)}
+.tabBtn{background:transparent;border:none;border-bottom:2px solid transparent;border-radius:0;
+  color:var(--muted);font-weight:600;padding:.6rem .85rem;white-space:nowrap}
+.tabBtn.active{color:var(--ink);border-bottom-color:var(--accent)}
+.badge{display:inline-block;background:var(--bad);color:#fff;font-size:.7rem;font-weight:700;
+  border-radius:99px;padding:.05rem .4rem;margin-left:.35rem}
+
+/* ── 状態タブの数字 ─────────────────────────────────────── */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.7rem;margin-bottom:1rem}
+.stat{border:1px solid var(--line);background:var(--surface);border-radius:.6rem;padding:.85rem 1rem}
+.stat .n{font-size:1.6rem;font-weight:700;line-height:1.1}
+.stat .l{color:var(--muted);font-size:.78rem;margin-top:.2rem}
+.stat.warn{border-color:var(--warn)}
+.stat.warn .n{color:var(--warn)}
+.stat.bad{border-color:var(--bad)}
+.stat.bad .n{color:var(--bad)}
+
+/* ── 承認カード ─────────────────────────────────────────── */
+.approval{border:1px solid var(--accent);background:var(--surface);border-radius:.7rem;
+  padding:1.1rem 1.25rem;margin-bottom:1rem}
+.approval h3{margin:0 0 .2rem;font-size:1.08rem}
+.approval .when{color:var(--warn);font-size:.8rem;margin-bottom:.9rem}
+.approval section{margin-bottom:.9rem}
+.approval p{margin:.2rem 0}
+.approval ul{margin:.2rem 0;padding-left:1.15rem}
+dl.money{display:grid;grid-template-columns:auto 1fr;gap:.25rem .8rem;margin:.2rem 0}
+dl.money dt{color:var(--muted);font-size:.82rem}
+dl.money dd{margin:0;font-variant-numeric:tabular-nums}
+ul.risk li{color:var(--warn)}
+.decide{display:flex;gap:.7rem;margin-top:1rem;flex-wrap:wrap}
+.decide button{flex:1;min-width:130px;font-size:1rem;font-weight:700;padding:.85rem 1rem;min-height:52px}
+.decide .go{background:var(--good);border-color:var(--good);color:#fff}
+.decide .stop{background:transparent;border-color:var(--bad);color:var(--bad)}
+
+/* ── 緊急停止 ───────────────────────────────────────────── */
+.danger{border:1px solid var(--bad);background:var(--surface);border-radius:.7rem;
+  padding:1.1rem 1.25rem;margin-top:1.2rem}
+.danger h3{margin:0 0 .3rem;font-size:1rem;color:var(--bad)}
+.danger button{background:var(--bad);border-color:var(--bad);color:#fff;font-weight:700;
+  padding:.7rem 1.2rem;min-height:46px}
+.danger button.resume{background:var(--good);border-color:var(--good)}
+
+/* ── 失敗の記録 ─────────────────────────────────────────── */
+.err{border-left:3px solid var(--bad);background:var(--surface2);border-radius:.3rem;
+  padding:.5rem .7rem;margin-bottom:.5rem;font-size:.82rem;white-space:pre-wrap;word-break:break-word}
+.err .w{color:var(--muted);font-size:.76rem;margin-bottom:.2rem}
+
+/* ── 投稿の確認タブ ─────────────────────────────────────── */
+.section-title{font-size:.95rem;font-weight:700;margin:1.4rem 0 .6rem;
+  display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.section-title .count{color:var(--muted);font-weight:400;font-size:.82rem}
+.pin{display:flex;gap:1rem;border:1px solid var(--line);background:var(--surface);
+  border-radius:.7rem;padding:1rem 1.1rem;margin-bottom:.8rem}
+.pin.gone{opacity:.55}
+.pin img{width:100px;height:150px;object-fit:cover;border-radius:.4rem;
+  background:var(--surface2);flex-shrink:0}
+.pin .body{flex:1;min-width:0}
+.pin .t{font-weight:600;margin-bottom:.25rem;word-break:break-word}
+.pin .d{color:var(--muted);font-size:.82rem;white-space:pre-wrap;word-break:break-word;margin-bottom:.4rem}
+.article-body{background:var(--surface2);border-radius:.4rem;padding:.9rem 1rem;margin-top:.7rem;
+  max-height:26rem;overflow:auto;white-space:pre-wrap;word-break:break-word;
+  font:13px/1.7 ui-monospace,SFMono-Regular,Menlo,monospace}
+details summary{cursor:pointer;color:var(--muted);font-size:.82rem;padding:.2rem 0}
+.note{color:var(--muted);font-size:.8rem;margin-top:.5rem;line-height:1.6}
+
+@media (max-width:560px){
+  .wrap{padding:1rem .8rem 5rem}
+  .pin{flex-direction:column}
+  .pin img{width:100%;height:auto;max-width:180px}
+}
 `;
 
 /**
@@ -99,7 +178,7 @@ export function buildAdminPage(branch: string): string {
   return `<!doctype html><html lang="ja"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>${escapeHtml(c.site.name)} — 管理画面</title>
+<title>${escapeHtml(c.site.name)} — 代表取締役デスク</title>
 <style>${CSS}</style></head><body><div class="wrap">
 ${ownerRepoWarning}
 <div id="app"><div class="empty">読み込み中…</div></div>
@@ -111,6 +190,9 @@ const BRANCH = ${JSON.stringify(branch)};
 const SITE_NAME = ${JSON.stringify(c.site.name)};
 const BASE_URL = ${JSON.stringify(c.site.baseUrl)};
 const REBUILD_WORKFLOW = "rebuild-site.yml";
+const PINS_WORKFLOW = "autopilot-pins.yml";
+// ピン画像は公開リポジトリの raw から直接読む（画像自体は秘密情報ではない）
+const RAW_BASE = "https://raw.githubusercontent.com/" + OWNER + "/" + REPO + "/" + BRANCH + "/";
 const TOKEN_KEY = "wfu_admin_gh_token_v1";
 ${ADMIN_APP_JS}
 </script>

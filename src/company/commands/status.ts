@@ -78,6 +78,26 @@ export function companyStatus(): void {
     ["本日の投稿上限", `${l.output.maxPinsPublishedPerDay} 枚`],
   ]));
 
+  // なおきさんが管理画面から取り消したものを、諭吉が見落とさないようにする。
+  // 削除が実行されずに残り続けると「消したつもり」になるため、ここで必ず出す。
+  const pendingTakedown = allPins.filter((p) => p.takedownRequestedAt && p.status === "published");
+  const withdrawn = articles.all().filter((a) => a.status === "withdrawn");
+  if (pendingTakedown.length > 0 || withdrawn.length > 0) {
+    const lines: string[] = [];
+    if (pendingTakedown.length > 0) {
+      lines.push(`⚠ **なおきさんが取り消したピンが ${pendingTakedown.length} 枚、まだ Pinterest に残っています。**`);
+      lines.push("  次の `pins:publish` の実行で削除されます。Pinterest の認証情報が未設定だと消えません。");
+    }
+    if (withdrawn.length > 0) {
+      lines.push(`・なおきさんが取り下げた記事: ${withdrawn.length} 本（サイトには出ていません）`);
+      for (const a of withdrawn.slice(0, 5)) {
+        lines.push(`    ${a.slug}${a.withdrawnReason ? ` — ${a.withdrawnReason}` : ""}`);
+      }
+      lines.push("  取り下げた理由を読んで、同じ失敗を繰り返さないでください。");
+    }
+    section("なおきさんが取り消したもの", lines);
+  }
+
   const m = metrics.get();
   const last = m.history[m.history.length - 1];
   section("数字", last

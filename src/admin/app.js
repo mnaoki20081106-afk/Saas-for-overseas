@@ -1,14 +1,22 @@
 /*
- * 管理画面のフロントエンド。
+ * 代表取締役デスク（管理画面）のフロントエンド。
  *
  * このファイルは素の JavaScript です。TypeScript のテンプレートリテラルの中に
  * 書くと、バッククォートと ${} を全部エスケープする必要があり、
  * 一文字ミスするだけで壊れます。別ファイルにして、その問題自体をなくしています。
  *
  * page.ts がビルド時にこの中身をそのまま <script> に埋め込みます。
- * OWNER / REPO / BRANCH / SITE_NAME / BASE_URL は page.ts 側で定義済みです。
+ * OWNER / REPO / BRANCH / SITE_NAME / BASE_URL / REBUILD_WORKFLOW /
+ * PINS_WORKFLOW / RAW_BASE / TOKEN_KEY は page.ts 側で定義済みです。
+ *
+ * ★この画面の役割は3つです。
+ *   1. 承認         … GO / STOP を押す（AIが外に出す前の関門）
+ *   2. 案件（応募）  … AIが調べた案件に、なおきさんが応募してURLを登録する
+ *   3. 投稿の確認    … 何が出るのか／出たのかを眺める。おかしければ取り消す
+ *
+ *   3番は「眺めるだけ」が基本です。承認は要りません。
+ *   取り消しボタンは、万が一のときの非常口として置いてあります。
  */
-
 
 const STATUS_LABEL = {
   candidate: "未応募", awaiting_apply: "応募文あり・未応募", applied: "審査中",
@@ -19,12 +27,40 @@ const STATUS_COLOR = {
   approved: "#16a34a", rejected: "#dc2626", paused: "#71717a",
 };
 
+const PIN_LABEL = {
+  draft: "文案だけ", queued: "予約待ち", scheduled: "投稿予約中", published: "投稿済み",
+  failed: "投稿に失敗", skipped: "取り消し済み", taken_down: "削除済み",
+};
+const PIN_COLOR = {
+  draft: "#94a3b8", queued: "#8b5cf6", scheduled: "#3b82f6", published: "#16a34a",
+  failed: "#dc2626", skipped: "#71717a", taken_down: "#71717a",
+};
+
+const ART_LABEL = {
+  brief: "企画だけ", drafted: "下書き", needs_review: "確認待ち",
+  published: "公開中", withdrawn: "取り下げ済み",
+};
+const ART_COLOR = {
+  brief: "#94a3b8", drafted: "#8b5cf6", needs_review: "#f59e0b",
+  published: "#16a34a", withdrawn: "#71717a",
+};
+
 function esc(s) {
-  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  return String(s === null || s === undefined ? "" : s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 function getToken() { return localStorage.getItem(TOKEN_KEY) || ""; }
 function setToken(t) { localStorage.setItem(TOKEN_KEY, t); }
 function clearToken() { localStorage.removeItem(TOKEN_KEY); }
+
+/** 2026-08-31T04:00:00Z → 8/31 13:00（見る人の時計に合わせる） */
+function when(iso) {
+  if (!iso) return "—";
+  const d = new Date(iso);
+  if (isNaN(d)) return String(iso).slice(0, 16).replace("T", " ");
+  return (d.getMonth() + 1) + "/" + d.getDate() + " " +
+    String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
+}
 
 /** UTF-8 安全な base64 encode/decode（日本語のコメントがJSON内にあるため） */
 function b64encodeUtf8(str) {
@@ -52,13 +88,22 @@ async function gh(path, opts) {
   return res;
 }
 
-/** ファイルを読む。無ければ null を返す(初回はまだ存在しないファイルがある)。 */
+/** JSON ファイルを読む。無ければ null を返す(初回はまだ存在しないファイルがある)。 */
 async function getFile(path) {
   const res = await gh(`/repos/${OWNER}/${REPO}/contents/${path}?ref=${encodeURIComponent(BRANCH)}`);
   if (res.status === 404) return null;
   if (!res.ok) throw new Error(`${path} の取得に失敗 (HTTP ${res.status})`);
   const json = await res.json();
   return { json: JSON.parse(b64decodeUtf8(json.content)), sha: json.sha };
+}
+
+/** テキストファイル（記事の本文など）をそのまま読む。 */
+async function getText(path) {
+  const res = await gh(`/repos/${OWNER}/${REPO}/contents/${path}?ref=${encodeURIComponent(BRANCH)}`);
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error(`${path} の取得に失敗 (HTTP ${res.status})`);
+  const json = await res.json();
+  return b64decodeUtf8(json.content);
 }
 
 /** ファイルを書く(無ければ新規作成、あれば更新)。 */
@@ -85,17 +130,21 @@ async function putFile(path, obj, sha, message) {
   return res.json();
 }
 
-async function dispatchRebuild() {
-  const res = await gh(`/repos/${OWNER}/${REPO}/actions/workflows/${REBUILD_WORKFLOW}/dispatches`, {
+async function dispatchWorkflow(file, whatFor) {
+  const res = await gh(`/repos/${OWNER}/${REPO}/actions/workflows/${file}/dispatches`, {
     method: "POST", headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ ref: BRANCH }),
   });
   if (!res.ok) {
     if (res.status === 401 || res.status === 403) {
-      throw new Error("サイトの再公開に失敗しました(トークンに Actions: Read and write の権限が必要です)。保存自体は完了しています。");
+      throw new Error(whatFor + "の起動に失敗しました(トークンに Actions: Read and write の権限が必要です)。記録自体は保存できています。");
     }
-    throw new Error("サイトの再公開の起動に失敗しました。保存自体は完了しています。Actions タブから rebuild-site を手動実行してください。");
+    throw new Error(whatFor + "の起動に失敗しました。記録自体は保存できています。GitHub の Actions タブから手動で実行してください。");
   }
+}
+
+async function dispatchRebuild() {
+  await dispatchWorkflow(REBUILD_WORKFLOW, "サイトの再公開");
 }
 
 /* ------------------------------------------------------------ rendering */
@@ -105,7 +154,7 @@ const app = document.getElementById("app");
 function renderGate(errorMsg) {
   app.innerHTML = `
     <div class="gate">
-      <h1>${esc(SITE_NAME)} — 管理画面</h1>
+      <h1>${esc(SITE_NAME)} — 代表取締役デスク</h1>
       <div class="banner warn">
         このページはあなた専用です。GitHub の個人アクセストークン(PAT)を入力すると、
         あなたのブラウザから直接 GitHub を読み書きします。
@@ -143,6 +192,13 @@ function maskUrl(url) {
   }
 }
 
+/* ---------------------------------------------------------- 案件（応募） */
+
+/**
+ * 応募カード。
+ * 「どこに応募するのか」「なぜこの案件なのか」「発行されたURLをどこに貼るのか」を
+ * 1枚で完結させる。なおきさんが他の画面を行き来しなくて済むようにするため。
+ */
 function programCard(p, links) {
   const current = links[p.slug];
   const ltv = Math.round(p.estMonthlyCommissionUsd * p.estAvgRetentionMonths);
@@ -150,42 +206,82 @@ function programCard(p, links) {
     .map((s) => `<option value="${s}" ${s === p.status ? "selected" : ""}>${STATUS_LABEL[s]}</option>`)
     .join("");
 
+  const model = { recurring: "継続報酬（毎月入る）", "one-time": "単発報酬（1回だけ）",
+    hybrid: "初回＋継続", unknown: "未確認" }[p.commissionModel] || p.commissionModel;
+
+  const evidence = (p.evidence || []).length
+    ? `<details><summary>この数字の出典を見る（${p.evidence.length}件）</summary>
+         <div class="note">${p.evidence.map((u) =>
+           `<div><a href="${esc(u)}" target="_blank" rel="noopener">${esc(maskUrl(u))} ↗</a></div>`).join("")}</div>
+       </details>`
+    : `<div class="note">出典URLが登録されていません。数字は参考値として扱ってください。</div>`;
+
+  // 登録済みなら「変更する」を畳んでおく。押し間違いで消えないように。
   const linkSection = current
-    ? `<div class="current-link">現在のリンク: ${esc(maskUrl(current))}</div>
+    ? `<div class="current-link">登録済みのリンク: ${esc(maskUrl(current))}</div>
        <div class="row">
-         <a href="${esc(BASE_URL)}/go/${esc(p.slug)}/" target="_blank" rel="noopener">確認用リンクを開く ↗</a>
-         <details><summary style="cursor:pointer;color:var(--muted);font-size:.82rem">URLを変更する</summary>
+         <a href="${esc(BASE_URL)}/go/${esc(p.slug)}/" target="_blank" rel="noopener">
+           テスト用に開いてみる ↗</a>
+         <details><summary>URLを変更する</summary>
            <div class="row" style="margin-top:.5rem">
              <input type="url" class="linkInput" data-slug="${esc(p.slug)}" placeholder="新しいアフィリエイトURL">
              <button class="primary saveLinkBtn" data-slug="${esc(p.slug)}">保存して反映</button>
            </div>
          </details>
        </div>`
-    : `<div class="row">
-         <input type="url" class="linkInput" data-slug="${esc(p.slug)}" placeholder="発行されたアフィリエイトURLを貼り付け">
+    : `<h4 style="margin-top:1rem">③ 発行されたアフィリエイトURLを貼る</h4>
+       <div class="row">
+         <input type="url" class="linkInput" data-slug="${esc(p.slug)}"
+           placeholder="https://... （審査に通ると発行されます）">
          <button class="primary saveLinkBtn" data-slug="${esc(p.slug)}">保存して反映</button>
+       </div>
+       <div class="note">
+         保存すると、この案件は自動で「承認済み」になり、記事の中のリンクが
+         1〜2分で本物のアフィリエイトURLに差し替わります。
        </div>`;
+
+  const applyRow = current ? "" : `
+    <h4 style="margin-top:1rem">② 応募する（ここは人にしかできません）</h4>
+    <div class="row">
+      <a href="${esc(p.affiliateProgramUrl)}" target="_blank" rel="noopener">
+        <button class="primary">応募ページを開く ↗</button></a>
+      <button class="markAppliedBtn" data-slug="${esc(p.slug)}">応募しました（審査待ちにする）</button>
+    </div>`;
 
   return `<div class="card" data-card="${esc(p.slug)}">
     <h3>${esc(p.name)}
-      <span class="pill" style="background:${STATUS_COLOR[p.status]}">${STATUS_LABEL[p.status]}</span>
+      <span class="pill" style="background:${STATUS_COLOR[p.status] || "#71717a"}">
+        ${esc(STATUS_LABEL[p.status] || p.status)}</span>
     </h3>
     <div class="meta">
-      ${esc(p.category)} · ${esc(p.network)} ·
-      スコア <b>${p.score.toFixed(1)}</b> ·
-      $${p.estMonthlyCommissionUsd}/月 × ${p.estAvgRetentionMonths}ヶ月 = 想定LTV <b>$${ltv}</b>
+      ${esc(p.category)} · ${esc(p.network)} · スコア <b>${Number(p.score).toFixed(1)}</b>
     </div>
+
+    <h4>① この案件を英世（CMO）が選んだ理由</h4>
+    <p style="margin:.2rem 0 .6rem">${esc(p.whyGoodFit)}</p>
+    <dl class="money">
+      <dt>報酬の型</dt><dd>${esc(model)}</dd>
+      <dt>報酬率</dt><dd>${p.commissionRatePct === null || p.commissionRatePct === undefined ? "未確認" : p.commissionRatePct + "%"}</dd>
+      <dt>1件あたり</dt><dd>$${p.estMonthlyCommissionUsd}/月 × ${p.estAvgRetentionMonths}ヶ月 = <b>$${ltv}</b></dd>
+      <dt>クッキー</dt><dd>${p.cookieDays === null || p.cookieDays === undefined ? "未確認" : p.cookieDays + "日"}</dd>
+      <dt>日本語の競合</dt><dd>${p.japaneseCompetition}/10（低いほど狙い目）</dd>
+    </dl>
+    ${evidence}
     <div class="row">
-      <a href="${esc(p.affiliateProgramUrl)}" target="_blank" rel="noopener">応募先 ↗</a>
       <a href="${esc(p.homepage)}" target="_blank" rel="noopener">公式サイト ↗</a>
+      <a href="${esc(p.affiliateProgramUrl)}" target="_blank" rel="noopener">応募先 ↗</a>
       <select class="statusSelect" data-slug="${esc(p.slug)}" style="margin-left:auto">${statusOptions}</select>
     </div>
+    ${applyRow}
     ${linkSection}
   </div>`;
 }
 
 let STATE = null;
-let TAB = "approvals";
+let TAB = "review";
+/** 記事本文のキャッシュ（開いたものだけ読む。毎回全部読むと遅いため） */
+const BODY_CACHE = {};
+const BODY_OPEN = {};
 
 async function loadState() {
   const [programs, links, humanTasks, approvals, limits, errors, articles, pins, tasks] =
@@ -272,7 +368,137 @@ function approvalCard(a) {
   </div>`;
 }
 
-/* -------------------------------------------------------------- タブ本体 */
+/* -------------------------------------------------------- 投稿の確認タブ */
+
+function articleCard(a) {
+  const open = BODY_OPEN[a.slug];
+  const body = BODY_CACHE[a.slug];
+  const live = a.status === "published";
+  const url = BASE_URL + "/" + a.slug + "/";
+
+  const bodyBlock = !open ? "" : (body === undefined
+    ? `<div class="article-body"><span class="spin"></span>本文を読み込んでいます…</div>`
+    : body === null
+      ? `<div class="article-body">本文ファイルが見つかりませんでした: ${esc(a.filePath)}</div>`
+      : `<div class="article-body">${esc(body)}</div>`);
+
+  const actions = live
+    ? `<button class="danger withdrawBtn" data-slug="${esc(a.slug)}">この記事をサイトから取り下げる</button>`
+    : a.status === "withdrawn"
+      ? `<button class="republishBtn" data-slug="${esc(a.slug)}">やっぱり公開する</button>`
+      : "";
+
+  return `<div class="card">
+    <h3>${esc(a.title)}
+      <span class="pill" style="background:${ART_COLOR[a.status] || "#71717a"}">
+        ${esc(ART_LABEL[a.status] || a.status)}</span>
+    </h3>
+    <div class="meta">
+      ${a.words} 語 · 更新 ${esc(when(a.updatedAt))} ·
+      <code>${esc(a.slug)}</code>
+      ${(a.qualityIssues || []).length ? ` · <b style="color:var(--warn)">要確認 ${a.qualityIssues.length}件</b>` : ""}
+    </div>
+    ${a.withdrawnAt ? `<div class="note">${esc(when(a.withdrawnAt))} に取り下げました。${a.withdrawnReason ? "理由: " + esc(a.withdrawnReason) : ""}</div>` : ""}
+    <div class="row">
+      <button class="bodyBtn" data-slug="${esc(a.slug)}">${open ? "本文を閉じる" : "本文を読む"}</button>
+      ${live ? `<a href="${esc(url)}" target="_blank" rel="noopener">公開ページを開く ↗</a>` : ""}
+      ${actions}
+    </div>
+    ${bodyBlock}
+  </div>`;
+}
+
+function pinCard(p) {
+  const gone = ["skipped", "taken_down", "failed"].includes(p.status);
+  const posted = p.status === "published";
+  const pending = ["draft", "queued", "scheduled"].includes(p.status);
+
+  let actions = "";
+  if (pending) {
+    actions = `<button class="danger cancelPinBtn" data-id="${esc(p.id)}">この投稿をやめる</button>`;
+  } else if (posted && !p.takedownRequestedAt) {
+    actions = `<button class="danger takedownBtn" data-id="${esc(p.id)}">Pinterestから削除する</button>`;
+  } else if (posted && p.takedownRequestedAt) {
+    actions = `<span class="note">削除を依頼済み（${esc(when(p.takedownRequestedAt))}）。次の自動実行で消えます。</span>`;
+  } else if (p.status === "skipped") {
+    actions = `<button class="restorePinBtn" data-id="${esc(p.id)}">やっぱり投稿する</button>`;
+  }
+
+  const link = posted && p.pinterestPinId
+    ? `<a href="https://www.pinterest.com/pin/${esc(p.pinterestPinId)}/" target="_blank" rel="noopener">Pinterestで見る ↗</a>`
+    : "";
+
+  return `<div class="pin ${gone ? "gone" : ""}">
+    <img src="${esc(RAW_BASE + p.imagePath)}" alt="" loading="lazy"
+         onerror="this.style.visibility='hidden'">
+    <div class="body">
+      <div class="t">${esc(p.title)}
+        <span class="pill" style="background:${PIN_COLOR[p.status] || "#71717a"}">
+          ${esc(PIN_LABEL[p.status] || p.status)}</span>
+      </div>
+      <div class="d">${esc(p.description)}</div>
+      <div class="meta">
+        ${posted ? "投稿 " + esc(when(p.publishedAt)) : "予約 " + esc(when(p.scheduledAt))}
+        · ボード「${esc(p.boardName)}」
+        ${p.metrics ? ` · 表示 ${p.metrics.impressions} · クリック ${p.metrics.outboundClicks}` : ""}
+      </div>
+      <div class="meta">リンク先: ${esc(maskUrl(p.destinationUrl))}</div>
+      ${p.lastError ? `<div class="note" style="color:var(--bad)">${esc(p.lastError)}</div>` : ""}
+      <div class="row">${link}${actions}</div>
+    </div>
+  </div>`;
+}
+
+function viewReview() {
+  const arts = STATE.articles.json || [];
+  const pins = STATE.pins.json || [];
+
+  const order = { published: 0, needs_review: 1, drafted: 2, brief: 3, withdrawn: 4 };
+  const sortedArts = [...arts].sort((a, b) =>
+    (order[a.status] ?? 9) - (order[b.status] ?? 9) ||
+    String(b.updatedAt).localeCompare(String(a.updatedAt)));
+
+  const pending = pins.filter((p) => ["draft", "queued", "scheduled"].includes(p.status))
+    .sort((a, b) => String(a.scheduledAt).localeCompare(String(b.scheduledAt)));
+  const posted = pins.filter((p) => p.status === "published")
+    .sort((a, b) => String(b.publishedAt).localeCompare(String(a.publishedAt)));
+  const others = pins.filter((p) => ["skipped", "taken_down", "failed"].includes(p.status));
+
+  const intro = `<div class="banner">
+    <b>ここは「眺めるだけ」の画面です。あなたの承認は要りません。</b><br>
+    AI社員が作った文章と、これから出る／すでに出た投稿を、そのまま表示しています。
+    おかしいと思ったら、赤いボタンで取り消せます。<b>取り消しに理由の説明は要りません。</b>
+  </div>`;
+
+  const artSection = `
+    <div class="section-title">記事（サイトに出る文章）
+      <span class="count">${sortedArts.length}本</span></div>
+    ${sortedArts.length === 0
+      ? '<div class="empty">まだ記事がありません。一葉（CTO）が書き、梅子（CQO）が検品したものがここに出ます。</div>'
+      : sortedArts.map(articleCard).join("")}`;
+
+  const pinSection = `
+    <div class="section-title">これから投稿するピン
+      <span class="count">${pending.length}枚</span></div>
+    ${pending.length === 0
+      ? '<div class="empty">投稿待ちのピンはありません。</div>'
+      : pending.map(pinCard).join("")}
+
+    <div class="section-title">投稿済みのピン
+      <span class="count">${posted.length}枚</span></div>
+    ${posted.length === 0
+      ? '<div class="empty">まだ投稿していません。</div>'
+      : posted.slice(0, 30).map(pinCard).join("")}
+    ${posted.length > 30 ? `<div class="note">新しい30枚だけ表示しています（全${posted.length}枚）。</div>` : ""}
+
+    ${others.length ? `<div class="section-title">取り消した・失敗したピン
+      <span class="count">${others.length}枚</span></div>
+      ${others.slice(0, 20).map(pinCard).join("")}` : ""}`;
+
+  return intro + artSection + pinSection;
+}
+
+/* -------------------------------------------------------------- 他のタブ */
 
 function viewApprovals() {
   const pending = (STATE.approvals.json || []).filter((a) => a.status === "pending");
@@ -365,10 +591,28 @@ function killSwitchPanel() {
 
 function viewPrograms() {
   const all = [...(STATE.programs.json || [])].sort((a, b) => b.score - a.score);
+  const links = (STATE.links.json || {}).links || {};
+  const intro = `<div class="banner">
+    <b>アフィリエイトへの応募は、あなたにしかできません。</b>
+    本人確認が必要なので、AI社員は代われません。<br>
+    英世（CMO）が調べた案件を、良い順に並べています。
+    ①理由を読む → ②応募ページを開いて申し込む → ③発行されたURLを貼る、の3手順です。
+  </div>`;
   if (all.length === 0) {
-    return '<div class="empty">案件がまだありません。AI社員のリサーチを待ってください。</div>';
+    return intro + `<div class="empty">
+      案件がまだありません。英世（CMO）のリサーチを待ってください。
+    </div>`;
   }
-  return all.map((p) => programCard(p, (STATE.links.json || {}).links || {})).join("");
+  const notYet = all.filter((p) => !links[p.slug]);
+  const done = all.filter((p) => links[p.slug]);
+  return intro +
+    `<div class="section-title">応募がまだの案件<span class="count">${notYet.length}件</span></div>` +
+    (notYet.length ? notYet.map((p) => programCard(p, links)).join("")
+      : '<div class="empty">すべて登録済みです。</div>') +
+    (done.length
+      ? `<div class="section-title">リンク登録済み<span class="count">${done.length}件</span></div>` +
+        done.map((p) => programCard(p, links)).join("")
+      : "");
 }
 
 /* ------------------------------------------------------------- 描画本体 */
@@ -376,7 +620,17 @@ function viewPrograms() {
 function render(flash) {
   const pendingCount = (STATE.approvals.json || []).filter((a) => a.status === "pending").length;
   const killed = STATE.limits.json && STATE.limits.json.killSwitch && STATE.limits.json.killSwitch.enabled;
-  const tabs = [["approvals", "承認", pendingCount], ["status", "状態", 0], ["programs", "案件", 0]];
+  const tabs = [
+    ["review", "投稿の確認", 0],
+    ["approvals", "承認", pendingCount],
+    ["programs", "案件（応募）", 0],
+    ["status", "状態", 0],
+  ];
+
+  const view = TAB === "approvals" ? viewApprovals()
+    : TAB === "status" ? viewStatus()
+    : TAB === "programs" ? viewPrograms()
+    : viewReview();
 
   app.innerHTML = `
     ${flash ? `<div class="banner ${flash.kind}">${flash.busy ? '<span class="spin"></span>' : ""}${esc(flash.text)}</div>` : ""}
@@ -384,7 +638,7 @@ function render(flash) {
     <header>
       <div>
         <h1>${esc(SITE_NAME)}</h1>
-        <div class="sub">${esc(OWNER)}/${esc(REPO)}@${esc(BRANCH)}</div>
+        <div class="sub">代表取締役デスク · ${esc(OWNER)}/${esc(REPO)}@${esc(BRANCH)}</div>
       </div>
       <button id="logoutBtn">ログアウト</button>
     </header>
@@ -394,7 +648,7 @@ function render(flash) {
           ${label}${n > 0 ? `<span class="badge">${n}</span>` : ""}
         </button>`).join("")}
     </nav>
-    ${TAB === "approvals" ? viewApprovals() : TAB === "status" ? viewStatus() : viewPrograms()}
+    ${view}
   `;
 
   document.getElementById("logoutBtn").onclick = () => { clearToken(); location.reload(); };
@@ -418,6 +672,50 @@ function render(flash) {
   document.querySelectorAll(".statusSelect").forEach((sel) => {
     sel.onchange = () => saveStatus(sel.dataset.slug, sel.value);
   });
+  document.querySelectorAll(".markAppliedBtn").forEach((btn) => {
+    btn.onclick = () => saveStatus(btn.dataset.slug, "applied");
+  });
+  document.querySelectorAll(".bodyBtn").forEach((btn) => {
+    btn.onclick = () => toggleBody(btn.dataset.slug);
+  });
+  document.querySelectorAll(".withdrawBtn").forEach((btn) => {
+    btn.onclick = () => setArticlePublished(btn.dataset.slug, false);
+  });
+  document.querySelectorAll(".republishBtn").forEach((btn) => {
+    btn.onclick = () => setArticlePublished(btn.dataset.slug, true);
+  });
+  document.querySelectorAll(".cancelPinBtn").forEach((btn) => {
+    btn.onclick = () => cancelPin(btn.dataset.id);
+  });
+  document.querySelectorAll(".restorePinBtn").forEach((btn) => {
+    btn.onclick = () => restorePin(btn.dataset.id);
+  });
+  document.querySelectorAll(".takedownBtn").forEach((btn) => {
+    btn.onclick = () => requestTakedown(btn.dataset.id);
+  });
+}
+
+/* --------------------------------------------------------------- 読み込み */
+
+/** 記事の本文を開く／閉じる。開いたときだけ GitHub から読む。 */
+async function toggleBody(slug) {
+  if (BODY_OPEN[slug]) {
+    BODY_OPEN[slug] = false;
+    render();
+    return;
+  }
+  BODY_OPEN[slug] = true;
+  if (BODY_CACHE[slug] !== undefined) { render(); return; }
+  render();
+  const a = (STATE.articles.json || []).find((x) => x.slug === slug);
+  try {
+    BODY_CACHE[slug] = a ? await getText(a.filePath) : null;
+  } catch (err) {
+    BODY_CACHE[slug] = null;
+    render({ kind: "bad", text: String(err.message || err) });
+    return;
+  }
+  render();
 }
 
 /* --------------------------------------------------------------- 書き込み */
@@ -498,6 +796,114 @@ async function toggleKillSwitch() {
   }
 }
 
+async function savePins(message) {
+  const put = await putFile("data/pins.json", STATE.pins.json, STATE.pins.sha, message);
+  STATE.pins.sha = put.content.sha;
+}
+
+/** まだ投稿していないピンの予約を取り消す。 */
+async function cancelPin(id) {
+  if (!confirm("このピンの投稿をやめますか？（あとから戻せます）")) return;
+  render({ kind: "warn", text: "取り消しています…", busy: true });
+  try {
+    const p = (STATE.pins.json || []).find((x) => x.id === id);
+    if (!p) throw new Error("ピンが見つかりません。ページを再読み込みしてください。");
+    if (p.status === "published") throw new Error("すでに投稿済みです。「Pinterestから削除する」を使ってください。");
+    p.status = "skipped";
+    p.cancelledAt = new Date().toISOString();
+    await savePins("admin: ピン " + id + " の投稿を取り消し");
+    render({ kind: "ok", text: "取り消しました。このピンは投稿されません。" });
+  } catch (err) {
+    render({ kind: "bad", text: String(err.message || err) });
+  }
+}
+
+/** 取り消したピンを投稿予約に戻す。 */
+async function restorePin(id) {
+  render({ kind: "warn", text: "戻しています…", busy: true });
+  try {
+    const p = (STATE.pins.json || []).find((x) => x.id === id);
+    if (!p) throw new Error("ピンが見つかりません。ページを再読み込みしてください。");
+    p.status = p.scheduledAt ? "scheduled" : "queued";
+    p.cancelledAt = null;
+    await savePins("admin: ピン " + id + " の投稿予約を復帰");
+    render({ kind: "ok", text: "投稿予約に戻しました。承認が済んでいれば次の実行で投稿されます。" });
+  } catch (err) {
+    render({ kind: "bad", text: String(err.message || err) });
+  }
+}
+
+/**
+ * 投稿済みのピンを Pinterest から削除するよう依頼する。
+ *
+ * ここでは記録を書くだけです。実際の削除は GitHub Actions が行います。
+ * Pinterest のトークンは Actions の中にしかなく、この画面からは触れないためです。
+ */
+async function requestTakedown(id) {
+  if (!confirm("投稿済みのピンを Pinterest から削除しますか？\n（削除は取り消せません）")) return;
+  const reason = prompt("理由（あとで見返すためのメモ。空でも構いません）") || "";
+  render({ kind: "warn", text: "削除を依頼しています…", busy: true });
+  try {
+    const p = (STATE.pins.json || []).find((x) => x.id === id);
+    if (!p) throw new Error("ピンが見つかりません。ページを再読み込みしてください。");
+    p.takedownRequestedAt = new Date().toISOString();
+    p.takedownReason = reason;
+    await savePins("admin: ピン " + id + " の削除を依頼");
+
+    render({ kind: "warn", text: "削除の処理を起動しています…", busy: true });
+    await dispatchWorkflow(PINS_WORKFLOW, "ピンの削除処理");
+    render({ kind: "ok", text: "削除を依頼しました。1〜2分で Pinterest から消えます。すぐ消したい場合は Pinterest 側でも削除できます。" });
+  } catch (err) {
+    render({ kind: "bad", text: String(err.message || err) });
+  }
+}
+
+/**
+ * 記事をサイトから取り下げる／戻す。
+ *
+ * 本文ファイルは消しません。data/articles.json の status を変えるだけです。
+ * サイトは status が published の記事だけを出すので、これで消えます。
+ * 間違って押しても、同じ画面から戻せます。
+ */
+async function setArticlePublished(slug, publish) {
+  const msg = publish
+    ? "この記事をもう一度サイトに公開しますか？"
+    : "この記事をサイトから取り下げますか？\n（本文は消えません。あとから戻せます）";
+  if (!confirm(msg)) return;
+  let reason = "";
+  if (!publish) reason = prompt("理由（あとで見返すためのメモ。空でも構いません）") || "";
+
+  render({ kind: "warn", text: publish ? "公開しています…" : "取り下げています…", busy: true });
+  try {
+    const list = STATE.articles.json || [];
+    const a = list.find((x) => x.slug === slug);
+    if (!a) throw new Error("記事が見つかりません。ページを再読み込みしてください。");
+    a.status = publish ? "published" : "withdrawn";
+    a.updatedAt = new Date().toISOString();
+    if (publish) {
+      a.withdrawnAt = null;
+      a.withdrawnReason = null;
+    } else {
+      a.withdrawnAt = new Date().toISOString();
+      a.withdrawnReason = reason;
+    }
+    const put = await putFile("data/articles.json", list, STATE.articles.sha,
+      "admin: 記事 " + slug + (publish ? " を再公開" : " を取り下げ"));
+    STATE.articles.sha = put.content.sha;
+
+    render({ kind: "warn", text: "サイトを作り直しています…", busy: true });
+    await dispatchRebuild();
+    render({
+      kind: "ok",
+      text: publish
+        ? "再公開しました。1〜2分でサイトに戻ります。"
+        : "取り下げました。1〜2分でサイトから消えます。本文は残っているので、いつでも戻せます。",
+    });
+  } catch (err) {
+    render({ kind: "bad", text: String(err.message || err) });
+  }
+}
+
 async function saveLink(slug, url) {
   render({ kind: "warn", text: slug + " を保存中…", busy: true });
   try {
@@ -549,9 +955,9 @@ async function boot() {
   app.innerHTML = '<div class="empty"><span class="spin"></span>読み込み中…</div>';
   try {
     await loadState();
-    // 判断が必要なことがあれば承認タブ、なければ状態タブから始める
+    // 判断が必要なことがあれば承認タブ、なければ投稿の確認タブから始める
     const pending = (STATE.approvals.json || []).filter((a) => a.status === "pending").length;
-    TAB = pending > 0 ? "approvals" : "status";
+    TAB = pending > 0 ? "approvals" : "review";
     render();
   } catch (err) {
     renderGate("読み込みに失敗しました: " + (err.message || err));

@@ -356,6 +356,12 @@ interface Pin {
   experimentId: string | null;
   variant: string | null;     // "A" | "B"
   approvalId: string | null;  // ★これが無いと Actions は投稿しない
+
+  // ── 追加（なおきさんが管理画面から取り消したときの記録） ──
+  cancelledAt: string | null;           // 予約を取り消した時刻（未投稿のピン）
+  takedownRequestedAt: string | null;   // 投稿済みのピンの削除を依頼した時刻
+  takenDownAt: string | null;           // 実際に Pinterest から消えた時刻
+  takedownReason: string | null;        // 取り消しの理由（なおきさんのメモ）
 }
 ```
 
@@ -366,6 +372,40 @@ QA 合格 + 承認 GO で初めて `queued` → `scheduled` に進みます。
 draft → (QA pass) → queued → (approval GO + schedule) → scheduled → published
                                                                    ↘ failed → (requeue) → scheduled
 ```
+
+**`status` に `"taken_down"` を追加します。** 投稿済みだったピンを、なおきさんの
+指示で Pinterest から削除した状態です。
+
+```
+scheduled ──(なおきさんが「この投稿をやめる」)──→ skipped ──(戻す)──→ scheduled
+published ──(なおきさんが「Pinterestから削除する」)──→ taken_down
+```
+
+**取り消しの向きだけは、承認を要りません。** 外に出すときはゲートを通しますが、
+**外から引っ込めるのはいつでも安全側**だからです。逆に、
+`takedownRequestedAt` を **AI が書くことは禁止** です。AI が自分で投稿を消せると、
+事故の痕跡まで消えてしまいます。書けるのは管理画面（＝なおきさん）だけです。
+
+---
+
+### 2.7b Article（既存を拡張）
+
+```ts
+interface Article {
+  // ── 既存フィールドはすべて維持 ──
+  status: ArticleStatus;   // "brief" | "drafted" | "published" | "needs_review" | "withdrawn"
+
+  // ── 追加（なおきさんが管理画面から取り下げたときの記録） ──
+  withdrawnAt: string | null;
+  withdrawnReason: string | null;
+}
+```
+
+**`withdrawn` を追加します。** なおきさんが管理画面から取り下げた記事です。
+サイトの生成は `status === "published"` の記事だけを出すので、これでサイトから消えます。
+
+**本文ファイル（`content/articles/*.md`）は消しません。** 押し間違いを戻せるようにするためです。
+同じ画面の「やっぱり公開する」で `published` に戻ります。
 
 ---
 

@@ -53,7 +53,11 @@ export interface ArticleBrief {
   faq: { q: string; a: string }[];
 }
 
-export type ArticleStatus = "brief" | "drafted" | "published" | "needs_review";
+/**
+ * withdrawn = なおきさんが管理画面から取り下げた記事。
+ * サイトから消えるが、データと本文は残す（間違って押したときに戻せるように）。
+ */
+export type ArticleStatus = "brief" | "drafted" | "published" | "needs_review" | "withdrawn";
 
 export interface Article {
   slug: string;
@@ -72,13 +76,22 @@ export interface Article {
   qualityIssues: string[];
   internalLinks: string[];
   brief?: ArticleBrief;
+
+  /* ── なおきさんが管理画面から取り下げたときの記録 ── */
+  withdrawnAt?: string | null;
+  withdrawnReason?: string | null;
 }
 
 /**
  * draft = Designer が作っただけ。QA と人間の承認を通るまで予約もされない。
  * 既存の queued 以降の流れは変わらない。
  */
-export type PinStatus = "draft" | "queued" | "scheduled" | "published" | "failed" | "skipped";
+/**
+ * skipped     = 投稿しない（なおきさんが予約を取り消した場合を含む）
+ * taken_down  = 投稿済みだったが、なおきさんの指示で Pinterest から削除した
+ */
+export type PinStatus =
+  | "draft" | "queued" | "scheduled" | "published" | "failed" | "skipped" | "taken_down";
 
 export interface Pin {
   id: string;
@@ -101,6 +114,16 @@ export interface Pin {
   generation: number;           // 0 = original, 1+ = 横展開
   lastError?: string;
   metrics?: PinMetrics;
+
+  /* ── なおきさんが管理画面から取り消したときの記録 ── */
+  /** 予約を取り消した時刻（まだ投稿していないピン） */
+  cancelledAt?: string | null;
+  /** 投稿済みのピンについて、Pinterest からの削除を依頼した時刻 */
+  takedownRequestedAt?: string | null;
+  /** 実際に Pinterest から削除できた時刻 */
+  takenDownAt?: string | null;
+  /** 取り消しの理由（なおきさんのメモ。空でもよい） */
+  takedownReason?: string | null;
 
   /* ── 実験と重複検出のための変数（既存のピンには migrate で付与される） ── */
   /** 切り口の種別。price-objection / hidden-limit / switching-cost など */
