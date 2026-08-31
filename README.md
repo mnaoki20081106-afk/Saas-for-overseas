@@ -13,6 +13,28 @@
 
 ---
 
+## 📐 AI会社への再設計（2026-08-31・設計フェーズ完了 / 実装未着手）
+
+このリポジトリを「AI社員が役割分担して自律運営する会社」へ作り変える設計を、実装前にまとめました。
+**まずは [DESIGN_REVIEW.md](DESIGN_REVIEW.md) の冒頭を読んでください。**
+いま何が詰まっているか（＝収益がゼロである本当の理由）を正直に書いています。
+
+| 文書 | 内容 |
+| --- | --- |
+| [ARCHITECTURE.md](ARCHITECTURE.md) | 現状の調査結果と、新しい全体設計。**⚠️ 緊急対応が3件あります（§1.6）** |
+| [AGENTS.md](AGENTS.md) | AI社員8人（MVPは5人）の職務規定・入出力・上限 |
+| [DATA_MODEL.md](DATA_MODEL.md) | 会社の記憶（25のデータ構造） |
+| [MIGRATION.md](MIGRATION.md) | 既存資産の分類（**削除するファイルはゼロ**）と移行手順 |
+| [COSTS.md](COSTS.md) | Pro だけで可能 / 無料インフラ / 有料APIが要る部分の分類表 |
+| [SECURITY.md](SECURITY.md) | 秘密情報・暴走対策・キルスイッチ・復旧手順 |
+| [ROADMAP.md](ROADMAP.md) | MVP から完全自律までの5段階 |
+| [DESIGN_REVIEW.md](DESIGN_REVIEW.md) | **この設計への自己批判と、それによる14箇所の修正** |
+
+**結論：Claude API への追加課金は不要になります。** 判断は Claude Code の Routines（Pro に含まれる）、
+実行は GitHub Actions（public リポジトリなので無料・無制限）、記憶は git 上の JSON で完結します。
+
+---
+
 ## 1. まず「どこまで自動か」をはっきりさせます
 
 SaaS もアフィリエイトも初めてとのことなので、最初にここだけ正直に書きます。
