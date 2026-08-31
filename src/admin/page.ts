@@ -17,7 +17,7 @@ import { execSync } from "node:child_process";
 import { escapeHtml } from "../lib/util";
 import { config } from "../lib/config";
 
-function detectOwnerRepo(): { owner: string; repo: string } | null {
+export function detectOwnerRepo(): { owner: string; repo: string } | null {
   try {
     const url = execSync("git remote get-url origin", { encoding: "utf8" }).trim();
     const m = url.match(/github\.com[:/]([^/]+)\/([^/.]+)(?:\.git)?$/);

@@ -263,35 +263,33 @@ npm run autopilot site:build
 
 これをやると、あなたのサイトへのピンが優先的に扱われます。
 
-1. Pinterest 右上の **v** アイコン → **設定 / Settings**
-2. 左メニューの **「Pinterest にリンク / Link to Pinterest」**
-   → **Websites** の横の **「申請する / Claim」**
-   （※ 「リンク済みアカウント / Claimed accounts」は*確認結果を見る*場所で、申請はこちらです）
-3. 認証方法で **「HTML タグを追加 / Add HTML tag」** を選ぶ
-4. こういうタグが出ます：
+> Pinterest の設定画面のメニュー名・場所は時期によって変わります。以下の**手順の道順**は
+> 参考程度にし、最終的には「認証方法（Google Merchant Center / HTML タグ / HTML ファイル /
+> DNS TXT レコード）」という選択肢が並ぶ画面を探してください。それが Claim（所有権確認）の画面です。
+
+1. Pinterest の設定 / Settings 内を探し、「サイトを申請する / Claim your website」に相当する項目を開く
+2. 認証方法で **「HTML タグ」** を選ぶ
+3. こういうタグが出ます：
 
 ```html
 <meta name="p:domain_verify" content="a1b2c3d4e5f6..."/>
 ```
 
-5. `content="..."` の**中身だけ**をコピーして、`config/config.json` に貼る：
+4. `content="..."` の**中身だけ**をコピーして、`config/config.json` に貼る：
 
 ```json
 "gaMeasurementId": "",
 "pinterestVerifyCode": "a1b2c3d4e5f6..."
 ```
 
-6. 反映する：
-
-```bash
-npm run autopilot site:build
-git add -A && git commit -m "Pinterest の確認コードを追加" && git push
-```
-
-7. GitHub の **Actions** タブが緑になるのを待つ（2〜3分）
-8. Pinterest の画面に戻り、自分のサイト URL を入れて **確認 / Verify**
+5. GitHub の **Actions** タブ →「**管理画面からの再公開**」（`rebuild-site`）を実行して反映する
+   （ローカルにコード環境があれば `npm run autopilot site:build && git add -A && git commit && git push` でも可）
+6. GitHub の Actions が緑になるのを待つ（2〜3分）
+7. Pinterest の画面に戻り、確認 / Verify を実行する
 
 > サイトがまだ公開されていないと失敗します。その場合は先に「5. 起動する」まで進めてから戻ってきてください。
+> **これが完了していないと、却下メールの "Its URL is registered with an entity in your company"
+> が何度再申請しても消えません。** サイトの内容を直しても、この所有権確認とは無関係です。
 
 ## 3-3. API アプリを作って Trial access を申請する（15分＋待ち）
 
@@ -372,6 +370,25 @@ PINTEREST_APP_ID=あなたのAppID PINTEREST_APP_SECRET=あなたのSecret npm r
 | `PINTEREST_REFRESH_TOKEN` | 上で出たトークン |
 
 > トークンの更新は以後すべて自動です。この作業は一生に1回だけです。
+
+### 3-4b. ターミナルが使えない場合（iPadなど）
+
+上の手順はターミナルの利用が前提ですが、代わりにブラウザだけで完結する方法もあります。
+
+1. 事前に GitHub Secrets へ `PINTEREST_APP_ID` と `PINTEREST_APP_SECRET` を登録しておく
+2. **Secrets: Read and write** 権限だけを持つ Fine-grained PAT を1つ作り
+   （`https://github.com/settings/personal-access-tokens/new`、対象はこのリポジトリのみ）、
+   `GH_PAT_FOR_SECRETS` という名前で GitHub Secrets に登録する
+   （この PAT はステップ4の書き込みにしか使わないので、終わったら失効させて構いません）
+3. サイトの `https://<あなたのドメイン>/pinterest-connect/` を開き、App ID を入力して
+   「Pinterestに接続する」→ Pinterest 側で **Allow**
+4. `/pinterest-callback/` に戻ってくると認可コードが表示されるので、GitHub の
+   **Actions** タブ →「**Pinterest 認可コードをトークンに交換**」→ **Run workflow**
+   にそのコードを貼って実行する
+
+このワークフローが `PINTEREST_REFRESH_TOKEN` を直接 GitHub Secrets に書き込みます
+（このリポジトリは公開リポジトリで Actions のログも誰でも見られるため、トークンをログには
+一切出しません）。タップと貼り付けだけで完結し、ターミナルは使いません。
 
 ## 3-5. Standard access を申請する（重要）
 

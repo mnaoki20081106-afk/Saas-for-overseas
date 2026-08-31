@@ -8,6 +8,7 @@ import { articles as articleStore, pins as pinStore, programs } from "../lib/sto
 import type { Article } from "../lib/types";
 import { escapeHtml, slugify } from "../lib/util";
 import { buildAdminPage } from "../admin/page";
+import { buildPinterestCallbackPage, buildPinterestConnectPage } from "../admin/pinterestConnect";
 import { readArticleBody } from "../stages/content";
 
 marked.setOptions({ gfm: true, breaks: false });
@@ -499,10 +500,12 @@ on this site.</p>
   pages += 3;
 
   write("admin/index.html", buildAdminPage(c.admin.branch));
+  write("pinterest-connect/index.html", buildPinterestConnectPage(c.site.baseUrl));
+  write("pinterest-callback/index.html", buildPinterestCallbackPage());
 
   write("sitemap.xml", sitemap(list));
   write("rss.xml", rss(list));
-  write("robots.txt", `User-agent: *\nAllow: /\nDisallow: /go/\nDisallow: /admin/\n\nSitemap: ${c.site.baseUrl}/sitemap.xml\n`);
+  write("robots.txt", `User-agent: *\nAllow: /\nDisallow: /go/\nDisallow: /admin/\nDisallow: /pinterest-connect/\nDisallow: /pinterest-callback/\n\nSitemap: ${c.site.baseUrl}/sitemap.xml\n`);
   write(".nojekyll", "");
 
   const result: BuildResult = {

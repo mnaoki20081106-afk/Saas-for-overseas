@@ -1,0 +1,58 @@
+name: Pinterest 認可コードをトークンに交換
+
+# ターミナルを使わずに(/pinterest-connect/ → Pinterest → /pinterest-callback/ の
+# 流れで手に入れた)認可コードを、リフレッシュトークンに交換して GitHub Secrets に
+# 直接書き込む。このリポジトリは公開リポジトリで Actions のログも誰でも見られるため、
+# トークンはログに出力せず、gh CLI で Secrets に直接書き込む方式にしている。
+#
+# 事前に必要な Secrets:
+#   PINTEREST_APP_ID / PINTEREST_APP_SECRET … Pinterest のアプリ設定画面から
+#   GH_PAT_FOR_SECRETS … Secrets: Read and write 権限を持つ Fine-grained PAT
+#                          (このワークフロー専用。作業が終わったら失効させてよい)
+
+on:
+  workflow_dispatch:
+    inputs:
+      code:
+        description: "Pinterestの認可画面から戻ってきたときに表示された code"
+        required: true
+      redirect_uri:
+        description: "Pinterestアプリの Redirect URIs に登録したものと同じURL"
+        required: true
+        default: "https://worked-for-us.com/pinterest-callback/"
+
+permissions:
+  contents: read
+
+jobs:
+  exchange:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci --no-audit --fund=false
+
+      - name: 認可コードをリフレッシュトークンに交換
+        id: exchange
+        env:
+          PINTEREST_APP_ID: ${{ secrets.PINTEREST_APP_ID }}
+          PINTEREST_APP_SECRET: ${{ secrets.PINTEREST_APP_SECRET }}
+          PINTEREST_AUTH_CODE: ${{ inputs.code }}
+          PINTEREST_REDIRECT_URI: ${{ inputs.redirect_uri }}
+        run: npx tsx src/cli.ts pinterest:exchange
+
+      - name: GitHub Secrets に書き込み（ログには一切出さない）
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT_FOR_SECRETS }}
+          REFRESH_TOKEN: ${{ steps.exchange.outputs.refresh_token }}
+        run: |
+          if [ -z "$REFRESH_TOKEN" ]; then
+            echo "refresh_token が空でした。ひとつ前のステップのログを確認してください。" >&2
+            exit 1
+          fi
+          gh secret set PINTEREST_REFRESH_TOKEN --repo "${{ github.repository }}" --body "$REFRESH_TOKEN"
+          echo "PINTEREST_REFRESH_TOKEN を Secrets に登録しました。"
