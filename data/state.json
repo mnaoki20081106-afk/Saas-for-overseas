@@ -16,6 +16,5 @@
   "phase": "bootstrap",
   "companyStartedAt": null,
   "lastKpiSnapshotAt": null,
-  "consecutiveApprovedPublishes": 0,
   "schemaVersion": 1
 }

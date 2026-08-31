@@ -17,6 +17,7 @@ import {
   APPROVAL_TEMPLATE, decideApproval, expireApprovals, renderApproval, requestApproval,
 } from "./commands/approvals";
 import { addDecision, handleError, pruneErrors, recordOutcome, renderDecisions, renderErrors } from "./commands/records";
+import { autonomyReadiness } from "./autonomy";
 import { RESEARCH_TEMPLATE, researcherContext, researcherSubmit } from "./commands/researcher";
 import { writerContext, writerCheck, writerSubmit } from "./commands/writer";
 import { REVIEW_TEMPLATE, editorContext, editorSubmit } from "./commands/editor";
@@ -98,13 +99,14 @@ AI会社の司令台
 
 ── 機械的な処理（Actions が実行する） ──────────
   pins:render                             画像のないピンを Chromium で描画
+  autonomy                                投稿の承認（GO）を外してよい状態かを見る
 `;
 
 type Handler = (args: string[]) => Promise<number> | number;
 
 /** 読み取り専用のコマンド。killSwitch が有効でも実行してよい。 */
 const READ_ONLY = new Set([
-  "status", "check", "help", "--help", "-h",
+  "status", "check", "help", "--help", "-h", "autonomy",
   "task:list", "task:next", "approval:list", "approval:show", "approval:template",
   "decision:list", "error:list",
   "researcher:context", "researcher:template",
@@ -277,6 +279,41 @@ const COMMANDS: Record<string, Handler> = {
   },
 
   /* --------------------------------------------------------- records */
+
+  /**
+   * 「毎回 GO を押す（A案）」から「自動で投稿する（B案）」へ移ってよいかを表示する。
+   *
+   * ここは表示だけです。実際にゲートを外すのは config/limits.json の書き換えで、
+   * AI は触れません（guard.yml が落とします）。外すのはオーナー本人の操作です。
+   */
+  autonomy() {
+    const list = autonomyReadiness();
+    console.log("\n# 投稿の承認（GO）を外してよいか\n");
+    console.log("いまは A案（外に出す前に、なおきさんが毎回 GO を押す）で運用中です。");
+    console.log("2026-08-31 のオーナー判断：「最初は A案。品質が保証できるようになったら B案を提案して」\n");
+
+    for (const g of list) {
+      if (g.neverAuto) {
+        console.log(`## ${g.label}\n  自動化しない設定です（config/limits.json）。\n`);
+        continue;
+      }
+      console.log(`## ${g.label}`);
+      if (g.notStarted) {
+        console.log("  まだ一度も承認していません。提案を考える段階ですらありません。");
+        console.log("  記事もピンも外に出ていないので、品質を測るデータがありません。\n");
+        continue;
+      }
+      for (const c of g.conditions) {
+        console.log(`  ${c.met ? "✓" : "×"} ${c.label}`);
+        console.log(`      ${c.progress}`);
+      }
+      console.log(g.ready
+        ? "\n  ★ すべて満たしました。なおきさんに A案/B案 で提案してください。\n"
+        : "\n  → まだ提案しないでください。データが足りません。\n");
+    }
+    console.log("外すのは、なおきさん本人の操作です。AI は config/limits.json を書き換えられません。\n");
+    return 0;
+  },
 
   "decision:add"(args) {
     const d = addDecision(requirePositional(args, 0, "JSONファイル"));

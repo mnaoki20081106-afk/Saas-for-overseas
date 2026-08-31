@@ -2,6 +2,7 @@ import { config } from "../../lib/config";
 import { publishGate } from "../../lib/guard";
 import { articles, humanTasks, metrics, pins, programs, runlog, state } from "../../lib/store";
 import { todayISO, usd } from "../../lib/util";
+import { autonomySummary } from "../autonomy";
 import { isColdStart, limits } from "../limits";
 import { kv, section } from "../report";
 import { approvals, decisions, drafts, employees, errors, ideas, research, reviews, tasks } from "../store";
@@ -108,6 +109,11 @@ export function companyStatus(): void {
       ["継続報酬", `${usd(last.monthlyRecurringUsd)}/月・有効サブスク ${last.activeSubscriptions} 件`],
     ])
     : "まだ一度も計測していません。投稿が始まってから 2〜3ヶ月は数字が動かないのが正常です。");
+
+  // 投稿の承認（GO）を外してよい状態になったかどうか。
+  // オーナーの指示：「最初はA案。品質が保証できるようになったらBを提案して」
+  const autonomy = autonomySummary();
+  if (autonomy) section("投稿の承認をやめてよいか（A案 → B案）", autonomy);
 
   const open = tasks.all().filter((t) => ["blocked", "ready", "running"].includes(t.status));
   const ready = open.filter((t) => t.status === "ready");

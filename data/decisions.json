@@ -1,1 +1,40 @@
-[]
+[
+  {
+    "by": "yukichi",
+    "kind": "config_change",
+    "summary": "投稿の承認はA案（毎回オーナーがGOを押す）で開始し、条件を満たしたらB案（自動投稿）を提案する",
+    "reasoning": "オーナーの判断。まだ記事を1本も外に出しておらず、AIが作るものの品質を実地で一度も確認していない。この状態でB案（承認なしの自動投稿）にすると、おかしなピンが出た後でしか気づけない。Pinterestはスパム判定がアカウント停止に直結するため、最初の実績が無いうちに自動投稿へ移るのは割に合わない。ただし『しばらく運用して品質が保証できたら提案する』を諭吉の記憶に任せると、提案されないか、根拠なく早すぎる提案になる。そこで条件を数値化し、co autonomy と co status が毎回判定するようにした。判定は data/approvals.json の履歴から毎回計算するので、管理画面から押してもCLIから押しても同じ答になる。",
+    "evidence": [
+      {
+        "source": "config/limits.json#autonomy.publishPins",
+        "value": "consecutiveApprovals 50 / minDays 30"
+      },
+      {
+        "source": "config/limits.json#autonomy.publishArticle",
+        "value": "consecutiveApprovals 20 / zeroQaFailures true / minDays 30"
+      },
+      {
+        "source": "data/articles.json",
+        "value": "公開記事 0 本（品質を測るデータが存在しない）"
+      },
+      {
+        "source": "data/pins.json",
+        "value": "投稿済みピン 0 枚"
+      },
+      {
+        "source": "config/limits.json#gates.publishPins.requiresApproval",
+        "value": "true（A案のまま。AIは変更できない）"
+      }
+    ],
+    "alternatives": [
+      "B案（投稿のGOを今すぐ外す）— 操作はゼロになるが、品質の実績が0なので、事故に事後でしか気づけない",
+      "提案の時期を諭吉の判断に任せる — 忘れるか、根拠なく早く出すかのどちらかになるので却下",
+      "条件を config/limits.json に書き足す — 安全装置はAIが編集できないため不可。既存のautonomy設定をそのまま使い、諭吉側でより厳しい条件だけを足した"
+    ],
+    "relatedTaskIds": [],
+    "outcome": null,
+    "id": "dec_mthr8hkitywmgd",
+    "at": "2026-08-31T21:32:48.498Z",
+    "outcomeAt": null
+  }
+]

@@ -223,7 +223,6 @@ export interface PipelineState {
   companyStartedAt?: string | null;
   lastKpiSnapshotAt?: string | null;
   /** 自律レベル昇格の判定用。承認が連続して GO された回数。 */
-  consecutiveApprovedPublishes?: number;
   /** マイグレーション用のスキーマ版数。 */
   schemaVersion?: number;
 }

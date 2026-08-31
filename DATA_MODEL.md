@@ -608,7 +608,10 @@ interface PipelineState {
   phase: "bootstrap" | "growth" | "scale";   // Researcher の閾値切替に使う
   companyStartedAt: string | null;
   lastKpiSnapshotAt: string | null;
-  consecutiveApprovedPublishes: number;      // 自律レベル昇格の判定用
+  // 自律レベル昇格（A案→B案）の判定は state に持たせません。
+  // なおきさんは管理画面から GO を押すため、co を通らない決裁が普通にあります。
+  // カウンタを持つと、そちらの決裁が数えられず、条件が永久に満たされません。
+  // src/company/autonomy.ts が data/approvals.json の履歴から毎回計算します。
   schemaVersion: number;                     // マイグレーション用
 }
 ```

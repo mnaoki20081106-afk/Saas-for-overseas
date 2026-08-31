@@ -78,11 +78,24 @@ export function migrate(): MigrateResult {
     phase: st.phase ?? "bootstrap",
     companyStartedAt: st.companyStartedAt ?? null,
     lastKpiSnapshotAt: st.lastKpiSnapshotAt ?? null,
-    consecutiveApprovedPublishes: st.consecutiveApprovedPublishes ?? 0,
     schemaVersion: SCHEMA_VERSION,
   };
-  const stateUpdated = fromVersion !== SCHEMA_VERSION;
   state.patch(patch);
+
+  // 廃止したフィールドを state から取り除く。
+  // 残しておくと「まだこれを見て判断している」と誤解され、次に読む人が嘘の値を信じます。
+  //   consecutiveApprovedPublishes … A案→B案の判定は data/approvals.json の履歴から
+  //   毎回計算する方式に変えたため不要（src/company/autonomy.ts）
+  const OBSOLETE_STATE_KEYS = ["consecutiveApprovedPublishes"];
+  const raw = readJson<Record<string, unknown>>(P.state, {});
+  let removed = false;
+  for (const k of OBSOLETE_STATE_KEYS) {
+    if (k in raw) { delete raw[k]; removed = true; }
+  }
+  if (removed) writeJson(P.state, raw);
+
+  // 「変更なし」と報告しながら実は書き換えている、をやらない。
+  const stateUpdated = fromVersion !== SCHEMA_VERSION || removed;
 
   // ── config: 無ければテンプレートを作る ───────────────────────────
   if (!fs.existsSync(CP.limits)) {
@@ -104,7 +117,11 @@ export function migrate(): MigrateResult {
 
   if (created.length) log.ok(`新しいデータファイルを作成: ${created.join(", ")}`);
   if (pinsUpdated) log.ok(`既存のピン ${pinsUpdated} 枚に新しい項目を追加しました`);
-  if (stateUpdated) log.ok("state.json に会社運転用の項目を追加しました");
+  if (stateUpdated) {
+    log.ok(removed
+      ? "state.json を更新しました（使わなくなった項目を取り除きました）"
+      : "state.json に会社運転用の項目を追加しました");
+  }
   log.ok(`スキーマ v${fromVersion} → v${SCHEMA_VERSION}`);
   if (!created.length && !pinsUpdated && !stateUpdated) log.info("すでに最新です（変更なし）");
 

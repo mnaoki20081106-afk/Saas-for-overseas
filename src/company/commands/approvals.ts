@@ -98,9 +98,10 @@ export function decideApproval(
 
   if (decision === "go") {
     unblockTasks();
-    // 自律レベル昇格の判定に使うカウンタ
-    const st = state.get();
-    state.patch({ consecutiveApprovedPublishes: (st.consecutiveApprovedPublishes ?? 0) + 1 });
+    // 自律レベル昇格（A案→B案）の判定に、ここでカウンタを持たせません。
+    // なおきさんは管理画面から GO を押すので、co を通らない決裁が普通にあります。
+    // 数え方は src/company/autonomy.ts が data/approvals.json の履歴から毎回計算します。
+    // そうすれば、iPad から押しても co から押しても同じ答になります。
   } else {
     // STOP されたら、その承認に紐づくタスクは実行しない
     const taskList = tasks.all();
@@ -114,7 +115,6 @@ export function decideApproval(
       }
     }
     if (cancelled) tasks.save(taskList);
-    state.patch({ consecutiveApprovedPublishes: 0 });
     log.info(`${cancelled} 件のタスクを取り下げました`);
   }
   return a;
