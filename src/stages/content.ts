@@ -15,7 +15,10 @@ const ARTICLE_TYPES = ["comparison", "alternatives", "best-for-pain", "deep-revi
 type ArticleType = (typeof ARTICLE_TYPES)[number];
 
 const Brief = z.object({
-  title: z.string().describe("Article H1. Specific, no year, no clickbait. Under 70 characters if possible."),
+  title: z.string().describe("Article H1. Specific, no year, no clickbait. Under 70 characters if possible. " +
+    "Vary the pattern across articles -- a direct comparison ('X vs Y'), a first-person narrative " +
+    "('Why I Switched From X to Y'), and a decision-framed title ('X for Teams Under 10 People') are " +
+    "all legitimate; using the same pattern for every article reads as templated."),
   metaTitle: z.string().describe("<=60 characters, includes the primary keyword"),
   metaDescription: z.string().describe("140-158 characters, states the concrete takeaway"),
   slug: z.string().describe("lowercase-hyphenated URL slug, no year"),
@@ -44,6 +47,11 @@ How you write:
 - You lead with the decision, not with a history of the category.
 - You always name who a tool is WRONG for. That is the section readers trust you for.
 - You use concrete numbers, real workflows, and small specific details (what broke, what took 20 minutes).
+- You never make an unsubstantiated superlative or absolute claim ("the best", "#1", "guaranteed",
+  "nothing else comes close", "the only tool you'll ever need"). Every strong claim is qualified by
+  who it's true for ("the best fit if your team is under 10 people", not "the best"). This matters
+  for both reader trust and affiliate-program compliance -- most networks prohibit unsubstantiated
+  superlatives in the terms you agreed to when you got approved.
 - You never use: exclamation marks, "in today's fast-paced world", "game-changer", "delve", "unleash",
   "revolutionize", "look no further", "supercharge", or any phrase that dates the article
   (no years, no "latest", no "recently", no "at the time of writing").
@@ -303,6 +311,65 @@ export function checkQuality(markdown: string, brief: ArticleBrief, existingCoun
   return { ok: issues.length === 0, issues, words };
 }
 
+const AccuracyReview = z.object({
+  flaggedClaims: z.array(z.string()).describe(
+    "One line per claim that was softened: what it said, why it overreached, how it now reads. Empty array if nothing was flagged.",
+  ),
+  correctedMarkdown: z.string().describe(
+    "The full article. Identical to the input except for the specific sentences listed in flaggedClaims.",
+  ),
+});
+
+const ACCURACY_REVIEWER_SYSTEM = `You are a skeptical editor whose only job, on a second pass, is to
+catch overclaiming before an article about SaaS products is published. You did not write it and have
+no attachment to the wording.
+
+Read the article for exactly one class of problem: claims stated as settled fact that are not
+checkable, or that overreach beyond what a reviewer could actually know. This includes:
+- Absolute or superlative claims not qualified to a specific audience ("the best", "guaranteed",
+  "nothing else comes close") -- including ones worded differently from any banned-phrase list, since
+  the same overclaiming shows up in many different words.
+- An opinion stated as settled fact ("X is faster than Y") instead of framed as one ("in our
+  experience, X felt faster for Y-sized teams").
+- A specific number or detail that reads as invented rather than grounded in something stated
+  elsewhere in the article or in general knowledge about the product category.
+- A claim about a competitor the article gives no basis for.
+
+For every problem found, rewrite ONLY that sentence or clause -- qualify it, frame it as opinion, or
+soften it -- without weakening the actual recommendation or making the article wishy-washy. Leave every
+other sentence byte-for-byte unchanged, including all {{link:slug}} placeholders, headings, and the
+markdown table. If nothing needs fixing, return the article completely unchanged and an empty list.`;
+
+/**
+ * 品質ゲートの構造チェック(語数・見出し・リンク数)とは独立に、
+ * 「誇張していないか・裏付けのない断定をしていないか」だけを専門に見る第2の目。
+ * 記事本文の生成直後、毎回必ず1回通す。
+ */
+async function accuracyReview(
+  markdown: string,
+  brief: ArticleBrief,
+): Promise<{ markdown: string; flagged: string[] }> {
+  const result = await withFixture(
+    () => ({ correctedMarkdown: markdown, flaggedClaims: [] as string[] }),
+    () =>
+      structured(AccuracyReview, {
+        system: ACCURACY_REVIEWER_SYSTEM,
+        user: `Review this article for overclaiming and fix only what needs fixing.
+
+## Title
+${brief.title}
+
+## Article
+${markdown}`,
+        stage: "repair",
+        label: "誇張・事実確認レビュー",
+        effort: "medium",
+        maxTokens: 32000,
+      }),
+  );
+  return { markdown: result.correctedMarkdown, flagged: result.flaggedClaims };
+}
+
 async function repair(markdown: string, issues: string[], brief: ArticleBrief): Promise<string> {
   log.warn(`品質ゲート不合格 → 自動修正を試みます (${issues.length} 件)`);
   return longform({
@@ -423,6 +490,13 @@ export async function writeOneArticle(): Promise<WriteResult | null> {
       }),
   );
   markdown = markdown.replace(/^```(?:markdown|md)?\n?/, "").replace(/\n?```\s*$/, "").trim();
+
+  const accuracy = await accuracyReview(markdown, brief);
+  markdown = accuracy.markdown.replace(/^```(?:markdown|md)?\n?/, "").replace(/\n?```\s*$/, "").trim();
+  if (accuracy.flagged.length) {
+    log.warn(`誇張・事実確認レビューで ${accuracy.flagged.length} 件を修正しました:`);
+    accuracy.flagged.forEach((f) => log.warn(`   - ${f}`));
+  }
 
   let quality = checkQuality(markdown, brief, existing.length);
   if (!quality.ok) {

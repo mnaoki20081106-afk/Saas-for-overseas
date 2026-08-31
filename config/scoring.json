@@ -5,7 +5,8 @@
     "avgRetentionMonths": 15,
     "japaneseCompetitionInverse": 20,
     "cookieDays": 5,
-    "programReliability": 10
+    "programReliability": 10,
+    "englishCompetitionInverse": 12
   },
   "hardFilters": {
     "mustBeRecurring": true,
@@ -13,5 +14,5 @@
     "minAvgRetentionMonths": 10,
     "maxJapaneseCompetition": 3
   },
-  "notes": "japaneseCompetition is 1-10 where 1 = essentially no Japanese-language creators covering it. Lower is better; the score inverts it."
+  "notes": "japaneseCompetition is 1-10 where 1 = essentially no Japanese-language creators covering it. englishCompetition is 1-10 where 1 = existing English-language coverage is thin or outdated (a genuine content gap, not just a Japanese blind spot) - both invert in the score, lower is better for each."
 }

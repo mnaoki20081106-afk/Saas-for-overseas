@@ -2,9 +2,9 @@ import { z } from "zod";
 import { config } from "../lib/config";
 import { structured, withFixture } from "../lib/claude";
 import { log } from "../lib/log";
-import { articles, pins as pinStore, programs } from "../lib/store";
+import { articles, pins as pinStore, programs, state } from "../lib/store";
 import type { Article, Pin } from "../lib/types";
-import { uid } from "../lib/util";
+import { clamp, uid } from "../lib/util";
 import { TEMPLATE_IDS } from "../pins/templates";
 import { renderPins, type RenderRequest } from "../pins/render";
 import { readArticleBody } from "./content";
@@ -195,12 +195,31 @@ export async function generatePinsForArticle(
 
 /**
  * 予約投稿の時刻を決める。
- * - 1日あたり publishPerDay 枚まで
+ * - 1日あたりの上限は dailyCapFor()（新規アカウントは段階的に増やす）
  * - ピンとピンの間は minMinutesBetweenPins 以上
  * - 投稿時刻は postingHoursUtc（Pinterest の US 夕方帯を狙う）
  */
+/**
+ * 新規アカウントはPinterest側の信頼度がまだ無いので、いきなり満量投稿すると
+ * スパム判定のリスクが上がる。初回のピン予約日を起点に、rampUpDays かけて
+ * rampUpStartPerDay → publishPerDay まで段階的に増やす。
+ */
+function dailyCapFor(day: Date, campaignStart: Date): number {
+  const c = config();
+  if (!c.pins.rampUpDays || c.pins.rampUpDays <= 0) return c.pins.publishPerDay;
+  const daysSinceStart = Math.floor((day.getTime() - campaignStart.getTime()) / 86_400_000);
+  if (daysSinceStart >= c.pins.rampUpDays) return c.pins.publishPerDay;
+  const progress = clamp(daysSinceStart / c.pins.rampUpDays, 0, 1);
+  const ramped = c.pins.rampUpStartPerDay + (c.pins.publishPerDay - c.pins.rampUpStartPerDay) * progress;
+  return Math.max(1, Math.round(ramped));
+}
+
 export function schedule(newPins: Pin[], from: Date = new Date()): Pin[] {
   const c = config();
+  const st = state.get();
+  const campaignStart = st.campaignStartedAt ? new Date(st.campaignStartedAt) : from;
+  if (!st.campaignStartedAt) state.patch({ campaignStartedAt: from.toISOString() });
+
   const taken = pinStore
     .all()
     .filter((p) => p.status === "scheduled" || p.status === "queued")
@@ -224,7 +243,7 @@ export function schedule(newPins: Pin[], from: Date = new Date()): Pin[] {
     for (let dayOffset = 0; dayOffset < 120 && slot === null; dayOffset++) {
       const day = new Date(cursor.getTime() + dayOffset * 86_400_000);
       const dayKey = day.toISOString().slice(0, 10);
-      if ((perDay.get(dayKey) ?? 0) >= c.pins.publishPerDay) continue;
+      if ((perDay.get(dayKey) ?? 0) >= dailyCapFor(day, campaignStart)) continue;
 
       for (const h of hours) {
         const candidate = Date.UTC(

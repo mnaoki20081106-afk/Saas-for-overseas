@@ -163,4 +163,6 @@ export interface PipelineState {
   publishedCategories: string[];
   cursor: number;
   milestonesHit: number[];
+  /** 初めてピンを予約した日。新規アカウントの投稿数ランプアップの起点。 */
+  campaignStartedAt: string | null;
 }

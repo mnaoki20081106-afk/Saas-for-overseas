@@ -24,7 +24,7 @@ const Candidate = z.object({
   estAvgRetentionMonths: z.number().describe("Realistic average months a referred customer keeps paying"),
   cookieDays: z.number().nullable(),
   japaneseCompetition: z.number().describe("1-10. 1 = essentially no Japanese-language content covers this tool"),
-  englishCompetition: z.number().describe("1-10. 10 = saturated with English affiliate content"),
+  englishCompetition: z.number().describe("1-10. 10 = saturated with fresh, thorough English comparison content already. 1 = existing English coverage is thin, outdated, or shallow -- a genuine content gap you can outrank, independent of the Japanese-competition question"),
   reliability: z.number().describe("1-10 confidence the program pays on time and is not about to shut down"),
   whyGoodFit: z.string().describe("2 sentences, concrete"),
   targetPains: z.array(z.string()).describe("3-5 concrete problems the buyer has before purchase"),
@@ -64,6 +64,13 @@ almost nobody in the Japanese-speaking creator market covers these tools. So pre
 Japanese-language coverage is thin or nonexistent (japaneseCompetition 1-3), even if English
 competition is moderate. Deprioritise the tools every affiliate blog already writes about
 (the very biggest names) unless the recurring economics are unusually good.
+
+Separately, also check the ENGLISH side: search for existing English-language comparison articles
+about the tool. If what you find is thin (a handful of listicle mentions, no real hands-on detail)
+or outdated (written years ago, references discontinued plans or old pricing), that is a genuine
+content gap independent of the Japanese question -- score englishCompetition low and say so in
+whyGoodFit. A tool can be a great pick even with moderate Japanese competition if the existing
+English coverage is stale enough that a current, detailed comparison would simply outrank it.
 
 ## Audience we sell to
 ${c.niche.audience}
@@ -111,6 +118,9 @@ function scoreProgram(p: CandidateT): number {
     money: clamp(p.estMonthlyCommissionUsd / 100, 0, 1),
     retention: clamp(p.estAvgRetentionMonths / 24, 0, 1),
     jpBlueOcean: clamp((10 - p.japaneseCompetition) / 9, 0, 1),
+    // 日本語競合ゼロでも、英語の比較記事がすでに大量にあるニッチはSEOで勝ちにくい。
+    // 「既存記事が薄い/古い」というコンテンツギャップも独立した加点要素にする。
+    enBlueOcean: clamp((10 - p.englishCompetition) / 9, 0, 1),
     cookie: clamp((p.cookieDays ?? 30) / 120, 0, 1),
     reliability: clamp(p.reliability / 10, 0, 1),
   };
@@ -119,6 +129,7 @@ function scoreProgram(p: CandidateT): number {
     norm.money * (w.monthlyCommissionUsd ?? 0) +
     norm.retention * (w.avgRetentionMonths ?? 0) +
     norm.jpBlueOcean * (w.japaneseCompetitionInverse ?? 0) +
+    norm.enBlueOcean * (w.englishCompetitionInverse ?? 0) +
     norm.cookie * (w.cookieDays ?? 0) +
     norm.reliability * (w.programReliability ?? 0);
   return Math.round(raw * 10) / 10;

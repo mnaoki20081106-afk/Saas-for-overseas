@@ -4,7 +4,7 @@ import { marked } from "marked";
 import { config, affiliateLinks } from "../lib/config";
 import { log } from "../lib/log";
 import { P } from "../lib/paths";
-import { articles as articleStore, programs } from "../lib/store";
+import { articles as articleStore, pins as pinStore, programs } from "../lib/store";
 import type { Article } from "../lib/types";
 import { escapeHtml, slugify } from "../lib/util";
 import { buildAdminPage } from "../admin/page";
@@ -58,6 +58,10 @@ code{background:var(--accent-soft);padding:.1rem .35rem;border-radius:.25rem;fon
   color:var(--accent);font-weight:700;margin-bottom:.4rem}
 .cta{display:inline-block;background:var(--accent);color:#fff;padding:.7rem 1.15rem;border-radius:.5rem;
   text-decoration:none;font-weight:600;font-size:.95rem}
+.cta-box{margin:1.6rem 0;padding:1.1rem 1.25rem;background:var(--accent-soft);
+  border:1px solid var(--line);border-radius:.6rem;text-align:center}
+.cta-box p{margin:0 0 .65rem;font-size:.9rem;color:var(--muted)}
+.cta:hover{opacity:.92;text-decoration:none}
 footer.site{border-top:1px solid var(--line);margin-top:3rem;padding-block:2rem;color:var(--muted);font-size:.86rem}
 footer.site a{color:var(--muted)}
 .grid-cats{display:flex;flex-wrap:wrap;gap:.5rem;margin:0 0 2rem;padding:0;list-style:none}
@@ -73,6 +77,8 @@ interface PageOpts {
   canonicalPath: string;
   jsonLd?: unknown[];
   noindex?: boolean;
+  /** SNS・リッチピン用のサムネイル画像。絶対URL。 */
+  image?: string;
   body: string;
 }
 
@@ -98,6 +104,8 @@ ${o.noindex ? '<meta name="robots" content="noindex,nofollow">' : `<link rel="ca
 <meta property="og:description" content="${escapeHtml(o.description)}">
 <meta property="og:url" content="${url}">
 <meta property="og:site_name" content="${escapeHtml(c.site.name)}">
+${o.image ? `<meta property="og:image" content="${escapeHtml(o.image)}">
+<meta name="twitter:image" content="${escapeHtml(o.image)}">` : ""}
 <meta name="twitter:card" content="summary_large_image">
 ${c.site.pinterestVerifyCode ? `<meta name="p:domain_verify" content="${escapeHtml(c.site.pinterestVerifyCode)}">` : ""}
 <link rel="alternate" type="application/rss+xml" title="${escapeHtml(c.site.name)}" href="${c.site.baseUrl}/rss.xml">
@@ -148,6 +156,58 @@ function markAffiliateLinks(html: string): string {
   return html.replace(/<a href="(\/go\/[a-z0-9-]+\/)"/g, `<a href="$1" rel="${rel}"`);
 }
 
+/**
+ * 本文中の文字リンクだけでは押されるかどうか運任せになるため、
+ * 目立つボタンを冒頭直後と末尾にプログラム側で確実に挿入する。
+ * AI の書き方や配置判断には委ねない。
+ */
+function ctaBox(slug: string, label: string): string {
+  const c = config();
+  const name = programs.bySlug(slug)?.name ?? "their site";
+  return `<div class="cta-box">
+<p>See if ${escapeHtml(name)} fits your team.</p>
+<a class="cta" href="/go/${slug}/" rel="${c.compliance.linkRel}">${escapeHtml(label)}</a>
+</div>`;
+}
+
+/**
+ * 記事に紐づくピン画像を1枚、SNS共有・リッチピン用のサムネイルとして
+ * public/og/ にコピーする。無ければ何も返さない(og:image を省略)。
+ */
+function articleOgImage(a: Article): string | undefined {
+  const c = config();
+  const candidates = pinStore
+    .all()
+    .filter((p) => p.articleSlug === a.slug && p.imagePath)
+    .sort((x, y) => {
+      const rank = (p: typeof x) => (p.generation === 0 ? 0 : 1) + (p.templateId === "bold-stat" ? 0 : 1);
+      return rank(x) - rank(y);
+    });
+  const pin = candidates[0];
+  if (!pin) return undefined;
+
+  const src = path.join(P.root, pin.imagePath);
+  if (!fs.existsSync(src)) return undefined;
+
+  const destRel = `og/${a.slug}.png`;
+  const dest = path.join(P.publicDir, destRel);
+  fs.mkdirSync(path.dirname(dest), { recursive: true });
+  fs.copyFileSync(src, dest);
+  return `${c.site.baseUrl}/${destRel}`;
+}
+
+function insertCtas(html: string, mainSlug: string): string {
+  const top = ctaBox(mainSlug, "Check current pricing →");
+  const bottom = ctaBox(mainSlug, "Start a free trial →");
+
+  const firstParaEnd = html.indexOf("</p>");
+  const withTop = firstParaEnd === -1
+    ? `${top}\n${html}`
+    : `${html.slice(0, firstParaEnd + 4)}\n${top}${html.slice(firstParaEnd + 4)}`;
+
+  return `${withTop}\n${bottom}`;
+}
+
 /* ------------------------------------------------------------- page types */
 
 function articlePage(a: Article): string {
@@ -157,7 +217,8 @@ function articlePage(a: Article): string {
   const { html: withIds, toc } = addHeadingIds(rawHtml);
   const html = markAffiliateLinks(wrapTables(withIds));
 
-  const bodyNoH1 = html.replace(/<h1>[\s\S]*?<\/h1>/, "");
+  const strippedH1 = html.replace(/<h1>[\s\S]*?<\/h1>/, "");
+  const bodyNoH1 = a.programSlugs.length > 0 ? insertCtas(strippedH1, a.programSlugs[0]) : strippedH1;
   const faqPairs = a.brief?.faq ?? [];
 
   const jsonLd: unknown[] = [
@@ -214,6 +275,7 @@ ${bodyNoH1}`;
     description: a.metaDescription,
     canonicalPath: `/articles/${a.slug}/`,
     jsonLd,
+    image: articleOgImage(a),
     body,
   });
 }
@@ -413,12 +475,26 @@ export function buildSite(): BuildResult {
     "How this site is funded and how affiliate links are handled.",
   ));
   write("privacy/index.html", staticPage(
-    "Privacy", "/privacy/",
-    `<h1>Privacy</h1>
-<p>This is a static site. We do not ask for or store personal information.</p>
-<p>${c.site.gaMeasurementId ? "We use Google Analytics to count page views in aggregate." : "We do not run analytics scripts on this site."}</p>
-<p>Affiliate networks may set a cookie when you follow one of our outbound links, so the vendor can attribute a signup to us. You can block cookies in your browser without affecting anything on this site.</p>`,
-    "Privacy information.",
+    "Privacy Policy", "/privacy/",
+    `<h1>Privacy Policy</h1>
+<p class="meta">Last updated: ${new Date().toISOString().slice(0, 10)}</p>
+<p>This Privacy Policy explains how ${escapeHtml(c.site.name)} (${escapeHtml(c.site.baseUrl)}) handles information
+when you visit this website.</p>
+<h2>Information we collect</h2>
+<p>This is a static site. We do not operate accounts, forms, or logins, and we do not ask visitors for personal
+information such as names, email addresses, or payment details.</p>
+<p>${c.site.gaMeasurementId
+      ? "We use Google Analytics to measure aggregate page views. Google Analytics may use cookies as described in Google's own privacy policy."
+      : "We do not run any analytics or tracking scripts on this site."}</p>
+<h2>Cookies and third-party links</h2>
+<p>Some links on this site are affiliate links to third-party software vendors (see our
+<a href="/disclosure/">affiliate disclosure</a>). When you follow one of those links, the vendor's own site may
+set a cookie so they can attribute a signup to us. That cookie is set by the vendor, not by this site, and is
+governed by the vendor's own privacy policy. You can block cookies in your browser without affecting anything
+on this site.</p>
+<h2>Contact</h2>
+<p>Questions about this policy can be sent through our <a href="${escapeHtml(c.site.baseUrl)}/about/">About page</a>.</p>`,
+    `Privacy Policy for ${c.site.name}.`,
   ));
   pages += 3;
 

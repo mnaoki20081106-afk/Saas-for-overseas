@@ -2,7 +2,7 @@
   "site": {
     "name": "Worked For Us",
     "tagline": "Honest, hands-on SaaS comparisons for small teams",
-    "baseUrl": "https://example.github.io/saas-for-overseas",
+    "baseUrl": "https://worked-for-us.com",
     "author": "The Worked For Us Team",
     "locale": "en-US",
     "description": "Independent, experience-based comparisons of subscription software for freelancers, agencies and small teams.",
@@ -60,7 +60,13 @@
       "unleash",
       "revolutionize",
       "look no further",
-      "supercharge your"
+      "supercharge your",
+      "the best in the world",
+      "the only tool you'll ever need",
+      "guaranteed to",
+      "#1 rated",
+      "hands down the best",
+      "nothing else comes close"
     ]
   },
   "pins": {
@@ -77,7 +83,9 @@
       21,
       23
     ],
-    "boardStrategy": "one board per category"
+    "boardStrategy": "one board per category",
+    "rampUpDays": 21,
+    "rampUpStartPerDay": 2
   },
   "programs": {
     "targetActive": 8,
