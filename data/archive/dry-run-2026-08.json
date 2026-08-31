@@ -1,0 +1,761 @@
+{
+  "_readme": "DRY_RUN（ANTHROPIC_API_KEY 未設定）で生成されたサンプルデータ。本物のデータと混ざると AI の学習が汚染されるため、2026-08-31 に本体から取り除いて退避した。復元する必要はない。記録として残しているだけ。",
+  "archivedAt": "2026-08-31T09:52:16.189515Z",
+  "programs": [
+    {
+      "slug": "sample-kanbanly",
+      "name": "Sample Kanbanly",
+      "homepage": "https://sample-kanbanly.example.com",
+      "signupUrl": "https://sample-kanbanly.example.com",
+      "affiliateProgramUrl": "https://sample-kanbanly.example.com/affiliates",
+      "network": "PartnerStack",
+      "category": "project management",
+      "pricingFromUsd": 49,
+      "commissionModel": "recurring",
+      "commissionRatePct": 25,
+      "estMonthlyCommissionUsd": 36,
+      "estAvgRetentionMonths": 16,
+      "cookieDays": 90,
+      "japaneseCompetition": 1,
+      "englishCompetition": 6,
+      "reliability": 8,
+      "whyGoodFit": "Sample Kanbanly pays a lifetime recurring share on a plan small teams rarely cancel. Sample data for DRY_RUN only.",
+      "targetPains": [
+        "paying for three overlapping tools",
+        "cannot see which channel actually produced revenue",
+        "onboarding a new contractor takes a full day"
+      ],
+      "mainCompetitors": [
+        "Competitor A",
+        "Competitor B"
+      ],
+      "score": 84.3,
+      "status": "awaiting_apply",
+      "discoveredAt": "2026-08-30T10:48:38.498Z",
+      "evidence": [
+        "https://example.com/dry-run-fixture"
+      ]
+    },
+    {
+      "slug": "sample-rankwise",
+      "name": "Sample Rankwise",
+      "homepage": "https://sample-rankwise.example.com",
+      "signupUrl": "https://sample-rankwise.example.com",
+      "affiliateProgramUrl": "https://sample-rankwise.example.com/affiliates",
+      "network": "PartnerStack",
+      "category": "seo tools",
+      "pricingFromUsd": 99,
+      "commissionModel": "recurring",
+      "commissionRatePct": 30,
+      "estMonthlyCommissionUsd": 58,
+      "estAvgRetentionMonths": 11,
+      "cookieDays": 90,
+      "japaneseCompetition": 2,
+      "englishCompetition": 6,
+      "reliability": 8,
+      "whyGoodFit": "Sample Rankwise pays a lifetime recurring share on a plan small teams rarely cancel. Sample data for DRY_RUN only.",
+      "targetPains": [
+        "paying for three overlapping tools",
+        "cannot see which channel actually produced revenue",
+        "onboarding a new contractor takes a full day"
+      ],
+      "mainCompetitors": [
+        "Competitor A",
+        "Competitor B"
+      ],
+      "score": 83.3,
+      "status": "awaiting_apply",
+      "discoveredAt": "2026-08-30T10:48:38.498Z",
+      "evidence": [
+        "https://example.com/dry-run-fixture"
+      ]
+    },
+    {
+      "slug": "sample-flowdesk",
+      "name": "Sample Flowdesk",
+      "homepage": "https://sample-flowdesk.example.com",
+      "signupUrl": "https://sample-flowdesk.example.com",
+      "affiliateProgramUrl": "https://sample-flowdesk.example.com/affiliates",
+      "network": "PartnerStack",
+      "category": "email marketing",
+      "pricingFromUsd": 39,
+      "commissionModel": "recurring",
+      "commissionRatePct": 30,
+      "estMonthlyCommissionUsd": 42,
+      "estAvgRetentionMonths": 14,
+      "cookieDays": 90,
+      "japaneseCompetition": 2,
+      "englishCompetition": 6,
+      "reliability": 8,
+      "whyGoodFit": "Sample Flowdesk pays a lifetime recurring share on a plan small teams rarely cancel. Sample data for DRY_RUN only.",
+      "targetPains": [
+        "paying for three overlapping tools",
+        "cannot see which channel actually produced revenue",
+        "onboarding a new contractor takes a full day"
+      ],
+      "mainCompetitors": [
+        "Competitor A",
+        "Competitor B"
+      ],
+      "score": 82,
+      "status": "awaiting_apply",
+      "discoveredAt": "2026-08-30T10:48:38.498Z",
+      "evidence": [
+        "https://example.com/dry-run-fixture"
+      ]
+    }
+  ],
+  "articles": [
+    {
+      "slug": "sample-kanbanly-vs-competitor-a",
+      "title": "Sample Kanbanly vs Competitor A: which one small teams actually keep",
+      "metaTitle": "Sample Kanbanly vs Competitor A: an honest comparison",
+      "metaDescription": "A hands-on comparison of Sample Kanbanly and its main alternative for small teams, including the setup costs and the cases where neither is the right answer.",
+      "primaryKeyword": "sample kanbanly vs competitor a",
+      "secondaryKeywords": [
+        "Sample Kanbanly pricing",
+        "Sample Kanbanly review",
+        "project management for small teams"
+      ],
+      "category": "project management",
+      "programSlugs": [
+        "sample-kanbanly"
+      ],
+      "filePath": "content/articles/sample-kanbanly-vs-competitor-a.md",
+      "words": 2822,
+      "status": "published",
+      "createdAt": "2026-08-30T10:48:38.759Z",
+      "updatedAt": "2026-08-30T10:48:38.759Z",
+      "qualityIssues": [],
+      "internalLinks": [],
+      "brief": {
+        "title": "Sample Kanbanly vs Competitor A: which one small teams actually keep",
+        "metaTitle": "Sample Kanbanly vs Competitor A: an honest comparison",
+        "metaDescription": "A hands-on comparison of Sample Kanbanly and its main alternative for small teams, including the setup costs and the cases where neither is the right answer.",
+        "slug": "sample-kanbanly-vs-competitor-a",
+        "primaryKeyword": "sample kanbanly vs competitor a",
+        "secondaryKeywords": [
+          "Sample Kanbanly pricing",
+          "Sample Kanbanly review",
+          "project management for small teams"
+        ],
+        "searchIntent": "Choosing between two shortlisted tools before starting a trial.",
+        "painPoints": [
+          "paying for three overlapping tools",
+          "cannot see which channel actually produced revenue",
+          "onboarding a new contractor takes a full day"
+        ],
+        "angle": "Sample DRY_RUN brief. Not for publication.",
+        "outline": [
+          {
+            "heading": "The short answer",
+            "purpose": "state the recommendation",
+            "bullets": [
+              "who each tool suits"
+            ]
+          },
+          {
+            "heading": "Who should not buy it",
+            "purpose": "honesty",
+            "bullets": [
+              "team size limits",
+              "migration cost"
+            ]
+          }
+        ],
+        "faq": [
+          {
+            "q": "Is there a free plan?",
+            "a": "Sample answer for DRY_RUN mode."
+          }
+        ],
+        "audience": "freelancers, small agencies and 2-20 person SaaS/e-commerce teams in the US, UK, Canada and Australia",
+        "programSlugs": [
+          "sample-kanbanly"
+        ]
+      }
+    },
+    {
+      "slug": "sample-rankwise-vs-competitor-a",
+      "title": "Sample Rankwise vs Competitor A: which one small teams actually keep",
+      "metaTitle": "Sample Rankwise vs Competitor A: an honest comparison",
+      "metaDescription": "A hands-on comparison of Sample Rankwise and its main alternative for small teams, including the setup costs and the cases where neither is the right answer.",
+      "primaryKeyword": "sample rankwise vs competitor a",
+      "secondaryKeywords": [
+        "Sample Rankwise pricing",
+        "Sample Rankwise review",
+        "seo tools for small teams"
+      ],
+      "category": "seo tools",
+      "programSlugs": [
+        "sample-rankwise"
+      ],
+      "filePath": "content/articles/sample-rankwise-vs-competitor-a.md",
+      "words": 2845,
+      "status": "published",
+      "createdAt": "2026-08-31T09:01:41.260Z",
+      "updatedAt": "2026-08-31T09:01:41.260Z",
+      "qualityIssues": [],
+      "internalLinks": [
+        "sample-kanbanly-vs-competitor-a"
+      ],
+      "brief": {
+        "title": "Sample Rankwise vs Competitor A: which one small teams actually keep",
+        "metaTitle": "Sample Rankwise vs Competitor A: an honest comparison",
+        "metaDescription": "A hands-on comparison of Sample Rankwise and its main alternative for small teams, including the setup costs and the cases where neither is the right answer.",
+        "slug": "sample-rankwise-vs-competitor-a",
+        "primaryKeyword": "sample rankwise vs competitor a",
+        "secondaryKeywords": [
+          "Sample Rankwise pricing",
+          "Sample Rankwise review",
+          "seo tools for small teams"
+        ],
+        "searchIntent": "Choosing between two shortlisted tools before starting a trial.",
+        "painPoints": [
+          "paying for three overlapping tools",
+          "cannot see which channel actually produced revenue",
+          "onboarding a new contractor takes a full day"
+        ],
+        "angle": "Sample DRY_RUN brief. Not for publication.",
+        "outline": [
+          {
+            "heading": "The short answer",
+            "purpose": "state the recommendation",
+            "bullets": [
+              "who each tool suits"
+            ]
+          },
+          {
+            "heading": "Who should not buy it",
+            "purpose": "honesty",
+            "bullets": [
+              "team size limits",
+              "migration cost"
+            ]
+          }
+        ],
+        "faq": [
+          {
+            "q": "Is there a free plan?",
+            "a": "Sample answer for DRY_RUN mode."
+          }
+        ],
+        "audience": "freelancers, small agencies and 2-20 person SaaS/e-commerce teams in the US, UK, Canada and Australia",
+        "programSlugs": [
+          "sample-rankwise"
+        ]
+      }
+    }
+  ],
+  "pins": [
+    {
+      "id": "pin_mtfos8m2k6can3",
+      "articleSlug": "sample-kanbanly-vs-competitor-a",
+      "templateId": "bold-stat",
+      "title": "Sample Kanbanly vs Competitor A: which one small teams actua — angle 1",
+      "description": "Affiliate links included — Sample DRY_RUN description for Sample Kanbanly vs Competitor A: which one small teams actually keep. Replace by setting ANTHROPIC_API_KEY. #saas #smallbusiness",
+      "overlayTop": "DRY RUN",
+      "overlayMain": "Sample headline 1",
+      "overlayBottom": "Sample supporting line for the DRY_RUN pin.",
+      "altText": "Sample pin graphic 1 for Sample Kanbanly vs Competitor A: which one small teams actually keep",
+      "boardName": "Project Management Tools",
+      "imagePath": "assets/pins/pin_mtfos8m2k6can3.png",
+      "destinationUrl": "https://example.github.io/saas-for-overseas/articles/sample-kanbanly-vs-competitor-a/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-kanbanly-vs-competitor-a",
+      "status": "failed",
+      "scheduledAt": "2026-08-30T13:00:00.000Z",
+      "publishedAt": null,
+      "pinterestPinId": null,
+      "parentPinId": null,
+      "generation": 0,
+      "lastError": "Pinterest POST /pins → 403: {\"code\":29,\"message\":\"Apps with Trial access may not create Pins in production https://api.pinterest.com - use API Sandbox https://api-sandbox.pinterest.com instead.\"}"
+    },
+    {
+      "id": "pin_mtfos8m2xb1mjo",
+      "articleSlug": "sample-kanbanly-vs-competitor-a",
+      "templateId": "split-card",
+      "title": "Sample Kanbanly vs Competitor A: which one small teams actua — angle 2",
+      "description": "Affiliate links included — Sample DRY_RUN description for Sample Kanbanly vs Competitor A: which one small teams actually keep. Replace by setting ANTHROPIC_API_KEY. #saas #smallbusiness",
+      "overlayTop": "DRY RUN",
+      "overlayMain": "Sample headline 2",
+      "overlayBottom": "Sample supporting line for the DRY_RUN pin.",
+      "altText": "Sample pin graphic 2 for Sample Kanbanly vs Competitor A: which one small teams actually keep",
+      "boardName": "Project Management Tools",
+      "imagePath": "assets/pins/pin_mtfos8m2xb1mjo.png",
+      "destinationUrl": "https://example.github.io/saas-for-overseas/articles/sample-kanbanly-vs-competitor-a/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-kanbanly-vs-competitor-a",
+      "status": "failed",
+      "scheduledAt": "2026-08-30T15:00:00.000Z",
+      "publishedAt": null,
+      "pinterestPinId": null,
+      "parentPinId": null,
+      "generation": 0,
+      "lastError": "Pinterest POST /pins → 403: {\"code\":29,\"message\":\"Apps with Trial access may not create Pins in production https://api.pinterest.com - use API Sandbox https://api-sandbox.pinterest.com instead.\"}"
+    },
+    {
+      "id": "pin_mtfos8m2uirtuq",
+      "articleSlug": "sample-kanbanly-vs-competitor-a",
+      "templateId": "checklist",
+      "title": "Sample Kanbanly vs Competitor A: which one small teams actua — angle 3",
+      "description": "Affiliate links included — Sample DRY_RUN description for Sample Kanbanly vs Competitor A: which one small teams actually keep. Replace by setting ANTHROPIC_API_KEY. #saas #smallbusiness",
+      "overlayTop": "DRY RUN",
+      "overlayMain": "Sample headline 3",
+      "overlayBottom": "point one | point two | point three",
+      "altText": "Sample pin graphic 3 for Sample Kanbanly vs Competitor A: which one small teams actually keep",
+      "boardName": "Project Management Tools",
+      "imagePath": "assets/pins/pin_mtfos8m2uirtuq.png",
+      "destinationUrl": "https://example.github.io/saas-for-overseas/articles/sample-kanbanly-vs-competitor-a/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-kanbanly-vs-competitor-a",
+      "status": "failed",
+      "scheduledAt": "2026-08-30T17:00:00.000Z",
+      "publishedAt": null,
+      "pinterestPinId": null,
+      "parentPinId": null,
+      "generation": 0,
+      "lastError": "Pinterest POST /pins → 403: {\"code\":29,\"message\":\"Apps with Trial access may not create Pins in production https://api.pinterest.com - use API Sandbox https://api-sandbox.pinterest.com instead.\"}"
+    },
+    {
+      "id": "pin_mtfos8m223baj8",
+      "articleSlug": "sample-kanbanly-vs-competitor-a",
+      "templateId": "versus",
+      "title": "Sample Kanbanly vs Competitor A: which one small teams actua — angle 4",
+      "description": "Affiliate links included — Sample DRY_RUN description for Sample Kanbanly vs Competitor A: which one small teams actually keep. Replace by setting ANTHROPIC_API_KEY. #saas #smallbusiness",
+      "overlayTop": "DRY RUN",
+      "overlayMain": "Sample headline 4",
+      "overlayBottom": "Sample supporting line for the DRY_RUN pin.",
+      "altText": "Sample pin graphic 4 for Sample Kanbanly vs Competitor A: which one small teams actually keep",
+      "boardName": "Project Management Tools",
+      "imagePath": "assets/pins/pin_mtfos8m223baj8.png",
+      "destinationUrl": "https://example.github.io/saas-for-overseas/articles/sample-kanbanly-vs-competitor-a/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-kanbanly-vs-competitor-a",
+      "status": "failed",
+      "scheduledAt": "2026-08-30T19:00:00.000Z",
+      "publishedAt": null,
+      "pinterestPinId": null,
+      "parentPinId": null,
+      "generation": 0,
+      "lastError": "Pinterest POST /pins → 403: {\"code\":29,\"message\":\"Apps with Trial access may not create Pins in production https://api.pinterest.com - use API Sandbox https://api-sandbox.pinterest.com instead.\"}"
+    },
+    {
+      "id": "pin_mtfos8m2bmas57",
+      "articleSlug": "sample-kanbanly-vs-competitor-a",
+      "templateId": "editorial",
+      "title": "Sample Kanbanly vs Competitor A: which one small teams actua — angle 5",
+      "description": "Affiliate links included — Sample DRY_RUN description for Sample Kanbanly vs Competitor A: which one small teams actually keep. Replace by setting ANTHROPIC_API_KEY. #saas #smallbusiness",
+      "overlayTop": "DRY RUN",
+      "overlayMain": "Sample headline 5",
+      "overlayBottom": "Sample supporting line for the DRY_RUN pin.",
+      "altText": "Sample pin graphic 5 for Sample Kanbanly vs Competitor A: which one small teams actually keep",
+      "boardName": "Project Management Tools",
+      "imagePath": "assets/pins/pin_mtfos8m2bmas57.png",
+      "destinationUrl": "https://example.github.io/saas-for-overseas/articles/sample-kanbanly-vs-competitor-a/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-kanbanly-vs-competitor-a",
+      "status": "failed",
+      "scheduledAt": "2026-08-30T21:00:00.000Z",
+      "publishedAt": null,
+      "pinterestPinId": null,
+      "parentPinId": null,
+      "generation": 0,
+      "lastError": "Pinterest POST /pins → 403: {\"code\":29,\"message\":\"Apps with Trial access may not create Pins in production https://api.pinterest.com - use API Sandbox https://api-sandbox.pinterest.com instead.\"}"
+    },
+    {
+      "id": "pin_mtfos8m2s8hvra",
+      "articleSlug": "sample-kanbanly-vs-competitor-a",
+      "templateId": "bold-stat",
+      "title": "Sample Kanbanly vs Competitor A: which one small teams actua — angle 6",
+      "description": "Affiliate links included — Sample DRY_RUN description for Sample Kanbanly vs Competitor A: which one small teams actually keep. Replace by setting ANTHROPIC_API_KEY. #saas #smallbusiness",
+      "overlayTop": "DRY RUN",
+      "overlayMain": "Sample headline 6",
+      "overlayBottom": "Sample supporting line for the DRY_RUN pin.",
+      "altText": "Sample pin graphic 6 for Sample Kanbanly vs Competitor A: which one small teams actually keep",
+      "boardName": "Project Management Tools",
+      "imagePath": "assets/pins/pin_mtfos8m2s8hvra.png",
+      "destinationUrl": "https://example.github.io/saas-for-overseas/articles/sample-kanbanly-vs-competitor-a/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-kanbanly-vs-competitor-a",
+      "status": "failed",
+      "scheduledAt": "2026-08-30T23:00:00.000Z",
+      "publishedAt": null,
+      "pinterestPinId": null,
+      "parentPinId": null,
+      "generation": 0,
+      "lastError": "Pinterest POST /pins → 403: {\"code\":29,\"message\":\"Apps with Trial access may not create Pins in production https://api.pinterest.com - use API Sandbox https://api-sandbox.pinterest.com instead.\"}"
+    },
+    {
+      "id": "pin_mtfos8m2xl7i0w",
+      "articleSlug": "sample-kanbanly-vs-competitor-a",
+      "templateId": "split-card",
+      "title": "Sample Kanbanly vs Competitor A: which one small teams actua — angle 7",
+      "description": "Affiliate links included — Sample DRY_RUN description for Sample Kanbanly vs Competitor A: which one small teams actually keep. Replace by setting ANTHROPIC_API_KEY. #saas #smallbusiness",
+      "overlayTop": "DRY RUN",
+      "overlayMain": "Sample headline 7",
+      "overlayBottom": "Sample supporting line for the DRY_RUN pin.",
+      "altText": "Sample pin graphic 7 for Sample Kanbanly vs Competitor A: which one small teams actually keep",
+      "boardName": "Project Management Tools",
+      "imagePath": "assets/pins/pin_mtfos8m2xl7i0w.png",
+      "destinationUrl": "https://example.github.io/saas-for-overseas/articles/sample-kanbanly-vs-competitor-a/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-kanbanly-vs-competitor-a",
+      "status": "scheduled",
+      "scheduledAt": "2026-08-31T13:00:00.000Z",
+      "publishedAt": null,
+      "pinterestPinId": null,
+      "parentPinId": null,
+      "generation": 0
+    },
+    {
+      "id": "pin_mtfos8m2xgrs7i",
+      "articleSlug": "sample-kanbanly-vs-competitor-a",
+      "templateId": "checklist",
+      "title": "Sample Kanbanly vs Competitor A: which one small teams actua — angle 8",
+      "description": "Affiliate links included — Sample DRY_RUN description for Sample Kanbanly vs Competitor A: which one small teams actually keep. Replace by setting ANTHROPIC_API_KEY. #saas #smallbusiness",
+      "overlayTop": "DRY RUN",
+      "overlayMain": "Sample headline 8",
+      "overlayBottom": "point one | point two | point three",
+      "altText": "Sample pin graphic 8 for Sample Kanbanly vs Competitor A: which one small teams actually keep",
+      "boardName": "Project Management Tools",
+      "imagePath": "assets/pins/pin_mtfos8m2xgrs7i.png",
+      "destinationUrl": "https://example.github.io/saas-for-overseas/articles/sample-kanbanly-vs-competitor-a/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-kanbanly-vs-competitor-a",
+      "status": "scheduled",
+      "scheduledAt": "2026-08-31T15:00:00.000Z",
+      "publishedAt": null,
+      "pinterestPinId": null,
+      "parentPinId": null,
+      "generation": 0
+    },
+    {
+      "id": "pin_mtfos8m2vz3v6j",
+      "articleSlug": "sample-kanbanly-vs-competitor-a",
+      "templateId": "versus",
+      "title": "Sample Kanbanly vs Competitor A: which one small teams actua — angle 9",
+      "description": "Affiliate links included — Sample DRY_RUN description for Sample Kanbanly vs Competitor A: which one small teams actually keep. Replace by setting ANTHROPIC_API_KEY. #saas #smallbusiness",
+      "overlayTop": "DRY RUN",
+      "overlayMain": "Sample headline 9",
+      "overlayBottom": "Sample supporting line for the DRY_RUN pin.",
+      "altText": "Sample pin graphic 9 for Sample Kanbanly vs Competitor A: which one small teams actually keep",
+      "boardName": "Project Management Tools",
+      "imagePath": "assets/pins/pin_mtfos8m2vz3v6j.png",
+      "destinationUrl": "https://example.github.io/saas-for-overseas/articles/sample-kanbanly-vs-competitor-a/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-kanbanly-vs-competitor-a",
+      "status": "scheduled",
+      "scheduledAt": "2026-08-31T17:00:00.000Z",
+      "publishedAt": null,
+      "pinterestPinId": null,
+      "parentPinId": null,
+      "generation": 0
+    },
+    {
+      "id": "pin_mtfos8m2ptmtm7",
+      "articleSlug": "sample-kanbanly-vs-competitor-a",
+      "templateId": "editorial",
+      "title": "Sample Kanbanly vs Competitor A: which one small teams actua — angle 10",
+      "description": "Affiliate links included — Sample DRY_RUN description for Sample Kanbanly vs Competitor A: which one small teams actually keep. Replace by setting ANTHROPIC_API_KEY. #saas #smallbusiness",
+      "overlayTop": "DRY RUN",
+      "overlayMain": "Sample headline 10",
+      "overlayBottom": "Sample supporting line for the DRY_RUN pin.",
+      "altText": "Sample pin graphic 10 for Sample Kanbanly vs Competitor A: which one small teams actually keep",
+      "boardName": "Project Management Tools",
+      "imagePath": "assets/pins/pin_mtfos8m2ptmtm7.png",
+      "destinationUrl": "https://example.github.io/saas-for-overseas/articles/sample-kanbanly-vs-competitor-a/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-kanbanly-vs-competitor-a",
+      "status": "scheduled",
+      "scheduledAt": "2026-08-31T19:00:00.000Z",
+      "publishedAt": null,
+      "pinterestPinId": null,
+      "parentPinId": null,
+      "generation": 0
+    },
+    {
+      "id": "pin_mth0eji86pokf0",
+      "articleSlug": "sample-rankwise-vs-competitor-a",
+      "templateId": "bold-stat",
+      "title": "Sample Rankwise vs Competitor A: which one small teams actua — angle 1",
+      "description": "Affiliate links included — Sample DRY_RUN description for Sample Rankwise vs Competitor A: which one small teams actually keep. Replace by setting ANTHROPIC_API_KEY. #saas #smallbusiness",
+      "overlayTop": "DRY RUN",
+      "overlayMain": "Sample headline 1",
+      "overlayBottom": "Sample supporting line for the DRY_RUN pin.",
+      "altText": "Sample pin graphic 1 for Sample Rankwise vs Competitor A: which one small teams actually keep",
+      "boardName": "Seo Tools Tools",
+      "imagePath": "assets/pins/pin_mth0eji86pokf0.png",
+      "destinationUrl": "https://worked-for-us.com/articles/sample-rankwise-vs-competitor-a/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-rankwise-vs-competitor-a",
+      "status": "scheduled",
+      "scheduledAt": "2026-09-01T13:00:00.000Z",
+      "publishedAt": null,
+      "pinterestPinId": null,
+      "parentPinId": null,
+      "generation": 0
+    },
+    {
+      "id": "pin_mth0eji8zo0xxu",
+      "articleSlug": "sample-rankwise-vs-competitor-a",
+      "templateId": "split-card",
+      "title": "Sample Rankwise vs Competitor A: which one small teams actua — angle 2",
+      "description": "Affiliate links included — Sample DRY_RUN description for Sample Rankwise vs Competitor A: which one small teams actually keep. Replace by setting ANTHROPIC_API_KEY. #saas #smallbusiness",
+      "overlayTop": "DRY RUN",
+      "overlayMain": "Sample headline 2",
+      "overlayBottom": "Sample supporting line for the DRY_RUN pin.",
+      "altText": "Sample pin graphic 2 for Sample Rankwise vs Competitor A: which one small teams actually keep",
+      "boardName": "Seo Tools Tools",
+      "imagePath": "assets/pins/pin_mth0eji8zo0xxu.png",
+      "destinationUrl": "https://worked-for-us.com/articles/sample-rankwise-vs-competitor-a/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-rankwise-vs-competitor-a",
+      "status": "scheduled",
+      "scheduledAt": "2026-09-01T15:00:00.000Z",
+      "publishedAt": null,
+      "pinterestPinId": null,
+      "parentPinId": null,
+      "generation": 0
+    },
+    {
+      "id": "pin_mth0eji8kb5zth",
+      "articleSlug": "sample-rankwise-vs-competitor-a",
+      "templateId": "checklist",
+      "title": "Sample Rankwise vs Competitor A: which one small teams actua — angle 3",
+      "description": "Affiliate links included — Sample DRY_RUN description for Sample Rankwise vs Competitor A: which one small teams actually keep. Replace by setting ANTHROPIC_API_KEY. #saas #smallbusiness",
+      "overlayTop": "DRY RUN",
+      "overlayMain": "Sample headline 3",
+      "overlayBottom": "point one | point two | point three",
+      "altText": "Sample pin graphic 3 for Sample Rankwise vs Competitor A: which one small teams actually keep",
+      "boardName": "Seo Tools Tools",
+      "imagePath": "assets/pins/pin_mth0eji8kb5zth.png",
+      "destinationUrl": "https://worked-for-us.com/articles/sample-rankwise-vs-competitor-a/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-rankwise-vs-competitor-a",
+      "status": "scheduled",
+      "scheduledAt": "2026-09-02T13:00:00.000Z",
+      "publishedAt": null,
+      "pinterestPinId": null,
+      "parentPinId": null,
+      "generation": 0
+    },
+    {
+      "id": "pin_mth0eji81waupp",
+      "articleSlug": "sample-rankwise-vs-competitor-a",
+      "templateId": "versus",
+      "title": "Sample Rankwise vs Competitor A: which one small teams actua — angle 4",
+      "description": "Affiliate links included — Sample DRY_RUN description for Sample Rankwise vs Competitor A: which one small teams actually keep. Replace by setting ANTHROPIC_API_KEY. #saas #smallbusiness",
+      "overlayTop": "DRY RUN",
+      "overlayMain": "Sample headline 4",
+      "overlayBottom": "Sample supporting line for the DRY_RUN pin.",
+      "altText": "Sample pin graphic 4 for Sample Rankwise vs Competitor A: which one small teams actually keep",
+      "boardName": "Seo Tools Tools",
+      "imagePath": "assets/pins/pin_mth0eji81waupp.png",
+      "destinationUrl": "https://worked-for-us.com/articles/sample-rankwise-vs-competitor-a/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-rankwise-vs-competitor-a",
+      "status": "scheduled",
+      "scheduledAt": "2026-09-02T15:00:00.000Z",
+      "publishedAt": null,
+      "pinterestPinId": null,
+      "parentPinId": null,
+      "generation": 0
+    },
+    {
+      "id": "pin_mth0eji8rck38b",
+      "articleSlug": "sample-rankwise-vs-competitor-a",
+      "templateId": "editorial",
+      "title": "Sample Rankwise vs Competitor A: which one small teams actua — angle 5",
+      "description": "Affiliate links included — Sample DRY_RUN description for Sample Rankwise vs Competitor A: which one small teams actually keep. Replace by setting ANTHROPIC_API_KEY. #saas #smallbusiness",
+      "overlayTop": "DRY RUN",
+      "overlayMain": "Sample headline 5",
+      "overlayBottom": "Sample supporting line for the DRY_RUN pin.",
+      "altText": "Sample pin graphic 5 for Sample Rankwise vs Competitor A: which one small teams actually keep",
+      "boardName": "Seo Tools Tools",
+      "imagePath": "assets/pins/pin_mth0eji8rck38b.png",
+      "destinationUrl": "https://worked-for-us.com/articles/sample-rankwise-vs-competitor-a/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-rankwise-vs-competitor-a",
+      "status": "scheduled",
+      "scheduledAt": "2026-09-03T13:00:00.000Z",
+      "publishedAt": null,
+      "pinterestPinId": null,
+      "parentPinId": null,
+      "generation": 0
+    },
+    {
+      "id": "pin_mth0eji8djg798",
+      "articleSlug": "sample-rankwise-vs-competitor-a",
+      "templateId": "bold-stat",
+      "title": "Sample Rankwise vs Competitor A: which one small teams actua — angle 6",
+      "description": "Affiliate links included — Sample DRY_RUN description for Sample Rankwise vs Competitor A: which one small teams actually keep. Replace by setting ANTHROPIC_API_KEY. #saas #smallbusiness",
+      "overlayTop": "DRY RUN",
+      "overlayMain": "Sample headline 6",
+      "overlayBottom": "Sample supporting line for the DRY_RUN pin.",
+      "altText": "Sample pin graphic 6 for Sample Rankwise vs Competitor A: which one small teams actually keep",
+      "boardName": "Seo Tools Tools",
+      "imagePath": "assets/pins/pin_mth0eji8djg798.png",
+      "destinationUrl": "https://worked-for-us.com/articles/sample-rankwise-vs-competitor-a/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-rankwise-vs-competitor-a",
+      "status": "scheduled",
+      "scheduledAt": "2026-09-03T15:00:00.000Z",
+      "publishedAt": null,
+      "pinterestPinId": null,
+      "parentPinId": null,
+      "generation": 0
+    },
+    {
+      "id": "pin_mth0eji8qp5tdr",
+      "articleSlug": "sample-rankwise-vs-competitor-a",
+      "templateId": "split-card",
+      "title": "Sample Rankwise vs Competitor A: which one small teams actua — angle 7",
+      "description": "Affiliate links included — Sample DRY_RUN description for Sample Rankwise vs Competitor A: which one small teams actually keep. Replace by setting ANTHROPIC_API_KEY. #saas #smallbusiness",
+      "overlayTop": "DRY RUN",
+      "overlayMain": "Sample headline 7",
+      "overlayBottom": "Sample supporting line for the DRY_RUN pin.",
+      "altText": "Sample pin graphic 7 for Sample Rankwise vs Competitor A: which one small teams actually keep",
+      "boardName": "Seo Tools Tools",
+      "imagePath": "assets/pins/pin_mth0eji8qp5tdr.png",
+      "destinationUrl": "https://worked-for-us.com/articles/sample-rankwise-vs-competitor-a/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-rankwise-vs-competitor-a",
+      "status": "scheduled",
+      "scheduledAt": "2026-09-03T17:00:00.000Z",
+      "publishedAt": null,
+      "pinterestPinId": null,
+      "parentPinId": null,
+      "generation": 0
+    },
+    {
+      "id": "pin_mth0eji82hlw54",
+      "articleSlug": "sample-rankwise-vs-competitor-a",
+      "templateId": "checklist",
+      "title": "Sample Rankwise vs Competitor A: which one small teams actua — angle 8",
+      "description": "Affiliate links included — Sample DRY_RUN description for Sample Rankwise vs Competitor A: which one small teams actually keep. Replace by setting ANTHROPIC_API_KEY. #saas #smallbusiness",
+      "overlayTop": "DRY RUN",
+      "overlayMain": "Sample headline 8",
+      "overlayBottom": "point one | point two | point three",
+      "altText": "Sample pin graphic 8 for Sample Rankwise vs Competitor A: which one small teams actually keep",
+      "boardName": "Seo Tools Tools",
+      "imagePath": "assets/pins/pin_mth0eji82hlw54.png",
+      "destinationUrl": "https://worked-for-us.com/articles/sample-rankwise-vs-competitor-a/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-rankwise-vs-competitor-a",
+      "status": "scheduled",
+      "scheduledAt": "2026-09-04T13:00:00.000Z",
+      "publishedAt": null,
+      "pinterestPinId": null,
+      "parentPinId": null,
+      "generation": 0
+    },
+    {
+      "id": "pin_mth0eji8b1c4z4",
+      "articleSlug": "sample-rankwise-vs-competitor-a",
+      "templateId": "versus",
+      "title": "Sample Rankwise vs Competitor A: which one small teams actua — angle 9",
+      "description": "Affiliate links included — Sample DRY_RUN description for Sample Rankwise vs Competitor A: which one small teams actually keep. Replace by setting ANTHROPIC_API_KEY. #saas #smallbusiness",
+      "overlayTop": "DRY RUN",
+      "overlayMain": "Sample headline 9",
+      "overlayBottom": "Sample supporting line for the DRY_RUN pin.",
+      "altText": "Sample pin graphic 9 for Sample Rankwise vs Competitor A: which one small teams actually keep",
+      "boardName": "Seo Tools Tools",
+      "imagePath": "assets/pins/pin_mth0eji8b1c4z4.png",
+      "destinationUrl": "https://worked-for-us.com/articles/sample-rankwise-vs-competitor-a/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-rankwise-vs-competitor-a",
+      "status": "scheduled",
+      "scheduledAt": "2026-09-04T15:00:00.000Z",
+      "publishedAt": null,
+      "pinterestPinId": null,
+      "parentPinId": null,
+      "generation": 0
+    },
+    {
+      "id": "pin_mth0eji8owh66x",
+      "articleSlug": "sample-rankwise-vs-competitor-a",
+      "templateId": "editorial",
+      "title": "Sample Rankwise vs Competitor A: which one small teams actua — angle 10",
+      "description": "Affiliate links included — Sample DRY_RUN description for Sample Rankwise vs Competitor A: which one small teams actually keep. Replace by setting ANTHROPIC_API_KEY. #saas #smallbusiness",
+      "overlayTop": "DRY RUN",
+      "overlayMain": "Sample headline 10",
+      "overlayBottom": "Sample supporting line for the DRY_RUN pin.",
+      "altText": "Sample pin graphic 10 for Sample Rankwise vs Competitor A: which one small teams actually keep",
+      "boardName": "Seo Tools Tools",
+      "imagePath": "assets/pins/pin_mth0eji8owh66x.png",
+      "destinationUrl": "https://worked-for-us.com/articles/sample-rankwise-vs-competitor-a/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-rankwise-vs-competitor-a",
+      "status": "scheduled",
+      "scheduledAt": "2026-09-04T17:00:00.000Z",
+      "publishedAt": null,
+      "pinterestPinId": null,
+      "parentPinId": null,
+      "generation": 0
+    }
+  ],
+  "humanTasks": [
+    {
+      "id": "apply-sample-kanbanly",
+      "kind": "affiliate_application",
+      "title": "Sample Kanbanly のアフィリエイトプログラムに応募する（PartnerStack）",
+      "whyItCannotBeAutomated": "相手企業の審査担当者が人間なので、応募フォームの送信と本人確認・税務情報の入力だけは自動化できません。回答文は全部こちらで書いてあります。",
+      "minutes": 12,
+      "url": "https://sample-kanbanly.example.com/affiliates",
+      "steps": [
+        "PartnerStack のプログラムページから直接サインアップ（審査が緩く早い）",
+        "応募先: https://sample-kanbanly.example.com/affiliates",
+        "下の「回答の下書き」をフォームにコピペする",
+        "サイト URL には自分の GitHub Pages の URL を入れる（記事が1本でも公開されていれば通りやすい）",
+        "承認されたら、発行されたアフィリエイトリンクを控える",
+        "承認後にこれを実行: npm run autopilot link:set sample-kanbanly \"<アフィリエイトリンク>\"",
+        "→ 次回のサイトビルドで、全記事のリンクが自動的に差し替わります"
+      ],
+      "prefilledAnswers": {
+        "How will you promote us? / プロモーション方法": "We publish long-form, experience-based comparison articles for freelancers, small agencies and 2-20 person SaaS/e-commerce teams in the US, UK, Canada and Australia, and distribute them through Pinterest, where we build category boards around specific buying problems. For Sample Kanbanly we plan a dedicated review plus at least two comparison articles against Competitor A and Competitor B, each with a clear disclosure and a genuine assessment of who the tool is not for. Our traffic is evergreen rather than news-driven, so a published article keeps sending qualified trial signups for months.",
+        "Describe your audience / 読者層": "freelancers, small agencies and 2-20 person SaaS/e-commerce teams in the US, UK, Canada and Australia. They are hands-on operators, usually the person who both chooses and pays for the tool, and they read comparisons before starting a trial.",
+        "Monthly traffic / 月間トラフィック": "This is a new site, so traffic is still small and growing. Our distribution is Pinterest plus organic search on evergreen comparison queries, and we would rather show you real numbers as they build than quote a figure we cannot back up.",
+        "Promotional methods / 手法（チェックボックス）": "Content / blog / Social media (Pinterest) / SEO / Comparison and review content",
+        "Bio / プロフィール": "We run Worked For Us, an independent site that compares subscription software for small teams. We buy and use the tools we write about, and we publish the cases where a tool is the wrong choice.",
+        "Website URL": "https://example.github.io/saas-for-overseas"
+      },
+      "blocks": [
+        "Sample Kanbanly の報酬発生（記事とピンは応募前でも先に作れます）"
+      ],
+      "status": "open",
+      "createdAt": "2026-08-30T10:48:38.552Z"
+    },
+    {
+      "id": "apply-sample-rankwise",
+      "kind": "affiliate_application",
+      "title": "Sample Rankwise のアフィリエイトプログラムに応募する（PartnerStack）",
+      "whyItCannotBeAutomated": "相手企業の審査担当者が人間なので、応募フォームの送信と本人確認・税務情報の入力だけは自動化できません。回答文は全部こちらで書いてあります。",
+      "minutes": 12,
+      "url": "https://sample-rankwise.example.com/affiliates",
+      "steps": [
+        "PartnerStack のプログラムページから直接サインアップ（審査が緩く早い）",
+        "応募先: https://sample-rankwise.example.com/affiliates",
+        "下の「回答の下書き」をフォームにコピペする",
+        "サイト URL には自分の GitHub Pages の URL を入れる（記事が1本でも公開されていれば通りやすい）",
+        "承認されたら、発行されたアフィリエイトリンクを控える",
+        "承認後にこれを実行: npm run autopilot link:set sample-rankwise \"<アフィリエイトリンク>\"",
+        "→ 次回のサイトビルドで、全記事のリンクが自動的に差し替わります"
+      ],
+      "prefilledAnswers": {
+        "How will you promote us? / プロモーション方法": "We publish long-form, experience-based comparison articles for freelancers, small agencies and 2-20 person SaaS/e-commerce teams in the US, UK, Canada and Australia, and distribute them through Pinterest, where we build category boards around specific buying problems. For Sample Rankwise we plan a dedicated review plus at least two comparison articles against Competitor A and Competitor B, each with a clear disclosure and a genuine assessment of who the tool is not for. Our traffic is evergreen rather than news-driven, so a published article keeps sending qualified trial signups for months.",
+        "Describe your audience / 読者層": "freelancers, small agencies and 2-20 person SaaS/e-commerce teams in the US, UK, Canada and Australia. They are hands-on operators, usually the person who both chooses and pays for the tool, and they read comparisons before starting a trial.",
+        "Monthly traffic / 月間トラフィック": "This is a new site, so traffic is still small and growing. Our distribution is Pinterest plus organic search on evergreen comparison queries, and we would rather show you real numbers as they build than quote a figure we cannot back up.",
+        "Promotional methods / 手法（チェックボックス）": "Content / blog / Social media (Pinterest) / SEO / Comparison and review content",
+        "Bio / プロフィール": "We run Worked For Us, an independent site that compares subscription software for small teams. We buy and use the tools we write about, and we publish the cases where a tool is the wrong choice.",
+        "Website URL": "https://example.github.io/saas-for-overseas"
+      },
+      "blocks": [
+        "Sample Rankwise の報酬発生（記事とピンは応募前でも先に作れます）"
+      ],
+      "status": "open",
+      "createdAt": "2026-08-30T10:48:38.604Z"
+    },
+    {
+      "id": "apply-sample-flowdesk",
+      "kind": "affiliate_application",
+      "title": "Sample Flowdesk のアフィリエイトプログラムに応募する（PartnerStack）",
+      "whyItCannotBeAutomated": "相手企業の審査担当者が人間なので、応募フォームの送信と本人確認・税務情報の入力だけは自動化できません。回答文は全部こちらで書いてあります。",
+      "minutes": 12,
+      "url": "https://sample-flowdesk.example.com/affiliates",
+      "steps": [
+        "PartnerStack のプログラムページから直接サインアップ（審査が緩く早い）",
+        "応募先: https://sample-flowdesk.example.com/affiliates",
+        "下の「回答の下書き」をフォームにコピペする",
+        "サイト URL には自分の GitHub Pages の URL を入れる（記事が1本でも公開されていれば通りやすい）",
+        "承認されたら、発行されたアフィリエイトリンクを控える",
+        "承認後にこれを実行: npm run autopilot link:set sample-flowdesk \"<アフィリエイトリンク>\"",
+        "→ 次回のサイトビルドで、全記事のリンクが自動的に差し替わります"
+      ],
+      "prefilledAnswers": {
+        "How will you promote us? / プロモーション方法": "We publish long-form, experience-based comparison articles for freelancers, small agencies and 2-20 person SaaS/e-commerce teams in the US, UK, Canada and Australia, and distribute them through Pinterest, where we build category boards around specific buying problems. For Sample Flowdesk we plan a dedicated review plus at least two comparison articles against Competitor A and Competitor B, each with a clear disclosure and a genuine assessment of who the tool is not for. Our traffic is evergreen rather than news-driven, so a published article keeps sending qualified trial signups for months.",
+        "Describe your audience / 読者層": "freelancers, small agencies and 2-20 person SaaS/e-commerce teams in the US, UK, Canada and Australia. They are hands-on operators, usually the person who both chooses and pays for the tool, and they read comparisons before starting a trial.",
+        "Monthly traffic / 月間トラフィック": "This is a new site, so traffic is still small and growing. Our distribution is Pinterest plus organic search on evergreen comparison queries, and we would rather show you real numbers as they build than quote a figure we cannot back up.",
+        "Promotional methods / 手法（チェックボックス）": "Content / blog / Social media (Pinterest) / SEO / Comparison and review content",
+        "Bio / プロフィール": "We run Worked For Us, an independent site that compares subscription software for small teams. We buy and use the tools we write about, and we publish the cases where a tool is the wrong choice.",
+        "Website URL": "https://example.github.io/saas-for-overseas"
+      },
+      "blocks": [
+        "Sample Flowdesk の報酬発生（記事とピンは応募前でも先に作れます）"
+      ],
+      "status": "open",
+      "createdAt": "2026-08-30T10:48:38.655Z"
+    }
+  ],
+  "state": {
+    "lastResearchAt": "2026-08-31T09:01:41.104Z",
+    "lastArticleAt": "2026-08-31T09:01:41.261Z",
+    "lastPinPublishAt": "2026-08-31T09:01:52.965Z",
+    "lastAnalyticsAt": null,
+    "lastReportAt": null,
+    "publishedCategories": [],
+    "cursor": 2,
+    "milestonesHit": [],
+    "campaignStartedAt": "2026-08-31T09:01:45.983Z"
+  }
+}

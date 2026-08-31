@@ -1,9 +1,11 @@
 name: Autopilot / 毎週（数値取得 → 勝ち型の横展開 → レポート）
 
 on:
-  schedule:
-    # 毎週月曜 UTC 04:00 = 日本時間 13:00
-    - cron: "0 4 * * 1"
+  # ⚠ 2026-08-31: autopilot-daily と同じ理由で一時停止中。
+  # 再開条件は .github/workflows/autopilot-daily.yml のコメントを参照。
+  # schedule:
+  #   # 毎週月曜 UTC 04:00 = 日本時間 13:00
+  #   - cron: "0 4 * * 1"
   workflow_dispatch:
 
 concurrency:
@@ -40,12 +42,26 @@ jobs:
           PARTNERSTACK_API_SECRET: ${{ secrets.PARTNERSTACK_API_SECRET }}
         run: npx tsx src/cli.ts weekly
 
-      - uses: ./.github/actions/commit
+      - name: 公開ゲートを判定
+        id: guard
+        run: npx tsx src/cli.ts guard:check
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
+      - if: steps.guard.outputs.publishable == 'true'
+        uses: ./.github/actions/commit
         with:
           message: "autopilot: 週次レポートと勝ち型の横展開"
 
       - uses: actions/configure-pages@v5
+        if: steps.guard.outputs.publishable == 'true'
       - uses: actions/upload-pages-artifact@v3
+        if: steps.guard.outputs.publishable == 'true'
         with:
           path: public
       - uses: actions/deploy-pages@v4
+        if: steps.guard.outputs.publishable == 'true'
+
+      - name: 公開を見送った理由を表示
+        if: steps.guard.outputs.publishable != 'true'
+        run: echo "::warning::公開を見送りました — ${{ steps.guard.outputs.reason }}"

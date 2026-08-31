@@ -1,8 +1,23 @@
 name: Autopilot / 3時間おき（予約したピンを投稿）
 
 on:
-  schedule:
-    - cron: "0 */3 * * *"
+  # ⚠ 2026-08-31: 自動実行を一時停止しています。
+  #
+  # 理由: Pinterest アプリが Trial access のままで、投稿が必ず失敗するため。
+  #   403 {"code":29,"message":"Apps with Trial access may not create Pins in production"}
+  # Trial access で作れるのは「作成者にしか見えない Sandbox ピン」なので、
+  # 3時間おきに叩き続けても集客にはならず、失敗ログが積み上がるだけです。
+  #
+  # 再開する条件:
+  #   Pinterest の Standard access 審査を通す（OAuth フローの画面録画の提出が必要）
+  #   → TODO-HUMAN.md の「Pinterest API アプリを作り、Standard access まで通す」
+  #
+  # 審査待ちの間の運用:
+  #   npx tsx src/cli.ts pins:export
+  #   で CSV と画像を書き出し、手動投稿または外部の予約ツールで回せます。
+  #
+  # schedule:
+  #   - cron: "0 */3 * * *"
   workflow_dispatch:
 
 concurrency:

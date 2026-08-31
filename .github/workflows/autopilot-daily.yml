@@ -1,9 +1,22 @@
 name: Autopilot / 毎日（記事1本 + ピン10枚 + 投稿 + サイト再生成）
 
 on:
-  schedule:
-    # UTC 03:00 = 日本時間 12:00
-    - cron: "0 3 * * *"
+  # ⚠ 2026-08-31: 自動実行を一時停止しています。
+  #
+  # 理由: ANTHROPIC_API_KEY が未設定で DRY_RUN 動作になっており、
+  #       サンプル記事（"This is placeholder prose generated in DRY_RUN mode"）が
+  #       毎日 worked-for-us.com に公開され続けていたため。
+  #
+  # 再開する条件（どちらか）:
+  #   A) GitHub Secrets に ANTHROPIC_API_KEY を登録する → 下の schedule のコメントを外す
+  #   B) AI会社化（Claude Code の Routines）へ移行する  → ROADMAP.md の Phase 1
+  #
+  # なお公開ゲート（src/lib/guard.ts）が入ったので、仮に再開しても
+  # DRY_RUN のままなら公開・コミットは行われません（二重の安全装置）。
+  #
+  # schedule:
+  #   # UTC 03:00 = 日本時間 12:00
+  #   - cron: "0 3 * * *"
   workflow_dispatch:
     inputs:
       articles:
@@ -50,14 +63,32 @@ jobs:
             npx tsx src/cli.ts daily
           fi
 
+      # 作ったものを外に出してよい状態かを判定する。
+      # DRY_RUN（サンプル文）のときは publishable=false になり、以降を全部スキップする。
+      - name: 公開ゲートを判定
+        id: guard
+        run: npx tsx src/cli.ts guard:check
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
       - name: 生成物をコミット
+        if: steps.guard.outputs.publishable == 'true'
         uses: ./.github/actions/commit
         with:
           message: "autopilot: 毎日の実行（記事・ピン・データ更新）"
 
       - uses: actions/configure-pages@v5
+        if: steps.guard.outputs.publishable == 'true'
       - uses: actions/upload-pages-artifact@v3
+        if: steps.guard.outputs.publishable == 'true'
         with:
           path: public
       - id: deployment
+        if: steps.guard.outputs.publishable == 'true'
         uses: actions/deploy-pages@v4
+
+      - name: 公開を見送った理由を表示
+        if: steps.guard.outputs.publishable != 'true'
+        run: |
+          echo "::warning::公開を見送りました — ${{ steps.guard.outputs.reason }}"
+          echo "詳細は ROADMAP.md / DESIGN_REVIEW.md を参照してください。"

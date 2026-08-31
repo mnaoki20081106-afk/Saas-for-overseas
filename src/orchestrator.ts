@@ -1,5 +1,6 @@
 import { config, env } from "./lib/config";
 import { log } from "./lib/log";
+import { publishGate } from "./lib/guard";
 import { ensureDirs } from "./lib/paths";
 import { articles, programs, runlog, state } from "./lib/store";
 import { runResearch } from "./stages/research";
@@ -61,9 +62,16 @@ export async function runDaily(): Promise<string> {
     const pub = await publishDuePins();
     notes.push(`Pinterest 投稿: ${pub.published} 枚（残り ${pub.dueRemaining} 枚）`);
 
-    // 6. サイトを作り直す
-    const built = buildSite();
-    notes.push(`サイト: ${built.pages} ページ / 中継リンク ${built.redirects} 本`);
+    // 6. サイトを作り直す（公開ゲートが開いているときだけ）
+    const gate = publishGate();
+    if (gate.ok) {
+      const built = buildSite();
+      notes.push(`サイト: ${built.pages} ページ / 中継リンク ${built.redirects} 本`);
+    } else {
+      notes.push(`サイト: 公開を見送りました（${gate.reason}）`);
+      log.human(gate.reason);
+      gate.howToFix.forEach((line) => log.info(line));
+    }
 
     notes.push(schedulingSummary());
     writeChecklist();
@@ -100,7 +108,8 @@ export async function runWeekly(): Promise<string> {
     const rep = buildReport();
     notes.push(rep.summary);
 
-    buildSite();
+    if (publishGate().ok) buildSite();
+    else notes.push(`サイト: 公開を見送りました（${publishGate().reason}）`);
     writeChecklist();
   } finally {
     await closeBrowser();
@@ -133,6 +142,8 @@ export async function runBootstrap(articleCount = 3): Promise<string> {
       notes.push(`${written.article.slug}: 記事 + ピン ${gen.created} 枚`);
     }
 
+    // bootstrap はローカル/CI で「出来上がるもの」を確認する用途があるので必ずビルドする。
+    // ただし公開ゲートが閉じていれば buildSite() 側が全ページ noindex + robots 全拒否にする。
     const built = buildSite();
     notes.push(`サイト ${built.pages} ページ`);
     buildReport();

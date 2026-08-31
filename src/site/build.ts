@@ -3,6 +3,7 @@ import path from "node:path";
 import { marked } from "marked";
 import { config, affiliateLinks } from "../lib/config";
 import { log } from "../lib/log";
+import { publishGate } from "../lib/guard";
 import { P } from "../lib/paths";
 import { articles as articleStore, pins as pinStore, programs } from "../lib/store";
 import type { Article } from "../lib/types";
@@ -86,6 +87,9 @@ interface PageOpts {
 function layout(o: PageOpts): string {
   const c = config();
   const url = `${c.site.baseUrl}${o.canonicalPath}`;
+  // 公開ゲートが閉じているとき(DRY_RUN 等)は、万一デプロイされても検索エンジンに
+  // 拾われないよう、全ページを強制的に noindex にする。canonical も出さない。
+  const noindex = o.noindex || !publishGate().ok;
   const ga = c.site.gaMeasurementId
     ? `<script async src="https://www.googletagmanager.com/gtag/js?id=${c.site.gaMeasurementId}"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}
@@ -99,7 +103,7 @@ gtag('js',new Date());gtag('config','${c.site.gaMeasurementId}');</script>`
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${escapeHtml(o.title)}</title>
 <meta name="description" content="${escapeHtml(o.description)}">
-${o.noindex ? '<meta name="robots" content="noindex,nofollow">' : `<link rel="canonical" href="${url}">`}
+${noindex ? '<meta name="robots" content="noindex,nofollow">' : `<link rel="canonical" href="${url}">`}
 <meta property="og:type" content="article">
 <meta property="og:title" content="${escapeHtml(o.title)}">
 <meta property="og:description" content="${escapeHtml(o.description)}">
@@ -505,7 +509,11 @@ on this site.</p>
 
   write("sitemap.xml", sitemap(list));
   write("rss.xml", rss(list));
-  write("robots.txt", `User-agent: *\nAllow: /\nDisallow: /go/\nDisallow: /admin/\nDisallow: /pinterest-connect/\nDisallow: /pinterest-callback/\n\nSitemap: ${c.site.baseUrl}/sitemap.xml\n`);
+  const gate = publishGate();
+  write("robots.txt", gate.ok
+    ? `User-agent: *\nAllow: /\nDisallow: /go/\nDisallow: /admin/\nDisallow: /pinterest-connect/\nDisallow: /pinterest-callback/\n\nSitemap: ${c.site.baseUrl}/sitemap.xml\n`
+    // サンプル記事がインデックスされないよう、丸ごと拒否する
+    : `# ${gate.reason}\nUser-agent: *\nDisallow: /\n`);
   write(".nojekyll", "");
 
   const result: BuildResult = {
@@ -514,6 +522,11 @@ on this site.</p>
     pendingAffiliateLinks: pending,
   };
   log.ok(`${pages} ページ + 中継リンク ${redirects} 本を public/ に出力しました`);
+  if (!gate.ok) {
+    log.warn(`⚠ ${gate.reason}`);
+    log.warn("  全ページを noindex にし、robots.txt で全拒否にしました（デプロイしても検索には出ません）。");
+    gate.howToFix.forEach((line) => log.warn(`  ${line}`));
+  }
   if (pending.length) {
     log.warn(`アフィリエイトリンク未登録 ${pending.length} 件（今は公式サイトへ直リンク）: ${pending.join(", ")}`);
   }

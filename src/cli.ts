@@ -2,6 +2,7 @@
 import fs from "node:fs";
 import { config, setAffiliateLink } from "./lib/config";
 import { log } from "./lib/log";
+import { publishGate } from "./lib/guard";
 import { ensureDirs } from "./lib/paths";
 import { articles, humanTasks, pins as pinStore, programs, runlog } from "./lib/store";
 import { closeBrowser } from "./pins/render";
@@ -55,6 +56,9 @@ const HELP = `
   report                 REPORT.md を更新
   growth [--force]       実績から発信素材とIntroducer提案を生成
 
+── 安全装置 ────────────────────────────────────
+  guard:check            いま外部に公開してよい状態かを判定する（CI が使う）
+
 ── 設定 ────────────────────────────────────────
   pinterest:auth         Pinterest のリフレッシュトークンを取得（初回のみ・ターミナル使用）
   pinterest:exchange     同上（ターミナルなし版。/pinterest-connect/ + Actions から使う。CI専用）
@@ -93,6 +97,25 @@ async function main(): Promise<void> {
     case "doctor":
       await doctor();
       break;
+
+    case "guard:check": {
+      // 「作ったものを外に出してよいか」を判定して、GitHub Actions のステップ制御に渡す。
+      // 出力は必ず GITHUB_OUTPUT 経由で、後続ステップの if: で使う。
+      const gate = publishGate();
+      if (gate.ok) {
+        log.ok("公開ゲート: 開いています（本番の生成物として公開できます）");
+      } else {
+        log.human(`公開ゲート: 閉じています — ${gate.reason}`);
+        gate.howToFix.forEach((line) => log.info(line));
+      }
+      const outFile = process.env.GITHUB_OUTPUT;
+      if (outFile) {
+        fs.appendFileSync(outFile, `publishable=${gate.ok}\n`);
+        fs.appendFileSync(outFile, `reason=${gate.reason}\n`);
+      }
+      // 判定結果を返すだけで、ワークフロー自体は失敗させない（毎日赤くなると気づけなくなるため）
+      break;
+    }
 
     case "provider:check":
       await checkProvider(rest[0]);

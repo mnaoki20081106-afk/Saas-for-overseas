@@ -24,13 +24,27 @@ jobs:
           cache: npm
       - run: npm ci --no-audit --fund=false
 
+      - name: 公開ゲートを判定
+        id: guard
+        run: npx tsx src/cli.ts guard:check
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
       - name: サイトだけを再ビルド（記事生成やAPI呼び出しは一切しない）
+        if: steps.guard.outputs.publishable == 'true'
         env:
           SITE_BASE_URL: ${{ vars.SITE_BASE_URL }}
         run: npx tsx src/cli.ts site:build
 
       - uses: actions/configure-pages@v5
+        if: steps.guard.outputs.publishable == 'true'
       - uses: actions/upload-pages-artifact@v3
+        if: steps.guard.outputs.publishable == 'true'
         with:
           path: public
       - uses: actions/deploy-pages@v4
+        if: steps.guard.outputs.publishable == 'true'
+
+      - name: 公開を見送った理由を表示
+        if: steps.guard.outputs.publishable != 'true'
+        run: echo "::warning::公開を見送りました — ${{ steps.guard.outputs.reason }}"
