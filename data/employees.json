@@ -1,67 +1,80 @@
 {
-  "ceo": {
+  "_readme": [
+    "3層構造の社員台帳。人は3人だけ（諭吉・サラ・ケン）。",
+    "owns は、その人が使う co コマンドの接頭辞。コマンド名は道具の名前で、人の名前ではない。",
+    "旧役職（researcher/writer/editor/designer/qa/analyst/growth）は廃止したが、",
+    "data/tasks.json の assignee として過去データに残っているため、機能IDとして解釈する。"
+  ],
+  "yukichi": {
+    "role": "CEO",
+    "displayName": "諭吉",
+    "layer": 2,
+    "owns": [
+      "status",
+      "check",
+      "task",
+      "approval",
+      "decision",
+      "release",
+      "error"
+    ],
+    "absorbs": [
+      "ceo",
+      "analyst"
+    ],
     "maxRunsPerDay": 3,
     "maxNewTasksPerRun": 5,
     "timeoutMinutes": 20,
     "maxRetries": 2,
     "active": true,
+    "hasSubordinates": true,
     "runs": []
   },
-  "researcher": {
-    "maxRunsPerWeek": 2,
+  "sara": {
+    "role": "CMO",
+    "displayName": "サラ",
+    "layer": 3,
+    "owns": [
+      "researcher",
+      "designer",
+      "pins"
+    ],
+    "absorbs": [
+      "researcher",
+      "designer",
+      "growth"
+    ],
+    "maxRunsPerDay": 2,
     "maxCandidatesPerRun": 10,
     "maxWebFetches": 30,
+    "maxPinsPerRun": 10,
     "timeoutMinutes": 25,
     "maxRetries": 2,
     "active": true,
+    "hasSubordinates": false,
     "runs": []
   },
-  "writer": {
+  "ken": {
+    "role": "CTO",
+    "displayName": "ケン",
+    "layer": 3,
+    "owns": [
+      "writer",
+      "editor",
+      "qa"
+    ],
+    "absorbs": [
+      "writer",
+      "editor",
+      "qa"
+    ],
     "maxRunsPerDay": 2,
     "maxArticlesPerRun": 1,
+    "maxRoundsPerArticle": 2,
     "timeoutMinutes": 30,
     "maxRetries": 2,
     "active": true,
-    "runs": []
-  },
-  "editor": {
-    "maxRunsPerDay": 4,
-    "maxRoundsPerArticle": 2,
-    "timeoutMinutes": 20,
-    "maxRetries": 1,
-    "active": true,
-    "runs": []
-  },
-  "designer": {
-    "maxRunsPerDay": 2,
-    "maxPinsPerRun": 10,
-    "timeoutMinutes": 20,
-    "maxRetries": 2,
-    "active": true,
-    "runs": []
-  },
-  "qa": {
-    "maxRunsPerDay": 4,
-    "timeoutMinutes": 15,
-    "maxRetries": 1,
-    "active": false,
-    "runs": []
-  },
-  "analyst": {
-    "maxRunsPerDay": 2,
-    "maxIdeasPerRun": 3,
-    "maxLiveExperiments": 2,
-    "timeoutMinutes": 15,
-    "maxRetries": 2,
-    "active": false,
-    "runs": []
-  },
-  "growth": {
-    "maxRunsPerDay": 1,
-    "maxProposalsPerRun": 3,
-    "timeoutMinutes": 15,
-    "maxRetries": 1,
-    "active": false,
+    "hasSubordinates": false,
     "runs": []
   }
 }

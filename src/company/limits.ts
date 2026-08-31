@@ -167,34 +167,37 @@ export function assertNotRecentlyRejected(kind: string, subject: string | null):
 
 /** 社員ごとの実行回数の上限 */
 export function assertCanRun(employeeId: string): void {
-  const cfg = employees.all()[employeeId];
-  if (!cfg) throw new Error(`知らない社員です: ${employeeId}`);
+  // 機能ID（researcher / writer など）で呼ばれても、担当する人に解決する。
+  // 人は 諭吉 / サラ / ケン の3人だけ。
+  const found = employees.personFor(employeeId);
+  if (!found) throw new Error(`知らない社員です: ${employeeId}（いるのは 諭吉 / サラ / ケン の3人だけです）`);
+  const { id: personId, config: cfg } = found;
   if (!cfg.active) {
     throw new LimitExceeded(
-      `employees.${employeeId}.active`,
-      `${employeeId} はこのフェーズではまだ稼働しません`,
+      `employees.${personId}.active`,
+      `${cfg.displayName} はこのフェーズではまだ稼働しません`,
       "分析対象のデータが存在しないうちは起動しません（→ DESIGN_REVIEW.md §6）。" +
         "有効にするには data/employees.json の active を true にしてください。",
     );
   }
   const today = todayISO();
   if (cfg.maxRunsPerDay !== undefined) {
-    const n = employees.runsOn(employeeId, today);
+    const n = employees.runsOn(personId, today);
     if (n >= cfg.maxRunsPerDay) {
       throw new LimitExceeded(
-        `employees.${employeeId}.maxRunsPerDay`,
-        `${employeeId} は本日すでに ${n} 回動いています（上限 ${cfg.maxRunsPerDay}）`,
+        `employees.${personId}.maxRunsPerDay`,
+        `${cfg.displayName} は本日すでに ${n} 回動いています（上限 ${cfg.maxRunsPerDay}）`,
         "明日まで待ってください。急ぐ場合は data/employees.json の上限を上げてください。",
       );
     }
   }
   if (cfg.maxRunsPerWeek !== undefined) {
     const since = new Date(Date.now() - 7 * 86_400_000).toISOString().slice(0, 10);
-    const n = employees.runsSince(employeeId, since);
+    const n = employees.runsSince(personId, since);
     if (n >= cfg.maxRunsPerWeek) {
       throw new LimitExceeded(
-        `employees.${employeeId}.maxRunsPerWeek`,
-        `${employeeId} は直近7日で ${n} 回動いています（上限 ${cfg.maxRunsPerWeek}）`,
+        `employees.${personId}.maxRunsPerWeek`,
+        `${cfg.displayName} は直近7日で ${n} 回動いています（上限 ${cfg.maxRunsPerWeek}）`,
         "リサーチは頻繁にやっても在庫が増えるだけです。既存の案件を使い切ってください。",
       );
     }

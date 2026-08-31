@@ -134,11 +134,20 @@ export function companyStatus(): void {
     : "ありません。");
 
   const emp = employees.all();
-  section("社員の稼働", Object.entries(emp).map(([id, cfg]) => {
-    const runs = employees.runsOn(id, today);
-    const cap = cfg.maxRunsPerDay !== undefined ? `${runs}/${cfg.maxRunsPerDay} 回` : `${runs} 回`;
-    return `- ${id.padEnd(11)} ${cfg.active ? "稼働中" : "停止中（このフェーズでは使わない）"}  本日 ${cap}`;
-  }).join("\n"));
+  section("組織（3層構造）", [
+    "第1層  オーナー（なおきさん）  GO / STOP・経営判断・換金の判断",
+    "         ↑↓ 対話するのはここだけ",
+    ...Object.entries(emp)
+      .sort((a, b) => a[1].layer - b[1].layer)
+      .map(([id, cfg]) => {
+        const runs = employees.runsOn(id, today);
+        const cap = cfg.maxRunsPerDay !== undefined ? `${runs}/${cfg.maxRunsPerDay} 回` : `${runs} 回`;
+        const sub = cfg.hasSubordinates ? "" : "・部下なし（自分で手を動かす）";
+        return `第${cfg.layer}層  ${cfg.role} ${cfg.displayName}` +
+          `  ${cfg.active ? "稼働中" : "停止中"}  本日 ${cap}${sub}` +
+          `\n         道具: ${cfg.owns.join(", ")}`;
+      }),
+  ]);
 
   const lastRun = runlog.all()[0];
   section("直近の実行", lastRun

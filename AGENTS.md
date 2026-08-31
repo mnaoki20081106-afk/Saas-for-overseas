@@ -1,5 +1,20 @@
 # AGENTS — AI社員の組織図と職務規定
 
+> ## ⚠️ この文書は 2026-08-31 に置き換えられました
+>
+> **8役職の構成は廃止され、3層構造（オーナー / CEO諭吉 / CMOサラ・CTOケン）になりました。**
+> 現行の組織については、次を見てください。
+>
+> - **[organization/README.md](organization/README.md)** — いまの組織図
+> - **[rules.md](rules.md)** — いまの鉄のルール
+> - **[skills/README.md](skills/README.md)** — 誰がどのノウハウを読むか
+>
+> 以下は、その判断に至るまでの設計記録として残しています。
+> 職務の中身（Researcher が何を調べるか、Editor が何を見るか等）は
+> 3人に引き継がれているので、内容自体はいまも有効です。
+
+---
+
 > AI社員は「常駐プロセス」ではなく **`.claude/skills/<役職>/SKILL.md` という手順書**です。
 > Routine（Claude Code のスケジュール実行）が起動したセッションが、
 > 手順書に従って役職を演じ、`data/` に結果を書き、git に commit します。
