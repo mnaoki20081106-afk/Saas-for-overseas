@@ -135,13 +135,24 @@ export function assertCanRequestApproval(): void {
  * 同じ提案を繰り返さない。STOP された提案は一定期間クールダウンする。
  * 「しつこいAI」は人間の承認をただの作業にしてしまうので、ここは厳しくする。
  */
-export function assertNotRecentlyRejected(kind: string, targetRef: string | null): void {
+export function assertNotRecentlyRejected(kind: string, subject: string | null): void {
   const l = limits();
   const cutoff = Date.now() - l.approval.rejectedCooldownDays * 86_400_000;
+
+  // 「同じ提案」の判定は、種類だけでなく対象まで見る。
+  // 種類だけで判定すると、1件 STOP されただけで同じ種類の提案が7日間すべて
+  // 出せなくなり、会社が止まる。対象（案件名）が違えば別の提案として扱う。
+  const sameSubject = (a: { expected: { programName: string | null }; title: string }): boolean => {
+    const prev = a.expected.programName;
+    if (subject !== null && prev !== null) return subject === prev;
+    if (subject === null && prev === null) return true;  // どちらも案件に紐づかない提案同士
+    return false;                                        // 片方だけ案件がある = 別の提案
+  };
+
   const rejected = approvals.all().find((a) =>
     a.status === "stop" &&
     a.kind === kind &&
-    (targetRef === null || a.taskIds.length === 0 || a.title.includes(targetRef)) &&
+    sameSubject(a) &&
     a.decidedAt !== null &&
     new Date(a.decidedAt).getTime() > cutoff);
   if (rejected) {
