@@ -1,4 +1,5 @@
 #!/usr/bin/env -S node --enable-source-maps
+import fs from "node:fs";
 import { config, setAffiliateLink } from "./lib/config";
 import { log } from "./lib/log";
 import { ensureDirs } from "./lib/paths";
@@ -55,7 +56,8 @@ const HELP = `
   growth [--force]       実績から発信素材とIntroducer提案を生成
 
 ── 設定 ────────────────────────────────────────
-  pinterest:auth         Pinterest のリフレッシュトークンを取得（初回のみ）
+  pinterest:auth         Pinterest のリフレッシュトークンを取得（初回のみ・ターミナル使用）
+  pinterest:exchange     同上（ターミナルなし版。/pinterest-connect/ + Actions から使う。CI専用）
   link:set <slug> <url>  承認されたアフィリエイトリンクを登録（全記事に自動反映）
   program:status <slug> <candidate|applied|approved|rejected|paused>
   task:done <id>         人間タスクを完了にする
@@ -215,6 +217,26 @@ async function main(): Promise<void> {
       console.log("\n以下を GitHub の Secrets（Settings → Secrets and variables → Actions）に登録してください:\n");
       console.log(`PINTEREST_REFRESH_TOKEN=${token.refresh_token}\n`);
       log.ok("取得できました。アクセストークンは以後このリフレッシュトークンから自動発行されます。");
+      break;
+    }
+
+    case "pinterest:exchange": {
+      // ターミナルを使わない経路（/pinterest-connect/ → GitHub Actions）用の非対話コマンド。
+      // 標準出力にはトークンを一切出さず、GITHUB_OUTPUT 経由でのみ次のステップに渡す。
+      const code = process.env.PINTEREST_AUTH_CODE;
+      const redirectUri = process.env.PINTEREST_REDIRECT_URI;
+      if (!code || !redirectUri) {
+        log.error("PINTEREST_AUTH_CODE と PINTEREST_REDIRECT_URI が必要です。");
+        process.exitCode = 1;
+        break;
+      }
+      const token = await exchangeCode(code, redirectUri);
+      console.log(`::add-mask::${token.refresh_token}`);
+      const outFile = process.env.GITHUB_OUTPUT;
+      if (outFile) {
+        fs.appendFileSync(outFile, `refresh_token=${token.refresh_token}\n`);
+      }
+      log.ok("認可コードをリフレッシュトークンに交換しました。");
       break;
     }
 
