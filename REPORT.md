@@ -1,0 +1,47 @@
+# 週次レポート — 2026-08-31
+
+## いま何が積み上がっているか
+
+| 指標 | 数値 |
+| --- | --- |
+| 公開記事 | 2 本 |
+| 要確認で未公開の記事 | 0 本 |
+| 投稿済みピン | 0 枚 |
+| 予約待ちピン | 14 枚 |
+| ピン表示数（直近30日） | 0 |
+| ピン→記事クリック | 0 |
+| **クリック率（追うべき指標）** | **0%** |
+| 継続報酬（月額） | $0 |
+| 有効サブスク数 | 0 件 |
+| 平均継続期間（実測） | 計測待ち |
+| 承認済み案件の想定LTV合計 | $0 |
+
+## 勝ち型（CTR 3% 以上）
+
+まだ勝ち型はありません（判定には 300 表示以上が必要）。
+ピンが表示数を集めるまで数週間かかるのが普通です。ここは待つのが正解。
+
+## 投稿に失敗したピン
+
+6 枚。`npm run autopilot pins:requeue` で再予約できます。
+
+- pin_mtfos8m2k6can3: Pinterest POST /pins → 403: {"code":29,"message":"Apps with Trial access may not create Pins in production https://api.pinterest.com - use API Sandbox https://a
+- pin_mtfos8m2xb1mjo: Pinterest POST /pins → 403: {"code":29,"message":"Apps with Trial access may not create Pins in production https://api.pinterest.com - use API Sandbox https://a
+- pin_mtfos8m2uirtuq: Pinterest POST /pins → 403: {"code":29,"message":"Apps with Trial access may not create Pins in production https://api.pinterest.com - use API Sandbox https://a
+- pin_mtfos8m223baj8: Pinterest POST /pins → 403: {"code":29,"message":"Apps with Trial access may not create Pins in production https://api.pinterest.com - use API Sandbox https://a
+- pin_mtfos8m2bmas57: Pinterest POST /pins → 403: {"code":29,"message":"Apps with Trial access may not create Pins in production https://api.pinterest.com - use API Sandbox https://a
+
+## あなたがやること
+
+9 件・合計約 136 分。詳細は [TODO-HUMAN.md](./TODO-HUMAN.md)。
+
+- [ ] Anthropic API キーを取得して GitHub Secrets に登録する（約10分）
+- [ ] GitHub Pages を有効にして、サイトの URL を設定する（約5分）
+- [ ] Pinterest のビジネスアカウントを作る（約15分）
+- [ ] Pinterest でサイトの所有権を確認する（Claim）（約10分）
+- [ ] Pinterest API アプリを作り、Standard access まで通す（約40分）
+- [ ] アフィリエイトネットワークの API キーを登録する（成果の自動集計用）（約20分）
+- [ ] Sample Kanbanly のアフィリエイトプログラムに応募する（PartnerStack）（約12分）
+- [ ] Sample Rankwise のアフィリエイトプログラムに応募する（PartnerStack）（約12分）
+- [ ] Sample Flowdesk のアフィリエイトプログラムに応募する（PartnerStack）（約12分）
+
