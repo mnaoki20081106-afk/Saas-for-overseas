@@ -165,4 +165,18 @@ export interface PipelineState {
   milestonesHit: number[];
   /** 初めてピンを予約した日。新規アカウントの投稿数ランプアップの起点。 */
   campaignStartedAt: string | null;
+
+  /* ── AI会社の運転に使う項目（既存の値には影響しない） ── */
+  /** CEO が最後に動いた時刻。規定間隔未満の再実行を弾くために使う。 */
+  lastCeoRunAt?: string | null;
+  /** その日のルーチン実行回数。Claude Pro の利用枠を守るための上限判定に使う。 */
+  routineRunsToday?: { date: string; count: number };
+  /** bootstrap = 実績ゼロ（審査の通りやすさ重視）/ growth = LTV重視 / scale */
+  phase?: "bootstrap" | "growth" | "scale";
+  companyStartedAt?: string | null;
+  lastKpiSnapshotAt?: string | null;
+  /** 自律レベル昇格の判定用。承認が連続して GO された回数。 */
+  consecutiveApprovedPublishes?: number;
+  /** マイグレーション用のスキーマ版数。 */
+  schemaVersion?: number;
 }

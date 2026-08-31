@@ -7,5 +7,15 @@
   "publishedCategories": [],
   "cursor": 0,
   "milestonesHit": [],
-  "campaignStartedAt": null
+  "campaignStartedAt": null,
+  "lastCeoRunAt": null,
+  "routineRunsToday": {
+    "date": "",
+    "count": 0
+  },
+  "phase": "bootstrap",
+  "companyStartedAt": null,
+  "lastKpiSnapshotAt": null,
+  "consecutiveApprovedPublishes": 0,
+  "schemaVersion": 1
 }

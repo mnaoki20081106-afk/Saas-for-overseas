@@ -129,6 +129,9 @@ const emptyState: PipelineState = {
   lastAnalyticsAt: null, lastReportAt: null,
   publishedCategories: [], cursor: 0, milestonesHit: [],
   campaignStartedAt: null,
+  lastCeoRunAt: null, routineRunsToday: { date: "", count: 0 },
+  phase: "bootstrap", companyStartedAt: null, lastKpiSnapshotAt: null,
+  consecutiveApprovedPublishes: 0, schemaVersion: 0,
 };
 export const state = {
   get: (): PipelineState => ({ ...emptyState, ...readJson<Partial<PipelineState>>(P.state, {}) }),

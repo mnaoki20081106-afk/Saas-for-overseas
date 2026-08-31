@@ -1,0 +1,52 @@
+{
+  "_readme": [
+    "追跡する KPI の定義と目標値。",
+    "目標値は初期値であり、実測データが貯まったら Analyst が見直しを提案します（適用には承認が必要）。",
+    "target が null のものは『追うが目標は置かない』指標です（分母や母数として使う）。"
+  ],
+
+  "traffic": {
+    "impressions":     { "label": "Pinterest 表示数",       "unit": "count", "target": null,  "direction": "up" },
+    "saves":           { "label": "保存数",                 "unit": "count", "target": null,  "direction": "up" },
+    "outboundClicks":  { "label": "外部クリック数",         "unit": "count", "target": null,  "direction": "up" },
+    "pinCtrPct":       { "label": "ピンのクリック率",       "unit": "pct",   "target": 1.5,   "direction": "up" },
+    "sessions":        { "label": "サイトのセッション数",   "unit": "count", "target": null,  "direction": "up" },
+    "goClicks":        { "label": "アフィリエイトリンクのクリック数", "unit": "count", "target": null, "direction": "up" }
+  },
+
+  "revenue": {
+    "affiliateClicks":    { "label": "アフィリエイトクリック", "unit": "count", "target": null, "direction": "up" },
+    "freeTrials":         { "label": "無料トライアル申込",     "unit": "count", "target": null, "direction": "up" },
+    "paidConversions":    { "label": "有料成約",               "unit": "count", "target": null, "direction": "up" },
+    "conversionPct":      { "label": "成約率",                 "unit": "pct",   "target": 1.0,  "direction": "up" },
+    "mrrUsd":             { "label": "継続報酬（月額）",       "unit": "usd",   "target": null, "direction": "up" },
+    "avgRetentionMonths": { "label": "実測 平均継続月数",      "unit": "months","target": 10,   "direction": "up" }
+  },
+
+  "efficiency": {
+    "revenuePerArticleUsd": { "label": "記事1本あたりの月額収益", "unit": "usd",   "target": null, "direction": "up" },
+    "revenuePerPinUsd":     { "label": "ピン1枚あたりの月額収益", "unit": "usd",   "target": null, "direction": "up" },
+    "routineRunsToday":     { "label": "本日のルーチン実行回数",  "unit": "count", "target": 1,    "direction": "down" }
+  },
+
+  "health": {
+    "_readme": "運営が健全に回っているかの指標。ここが崩れると、収益指標を見ても意味がない。",
+    "pendingApprovals":       { "label": "承認待ち件数",         "unit": "count", "target": 3,   "direction": "down" },
+    "medianApprovalWaitDays": { "label": "承認までの日数（中央値）", "unit": "days", "target": 2, "direction": "down" },
+    "qaFailRatePct":          { "label": "QA 不合格率",          "unit": "pct",   "target": 20,  "direction": "down" },
+    "taskFailRatePct":        { "label": "タスク失敗率",         "unit": "pct",   "target": 10,  "direction": "down" },
+    "unapprovedPublishCount": {
+      "label": "承認なし公開の件数",
+      "unit": "count",
+      "target": 0,
+      "direction": "down",
+      "critical": true,
+      "note": "常に 0 であるべき値。1 になったら安全装置が破れている。killSwitch を自動で入れる。"
+    }
+  },
+
+  "breakdown": {
+    "_readme": "どこで稼いでいるかの分解。勝ち筋の特定に使う。",
+    "dimensions": ["byProgram", "byCategory", "byArticleType", "byTemplate"]
+  }
+}

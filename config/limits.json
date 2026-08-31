@@ -1,0 +1,86 @@
+{
+  "_readme": [
+    "このファイルは会社の安全装置です。",
+    "AI社員は読むだけで、書き換えてはいけません（guard.yml が改変を検出してCIを落とします）。",
+    "値を変えるときは、なおきさん本人が変更してください。"
+  ],
+
+  "output": {
+    "maxArticlesPerDay": 1,
+    "maxPinsPerDay": 20,
+    "maxPinsPerArticleTotal": 30,
+    "maxPinsPublishedPerDay": 6,
+    "maxXPostsPerDay": 3,
+    "maxOpenTasks": 20,
+    "maxPendingApprovals": 3,
+    "maxUnhandledErrors": 10
+  },
+
+  "routine": {
+    "maxRunsPerDay": 3,
+    "minMinutesBetweenRuns": 180,
+    "maxMinutesPerRun": 45,
+    "staleRunningTaskMinutes": 120
+  },
+
+  "duplication": {
+    "articleHeadingOverlapMaxPct": 60,
+    "requireUniquePrimaryKeyword": true,
+    "requireUniquePinImageHash": true,
+    "requireUniquePinCopyHash": true
+  },
+
+  "quality": {
+    "requireEvidenceUrlForNumbers": true,
+    "blockPublishOnBrokenLinks": true,
+    "maxEditorRounds": 2,
+    "taskMaxAttempts": 3,
+    "taskExpiryDays": 7
+  },
+
+  "gates": {
+    "publishArticle": { "requiresApproval": true },
+    "publishPins": { "requiresApproval": true },
+    "postToX": { "requiresApproval": true },
+    "applyToProgram": { "requiresApproval": true, "humanExecutes": true },
+    "changeStrategy": { "requiresApproval": true },
+    "changeLimits": { "requiresApproval": true },
+    "writeDraft": { "requiresApproval": false },
+    "designPins": { "requiresApproval": false },
+    "research": { "requiresApproval": false }
+  },
+
+  "autonomy": {
+    "publishArticle": { "autoAfter": { "consecutiveApprovals": 20, "zeroQaFailures": true, "minDays": 30 } },
+    "publishPins": { "autoAfter": { "consecutiveApprovals": 50, "minDays": 30 } },
+    "postToX": { "autoAfter": null }
+  },
+
+  "approval": {
+    "expiryHours": 72,
+    "rejectedCooldownDays": 7
+  },
+
+  "experiment": {
+    "maxConcurrent": 2,
+    "minSamplePerVariant": 10,
+    "minImpressionsPerPin": 300,
+    "minRelativeDiffPct": 30
+  },
+
+  "coldStart": {
+    "_readme": [
+      "最初の3ヶ月は過去データが存在しません。この期間、AIは『どれが良いか』を判断してはいけません。",
+      "最適化ではなく、データを作るために出します。",
+      "下の条件を満たすまで、Analyst は判定を行わず、confidence は必ず low になります。"
+    ],
+    "minPinsWithEnoughImpressions": 20,
+    "minImpressionsPerPin": 300,
+    "minConversionsForProgramJudgement": 3
+  },
+
+  "killSwitch": {
+    "enabled": false,
+    "reason": ""
+  }
+}

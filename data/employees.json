@@ -1,0 +1,67 @@
+{
+  "ceo": {
+    "maxRunsPerDay": 3,
+    "maxNewTasksPerRun": 5,
+    "timeoutMinutes": 20,
+    "maxRetries": 2,
+    "active": true,
+    "runs": []
+  },
+  "researcher": {
+    "maxRunsPerWeek": 2,
+    "maxCandidatesPerRun": 10,
+    "maxWebFetches": 30,
+    "timeoutMinutes": 25,
+    "maxRetries": 2,
+    "active": true,
+    "runs": []
+  },
+  "writer": {
+    "maxRunsPerDay": 2,
+    "maxArticlesPerRun": 1,
+    "timeoutMinutes": 30,
+    "maxRetries": 2,
+    "active": true,
+    "runs": []
+  },
+  "editor": {
+    "maxRunsPerDay": 4,
+    "maxRoundsPerArticle": 2,
+    "timeoutMinutes": 20,
+    "maxRetries": 1,
+    "active": true,
+    "runs": []
+  },
+  "designer": {
+    "maxRunsPerDay": 2,
+    "maxPinsPerRun": 10,
+    "timeoutMinutes": 20,
+    "maxRetries": 2,
+    "active": true,
+    "runs": []
+  },
+  "qa": {
+    "maxRunsPerDay": 4,
+    "timeoutMinutes": 15,
+    "maxRetries": 1,
+    "active": false,
+    "runs": []
+  },
+  "analyst": {
+    "maxRunsPerDay": 2,
+    "maxIdeasPerRun": 3,
+    "maxLiveExperiments": 2,
+    "timeoutMinutes": 15,
+    "maxRetries": 2,
+    "active": false,
+    "runs": []
+  },
+  "growth": {
+    "maxRunsPerDay": 1,
+    "maxProposalsPerRun": 3,
+    "timeoutMinutes": 15,
+    "maxRetries": 1,
+    "active": false,
+    "runs": []
+  }
+}
