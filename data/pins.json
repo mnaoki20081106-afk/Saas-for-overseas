@@ -138,12 +138,13 @@
     "boardName": "Project Management Tools",
     "imagePath": "assets/pins/pin_mtfos8m2xl7i0w.png",
     "destinationUrl": "https://example.github.io/saas-for-overseas/articles/sample-kanbanly-vs-competitor-a/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-kanbanly-vs-competitor-a",
-    "status": "scheduled",
+    "status": "failed",
     "scheduledAt": "2026-08-31T13:00:00.000Z",
     "publishedAt": null,
     "pinterestPinId": null,
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "lastError": "Pinterest POST /pins → 403: {\"code\":29,\"message\":\"Apps with Trial access may not create Pins in production https://api.pinterest.com - use API Sandbox https://api-sandbox.pinterest.com instead.\"}"
   },
   {
     "id": "pin_mtfos8m2xgrs7i",
@@ -158,12 +159,13 @@
     "boardName": "Project Management Tools",
     "imagePath": "assets/pins/pin_mtfos8m2xgrs7i.png",
     "destinationUrl": "https://example.github.io/saas-for-overseas/articles/sample-kanbanly-vs-competitor-a/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-kanbanly-vs-competitor-a",
-    "status": "scheduled",
+    "status": "failed",
     "scheduledAt": "2026-08-31T15:00:00.000Z",
     "publishedAt": null,
     "pinterestPinId": null,
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "lastError": "Pinterest POST /pins → 403: {\"code\":29,\"message\":\"Apps with Trial access may not create Pins in production https://api.pinterest.com - use API Sandbox https://api-sandbox.pinterest.com instead.\"}"
   },
   {
     "id": "pin_mtfos8m2vz3v6j",
@@ -178,12 +180,13 @@
     "boardName": "Project Management Tools",
     "imagePath": "assets/pins/pin_mtfos8m2vz3v6j.png",
     "destinationUrl": "https://example.github.io/saas-for-overseas/articles/sample-kanbanly-vs-competitor-a/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-kanbanly-vs-competitor-a",
-    "status": "scheduled",
+    "status": "failed",
     "scheduledAt": "2026-08-31T17:00:00.000Z",
     "publishedAt": null,
     "pinterestPinId": null,
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "lastError": "Pinterest POST /pins → 403: {\"code\":29,\"message\":\"Apps with Trial access may not create Pins in production https://api.pinterest.com - use API Sandbox https://api-sandbox.pinterest.com instead.\"}"
   },
   {
     "id": "pin_mtfos8m2ptmtm7",
@@ -198,12 +201,13 @@
     "boardName": "Project Management Tools",
     "imagePath": "assets/pins/pin_mtfos8m2ptmtm7.png",
     "destinationUrl": "https://example.github.io/saas-for-overseas/articles/sample-kanbanly-vs-competitor-a/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-kanbanly-vs-competitor-a",
-    "status": "scheduled",
+    "status": "failed",
     "scheduledAt": "2026-08-31T19:00:00.000Z",
     "publishedAt": null,
     "pinterestPinId": null,
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "lastError": "Pinterest POST /pins → 403: {\"code\":29,\"message\":\"Apps with Trial access may not create Pins in production https://api.pinterest.com - use API Sandbox https://api-sandbox.pinterest.com instead.\"}"
   },
   {
     "id": "pin_mth0eji86pokf0",
