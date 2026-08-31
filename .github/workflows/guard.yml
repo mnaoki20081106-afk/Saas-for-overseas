@@ -1,0 +1,92 @@
+name: 安全装置の検査
+
+# ─────────────────────────────────────────────────────────────────────
+# このワークフローは「AI が書いた commit を、AI が触れないコードが検査する」ための
+# 仕組みです。AI社員（Claude Code の Routines）が push した内容を、
+# main にマージする前にここで検査します。
+#
+# 検査するもの:
+#   1. データが規定の形になっているか（zod スキーマ）
+#   2. 承認のないピンが投稿されていないか（承認ゲートが破れていないか）
+#   3. 1日の投稿上限を超えていないか（Pinterest のスパム判定を避ける）
+#   4. 安全装置そのものが書き換えられていないか ← ここが要点
+#
+# 4 が重要です。AI が config/limits.json や .github/ を編集して自分の枷を外そうと
+# しても、その commit で CI が落ちるため、main に入りません。
+# ─────────────────────────────────────────────────────────────────────
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # 差分を見るために、直前のコミットも取る
+          fetch-depth: 2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci --no-audit --fund=false
+
+      # ── 1. 安全装置が書き換えられていないか ──────────────────────
+      #
+      # AI社員が push したブランチ（claude/ 接頭辞）で、安全装置に触れていたら失敗させる。
+      # なおきさん本人が変更する場合は main か、それ以外のブランチで行う。
+      - name: 安全装置の改変を検出
+        if: startsWith(github.ref_name, 'claude/')
+        run: |
+          set -euo pipefail
+          PROTECTED='config/limits.json .github/'
+          CHANGED=$(git diff --name-only HEAD~1 HEAD 2>/dev/null || echo "")
+          VIOLATION=0
+          for path in $PROTECTED; do
+            if echo "$CHANGED" | grep -q "^${path}"; then
+              echo "::error::AI社員が安全装置を変更しています: ${path}"
+              echo "  安全装置（config/limits.json と .github/）は AI が編集してはいけません。"
+              echo "  上限や承認ゲートを変えるには、なおきさん本人の操作が必要です。"
+              VIOLATION=1
+            fi
+          done
+          if [ "$VIOLATION" = "1" ]; then
+            echo ""
+            echo "  この commit は main にマージできません。"
+            echo "  意図的な変更であれば、claude/ 以外のブランチで行ってください。"
+            exit 1
+          fi
+          echo "安全装置は変更されていません。"
+
+      # ── 2. データと承認ゲートの検査 ─────────────────────────────
+      - name: データと承認ゲートを検査
+        run: npx tsx src/company/cli.ts check
+
+      # ── 3. 型チェック ────────────────────────────────────────────
+      - name: 型チェック
+        run: npm run typecheck
+
+      # ── 4. 死活監視 ──────────────────────────────────────────────
+      #
+      # public リポジトリでは、60日間活動がないと schedule が自動停止する。
+      # 毎日 commit している限り問題ないが、止まったことに気づけるようにしておく。
+      - name: 会社が動いているか
+        run: |
+          set -euo pipefail
+          LAST=$(git log -1 --format=%ct)
+          NOW=$(date +%s)
+          DAYS=$(( (NOW - LAST) / 86400 ))
+          echo "最後の commit から ${DAYS} 日経過しています。"
+          if [ "$DAYS" -gt 7 ]; then
+            echo "::warning::7日以上 commit がありません。ルーチンが止まっている可能性があります。"
+            echo "  claude.ai/code/routines で、ルーチンが有効になっているか確認してください。"
+          fi

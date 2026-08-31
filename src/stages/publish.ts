@@ -1,6 +1,8 @@
 import { config, env } from "../lib/config";
 import { log } from "../lib/log";
 import { articles, pins as pinStore, state } from "../lib/store";
+import { approvals } from "../company/store";
+import { limits } from "../company/limits";
 import { createPin, ensureBoard, PinterestError } from "../integrations/pinterest";
 import type { Pin } from "../lib/types";
 import { nowISO, sleep } from "../lib/util";
@@ -20,14 +22,45 @@ export async function publishDuePins(opts: { limit?: number; force?: boolean } =
   const result: PublishResult = { published: 0, failed: 0, skipped: 0, dueRemaining: 0, errors: [] };
 
   const now = Date.now();
-  const due = pinStore
+  const scheduled = pinStore
     .all()
     .filter((p) => p.status === "scheduled" && p.scheduledAt)
     .filter((p) => opts.force || new Date(p.scheduledAt!).getTime() <= now)
     .sort((a, b) => (a.scheduledAt! < b.scheduledAt! ? -1 : 1));
 
+  // ★承認ゲート（外部への副作用の直前で、もう一度確かめる）
+  //
+  // 承認レコードが go のピンだけを投稿する。AI がどれだけ間違えても、
+  // なおきさんが GO を押していないピンは1枚も外に出ない。
+  // ここは AI が編集しないコードなので、プロンプトの言い回しに左右されない。
+  const l = limits();
+  let due = scheduled;
+  if (l.gates.publishPins?.requiresApproval ?? true) {
+    const goIds = new Set(approvals.all().filter((a) => a.status === "go").map((a) => a.id));
+    const approved = scheduled.filter((p) => p.approvalId && goIds.has(p.approvalId));
+    const unapproved = scheduled.length - approved.length;
+    if (unapproved > 0) {
+      log.human(`${unapproved} 枚は承認がないため投稿しません。`);
+      log.info("  /admin/ で GO を押すか、`npm run co -- approval:list` で承認待ちを確認してください。");
+      log.info("  （旧経路 bootstrap / daily で作られたピンは承認IDを持たないため、ここで止まります）");
+      result.skipped += unapproved;
+    }
+    due = approved;
+  }
+
   if (due.length === 0) {
     log.info("投稿すべきピンはありません");
+    return result;
+  }
+
+  // その日すでに投稿した実績を数え直す。予約時の計算が間違っていても、
+  // ここで上限を超えないようにする（スパム判定はアカウント停止に直結するため）。
+  const today = new Date().toISOString().slice(0, 10);
+  const publishedToday = pinStore.all().filter((p) => p.publishedAt?.startsWith(today)).length;
+  const remainingToday = Math.max(0, l.output.maxPinsPublishedPerDay - publishedToday);
+  if (remainingToday === 0) {
+    log.warn(`本日はすでに ${publishedToday} 枚投稿しています（上限 ${l.output.maxPinsPublishedPerDay}）。今日はここまでにします。`);
+    result.dueRemaining = due.length;
     return result;
   }
 
@@ -39,7 +72,7 @@ export async function publishDuePins(opts: { limit?: number; force?: boolean } =
     return result;
   }
 
-  const limit = opts.limit ?? c.pins.publishPerDay;
+  const limit = Math.min(opts.limit ?? c.pins.publishPerDay, remainingToday);
   const batch = due.slice(0, limit);
   result.dueRemaining = due.length - batch.length;
 

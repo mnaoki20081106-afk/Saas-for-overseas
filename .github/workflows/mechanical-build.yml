@@ -1,0 +1,82 @@
+name: 機械的な処理（画像描画 → サイト生成 → 公開）
+
+# ─────────────────────────────────────────────────────────────────────
+# AI が判断を終えたあとの、判断を伴わない処理だけを行うワークフローです。
+# Claude は一切呼びません。
+#
+#   1. 画像のないピンを Chromium で描画する（1枚 $0）
+#   2. サイトを生成する
+#   3. GitHub Pages に公開する
+#
+# public リポジトリなので、実行時間は無制限・無料です。
+#
+# 公開ゲート（src/lib/guard.ts）が閉じているときは、2 と 3 を行いません。
+# ─────────────────────────────────────────────────────────────────────
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data/**"
+      - "content/**"
+      - "config/**"
+      - "src/site/**"
+      - "src/pins/**"
+  workflow_dispatch:
+
+concurrency:
+  group: autopilot
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+
+      # ── 検査を先に通す。壊れたデータで公開処理を走らせない ──
+      - name: データと承認ゲートを検査
+        run: npx tsx src/company/cli.ts check
+
+      - name: 画像のないピンを描画
+        run: npx tsx src/company/cli.ts pins:render
+
+      - name: 公開ゲートを判定
+        id: guard
+        run: npx tsx src/cli.ts guard:check
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
+      - name: サイトを生成
+        if: steps.guard.outputs.publishable == 'true'
+        env:
+          SITE_BASE_URL: ${{ vars.SITE_BASE_URL }}
+        run: npx tsx src/cli.ts site:build
+
+      - name: 生成物をコミット
+        if: steps.guard.outputs.publishable == 'true'
+        uses: ./.github/actions/commit
+        with:
+          message: "autopilot: ピン画像とサイトを更新"
+
+      - uses: actions/configure-pages@v5
+        if: steps.guard.outputs.publishable == 'true'
+      - uses: actions/upload-pages-artifact@v3
+        if: steps.guard.outputs.publishable == 'true'
+        with:
+          path: public
+      - uses: actions/deploy-pages@v4
+        if: steps.guard.outputs.publishable == 'true'
+
+      - name: 公開を見送った理由を表示
+        if: steps.guard.outputs.publishable != 'true'
+        run: |
+          echo "::warning::サイトの公開を見送りました — ${{ steps.guard.outputs.reason }}"
+          echo "ピン画像の描画は行いました。記事の公開だけを止めています。"

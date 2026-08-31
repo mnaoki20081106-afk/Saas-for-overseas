@@ -22,6 +22,7 @@ import { writerContext, writerCheck, writerSubmit } from "./commands/writer";
 import { REVIEW_TEMPLATE, editorContext, editorSubmit } from "./commands/editor";
 import { PIN_TEMPLATE, designerContext, designerSubmit, renderMissingPins } from "./commands/designer";
 import { qaCheck } from "./commands/qa";
+import { releaseArticle, scheduleApprovedPins } from "./commands/release";
 import { closeBrowser } from "../pins/render";
 import type { EmployeeId, TaskKind } from "./schemas";
 
@@ -89,6 +90,11 @@ AI会社の司令台
   designer:submit <file.json>             ピン文案を提出（draft として登録）
 
   qa:check <slug>                         最終検品（自動判定10項目 + AI判定4項目）
+
+── 公開（承認が GO のときだけ通る） ────────────
+  release:article <slug> --approval <id>  記事を公開対象にする
+  release:pins <slug> --approval <id>     ピンに承認IDを刻んで予約する
+                                          ★これを通らないピンは投稿されません
 
 ── 機械的な処理（Actions が実行する） ──────────
   pins:render                             画像のないピンを Chromium で描画
@@ -370,6 +376,16 @@ const COMMANDS: Record<string, Handler> = {
 
   "qa:check"(args) {
     return qaCheck(requirePositional(args, 0, "記事のslug")).failed === 0 ? 0 : 1;
+  },
+
+  "release:article"(args) {
+    releaseArticle(requirePositional(args, 0, "記事のslug"), requireFlag(args, "approval"));
+    return 0;
+  },
+
+  "release:pins"(args) {
+    scheduleApprovedPins(requirePositional(args, 0, "記事のslug"), requireFlag(args, "approval"));
+    return 0;
   },
 
   async "pins:render"() {
