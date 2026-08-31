@@ -105,6 +105,26 @@ export function buildReport(): ReportResult {
       lines.push(`| ${name} | ${a.paidConversions} | ${usd(a.monthlyRecurringUsd)} | ${usd(a.lifetimeUsd)} | ${a.avgRetentionMonths ?? "-"} |`);
     }
     lines.push("");
+
+    // 1つのASPへの依存度が高いと、その会社の規約・報酬率変更で収入が一気に落ちるリスクがある
+    const byNetwork = new Map<string, number>();
+    for (const a of m.affiliate) byNetwork.set(a.network, (byNetwork.get(a.network) ?? 0) + a.monthlyRecurringUsd);
+    const totalMrr = [...byNetwork.values()].reduce((s, v) => s + v, 0);
+    if (totalMrr > 0) {
+      const sorted = [...byNetwork.entries()].sort((x, y) => y[1] - x[1]);
+      const topShare = sorted[0][1] / totalMrr;
+      lines.push("## ASP（ネットワーク）ごとの内訳", "", "| ネットワーク | 月額報酬 | 割合 |", "| --- | --- | --- |");
+      for (const [net, v] of sorted) lines.push(`| ${net} | ${usd(v)} | ${pct(v, totalMrr)}% |`);
+      lines.push("");
+      if (topShare >= 0.7) {
+        lines.push(
+          `⚠️ **${sorted[0][0]} 1社への依存度が ${Math.round(topShare * 100)}% です。**`,
+          "1つのASPの規約変更や報酬率変更をそのまま受けることになるので、" +
+            "承認済み・応募中の案件を他のネットワークにも広げることを検討してください。",
+          "",
+        );
+      }
+    }
   }
 
   if (failed.length) {
