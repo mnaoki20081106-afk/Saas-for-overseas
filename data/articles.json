@@ -138,5 +138,77 @@
         "sample-rankwise"
       ]
     }
+  },
+  {
+    "slug": "sample-flowdesk-vs-competitor-a",
+    "title": "Sample Flowdesk vs Competitor A: which one small teams actually keep",
+    "metaTitle": "Sample Flowdesk vs Competitor A: an honest comparison",
+    "metaDescription": "A hands-on comparison of Sample Flowdesk and its main alternative for small teams, including the setup costs and the cases where neither is the right answer.",
+    "primaryKeyword": "sample flowdesk vs competitor a",
+    "secondaryKeywords": [
+      "Sample Flowdesk pricing",
+      "Sample Flowdesk review",
+      "email marketing for small teams"
+    ],
+    "category": "email marketing",
+    "programSlugs": [
+      "sample-flowdesk"
+    ],
+    "filePath": "content/articles/sample-flowdesk-vs-competitor-a.md",
+    "words": 2868,
+    "status": "published",
+    "createdAt": "2026-09-01T08:04:57.642Z",
+    "updatedAt": "2026-09-01T08:04:57.642Z",
+    "qualityIssues": [],
+    "internalLinks": [
+      "sample-kanbanly-vs-competitor-a",
+      "sample-rankwise-vs-competitor-a"
+    ],
+    "brief": {
+      "title": "Sample Flowdesk vs Competitor A: which one small teams actually keep",
+      "metaTitle": "Sample Flowdesk vs Competitor A: an honest comparison",
+      "metaDescription": "A hands-on comparison of Sample Flowdesk and its main alternative for small teams, including the setup costs and the cases where neither is the right answer.",
+      "slug": "sample-flowdesk-vs-competitor-a",
+      "primaryKeyword": "sample flowdesk vs competitor a",
+      "secondaryKeywords": [
+        "Sample Flowdesk pricing",
+        "Sample Flowdesk review",
+        "email marketing for small teams"
+      ],
+      "searchIntent": "Choosing between two shortlisted tools before starting a trial.",
+      "painPoints": [
+        "paying for three overlapping tools",
+        "cannot see which channel actually produced revenue",
+        "onboarding a new contractor takes a full day"
+      ],
+      "angle": "Sample DRY_RUN brief. Not for publication.",
+      "outline": [
+        {
+          "heading": "The short answer",
+          "purpose": "state the recommendation",
+          "bullets": [
+            "who each tool suits"
+          ]
+        },
+        {
+          "heading": "Who should not buy it",
+          "purpose": "honesty",
+          "bullets": [
+            "team size limits",
+            "migration cost"
+          ]
+        }
+      ],
+      "faq": [
+        {
+          "q": "Is there a free plan?",
+          "a": "Sample answer for DRY_RUN mode."
+        }
+      ],
+      "audience": "freelancers, small agencies and 2-20 person SaaS/e-commerce teams in the US, UK, Canada and Australia",
+      "programSlugs": [
+        "sample-flowdesk"
+      ]
+    }
   }
 ]
