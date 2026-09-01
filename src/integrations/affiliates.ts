@@ -74,8 +74,20 @@ async function fetchImpact(days: number): Promise<AffiliateStat[]> {
 
 /* -------------------------------------------------------------- ShareASale */
 
+/**
+ * @deprecated ShareASale は 2025-10-06 に閉鎖され、Awin に統合されました。
+ *
+ * アカウント・トラッキングリンク・提携関係はすべて Awin へ自動移行済みです。
+ * `api.shareasale.com` はもう応答しません。この関数は、過去に
+ * SHAREASALE_* を設定していた場合に静かに0件を返すだけの残骸です。
+ *
+ * 新しく使うときは Awin 側（AWIN_API_TOKEN / AWIN_PUBLISHER_ID）を設定してください。
+ * リンクの自動発行は src/integrations/linkbuilder.ts の awinLink() が行います。
+ */
 async function fetchShareASale(days: number): Promise<AffiliateStat[]> {
   if (!env.shareasale.configured) return [];
+  log.warn("ShareASale は 2025-10-06 に閉鎖され Awin に統合されました。SHAREASALE_* は外し、AWIN_API_TOKEN / AWIN_PUBLISHER_ID を設定してください。");
+  return [];
   const start = daysAgoISO(days);
   const end = todayISO();
   const action = "activity";

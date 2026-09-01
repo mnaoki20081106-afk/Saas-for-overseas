@@ -35,6 +35,32 @@ export interface Program {
   discoveredAt: string;
   evidence: string[];
   notes?: string;
+
+  /**
+   * アフィリエイトURLを自動発行するために必要な、ネットワーク側のID。
+   *
+   * ここが埋まっていれば `co links:sync` がリンクを取ってきて
+   * config/affiliate-links.json に自動で書き込みます。
+   * 空でも記事は書けます（公式サイトへの通常リンクとして出力されます）。
+   */
+  linkRef?: {
+    /** Impact: 承認された Campaign/Program の ID。Campaigns API から自動で埋まります */
+    impactCampaignId?: string;
+    /** Awin（旧ShareASale）: 広告主ID（awinmid） */
+    awinAdvertiserId?: string;
+    /** PartnerStack: ダッシュボードからコピーした紹介リンク（APIが無いので1回だけ手作業） */
+    partnerstackBaseUrl?: string;
+    /**
+     * PartnerStack でページ指定に使うクエリ名（例: "target"）。
+     * ベンダーごとに違い公開仕様が無いので、既定では何も足しません。
+     * 分かっている場合だけ設定してください。
+     */
+    partnerstackDeepLinkParam?: string;
+    /** Rewardful: 自分の via トークン。これ1つで全ページのリンクが作れます */
+    rewardfulVia?: string;
+    /** リンク先にしたいページ。空ならトップページ。例: "/pricing" */
+    destinationPath?: string;
+  };
 }
 
 export interface ArticleBrief {

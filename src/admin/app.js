@@ -240,6 +240,31 @@ function programCard(p, links) {
          1〜2分で本物のアフィリエイトURLに差し替わります。
        </div>`;
 
+  // ネットワークごとに、自動発行に必要なものが違う。
+  // 何を貼ればよいかを、その場で1つだけ聞く（複数聞くと手が止まるため）。
+  const ref = p.linkRef || {};
+  const AUTO = {
+    Impact:      { auto: true,  what: "Impact のAPIキーが登録されていれば、リンクは自動で発行されます。貼る作業はありません。" },
+    Awin:        { auto: true,  what: "Awin のAPIトークンが登録されていれば、リンクは自動で発行されます。貼る作業はありません。" },
+    ShareASale:  { auto: true,  what: "ShareASale は2025年10月に閉鎖され Awin に統合されました。Awin 側の広告主IDを使います。" },
+    PartnerStack:{ auto: false, field: "partnerstackBaseUrl", label: "PartnerStack の紹介リンク",
+                   ph: "https://... （ダッシュボードからコピー）",
+                   what: "PartnerStack はパートナー用のAPIがありません。<b>1回だけ</b>貼ってください。以降は自動です。" },
+    Rewardful:   { auto: false, field: "rewardfulVia", label: "Rewardful の via トークン",
+                   ph: "例: workedforus",
+                   what: "承認メールのリンク（例 https://…/?via=<b>abc123</b>）の太字部分だけを、<b>1回だけ</b>貼ってください。以降は自動です。" },
+  }[p.network];
+
+  const autoRow = !AUTO ? "" : AUTO.auto
+    ? `<div class="note" style="margin-top:.8rem">🤖 ${AUTO.what}</div>`
+    : `<h4 style="margin-top:1rem">自動発行の設定（1回だけ）</h4>
+       <div class="note">${AUTO.what}</div>
+       <div class="row">
+         <input type="text" class="refInput" data-slug="${esc(p.slug)}" data-field="${AUTO.field}"
+           value="${esc(ref[AUTO.field] || "")}" placeholder="${esc(AUTO.ph)}">
+         <button class="saveRefBtn" data-slug="${esc(p.slug)}" data-field="${AUTO.field}">保存</button>
+       </div>`;
+
   const applyRow = current ? "" : `
     <h4 style="margin-top:1rem">② 応募する（ここは人にしかできません）</h4>
     <div class="row">
@@ -273,6 +298,7 @@ function programCard(p, links) {
       <select class="statusSelect" data-slug="${esc(p.slug)}" style="margin-left:auto">${statusOptions}</select>
     </div>
     ${applyRow}
+    ${autoRow}
     ${linkSection}
   </div>`;
 }
@@ -672,6 +698,13 @@ function render(flash) {
   document.querySelectorAll(".statusSelect").forEach((sel) => {
     sel.onchange = () => saveStatus(sel.dataset.slug, sel.value);
   });
+  document.querySelectorAll(".saveRefBtn").forEach((btn) => {
+    btn.onclick = () => {
+      const input = document.querySelector(
+        `.refInput[data-slug="${btn.dataset.slug}"][data-field="${btn.dataset.field}"]`);
+      saveLinkRef(btn.dataset.slug, btn.dataset.field, input.value.trim());
+    };
+  });
   document.querySelectorAll(".markAppliedBtn").forEach((btn) => {
     btn.onclick = () => saveStatus(btn.dataset.slug, "applied");
   });
@@ -931,6 +964,36 @@ async function saveLink(slug, url) {
     render({ kind: "warn", text: "サイトを再公開しています…", busy: true });
     await dispatchRebuild();
     render({ kind: "ok", text: "保存しました。1〜2分でサイトに反映されます。確認用リンク /go/" + slug + "/ でテストクリックしてください。" });
+  } catch (err) {
+    render({ kind: "bad", text: String(err.message || err) });
+  }
+}
+
+/**
+ * 自動発行に必要なID（PartnerStack の紹介リンク / Rewardful の via トークン）を保存する。
+ *
+ * ここに入れておけば、次の `co links:sync` でアフィリエイトURLが自動で作られます。
+ * URL そのものを貼るのとは別です（URL を直接貼りたいときは下の欄を使ってください）。
+ */
+async function saveLinkRef(slug, field, value) {
+  render({ kind: "warn", text: slug + " を保存中…", busy: true });
+  try {
+    const idx = STATE.programs.json.findIndex((p) => p.slug === slug);
+    if (idx === -1) throw new Error("案件が見つかりません。ページを再読み込みしてください。");
+    const p = STATE.programs.json[idx];
+    p.linkRef = p.linkRef || {};
+    if (value) p.linkRef[field] = value;
+    else delete p.linkRef[field];
+
+    const put = await putFile("data/programs.json", STATE.programs.json, STATE.programs.sha,
+      "admin: " + slug + " の自動発行の設定を更新");
+    STATE.programs.sha = put.content.sha;
+    render({
+      kind: "ok",
+      text: value
+        ? "保存しました。次の自動実行で、この案件のアフィリエイトURLが自動で作られます。"
+        : "設定を消しました。",
+    });
   } catch (err) {
     render({ kind: "bad", text: String(err.message || err) });
   }

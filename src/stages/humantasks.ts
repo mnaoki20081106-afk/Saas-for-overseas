@@ -148,16 +148,18 @@ function credentialTasks(): HumanTask[] {
     add({
       id: "cred-networks",
       kind: "credential",
-      title: "アフィリエイトネットワークの API キーを登録する（成果の自動集計用）",
-      whyItCannotBeAutomated: "各ネットワークの管理画面でしか発行できません。未登録でも記事とピンの自動化は動きます（売上集計だけ手入力になります）。",
+      title: "アフィリエイトネットワークの API キーを登録する（★アフィリエイトURLの自動発行に使います）",
+      whyItCannotBeAutomated: "各ネットワークの管理画面でしか発行できません。未登録でも記事とピンの自動化は動きますが、アフィリエイトURLを毎回手で貼ることになります。",
       minutes: 20,
       steps: [
         "Impact: 管理画面 → Settings → API → Account SID と Auth Token を控えて IMPACT_ACCOUNT_SID / IMPACT_AUTH_TOKEN に登録",
-        "ShareASale: Tools → Merchant Data Feeds → API → SHAREASALE_AFFILIATE_ID / SHAREASALE_API_TOKEN / SHAREASALE_API_SECRET",
-        "PartnerStack: Settings → Integrations → API keys → PARTNERSTACK_API_KEY / PARTNERSTACK_API_SECRET",
-        "どれか1つでも入れれば、その分だけ自動集計されます",
+        "★Awin（旧ShareASale）: https://ui.awin.com/awin-api で自分でトークンを発行 → AWIN_API_TOKEN に登録。あわせて自分の Publisher ID を AWIN_PUBLISHER_ID に登録",
+        "PartnerStack: Settings → Integrations → API keys → PARTNERSTACK_API_KEY / PARTNERSTACK_API_SECRET（売上集計用。URL発行には使えません）",
+        "Rewardful: APIキーはマーチャント（相手企業）専用なので、こちらでは使えません。登録するものはありません",
+        "どれか1つでも入れれば、その分だけ自動になります",
       ],
-      blocks: ["売上の自動集計", "平均継続期間の実測", "週次レポートの収益セクション"],
+      blocks: ["アフィリエイトURLの自動発行", "売上の自動集計", "平均継続期間の実測", "週次レポートの収益セクション"],
+      appendix: AFFILIATE_LINK_AUTOMATION,
     });
   }
 
@@ -292,6 +294,47 @@ export async function refreshHumanTasks(maxApplications = 3): Promise<HumanTaskR
   log.ok(`未完了の人間タスク: ${open} 件 → ${path.relative(P.root, markdownPath)}`);
   return { created, open, markdownPath };
 }
+
+/**
+ * アフィリエイトURLの自動化の説明。
+ *
+ * ★2026-09-01 に4社を実地で調べた結果です。
+ *   「提携申請」と「リンク発行」は別作業で、自動化できるのは後者だけです。
+ *   ここを混同すると「自動化できない」と誤解して、毎回手で貼ることになります。
+ */
+const AFFILIATE_LINK_AUTOMATION = [
+  "### ★ アフィリエイトURLはどこまで自動になるか",
+  "",
+  "**「提携申請」と「リンク発行」は別の作業です。**",
+  "",
+  "- **提携申請** … 相手企業の担当者が人間として審査します。本人確認と税務情報も要ります。",
+  "  **4社とも自動化できません。** なおきさんの作業です（自動化を試みること自体が規約違反になります）",
+  "- **リンク発行** … 承認されたあと「このページ用の追跡URLをください」と頼む作業。**ここは自動にできます**",
+  "",
+  "| ネットワーク | 提携申請 | リンク発行 | なおきさんの手作業 |",
+  "| --- | --- | --- | --- |",
+  "| **Impact** | 人間 | **完全自動** | APIキーを1回登録するだけ |",
+  "| **Awin**（旧ShareASale） | 人間 | **完全自動** | APIトークンを1回登録するだけ |",
+  "| **PartnerStack** | 人間 | 半自動 | 案件ごとに紹介リンクを1回コピー |",
+  "| **Rewardful** | 人間 | 半自動 | 案件ごとに via トークンを1回コピー |",
+  "",
+  "**Impact は承認済みプログラムの一覧まで自動で取れます。** 承認された案件を名前で",
+  "自動照合し、リンクまで取ってきます。**なおきさんの操作はゼロです。**",
+  "",
+  "PartnerStack と Rewardful は、パートナー側のAPIが公開されていません。",
+  "**ただし1回コピーすれば、以降そのマーチャントのリンクは全部自動で作れます。**",
+  "貼る場所は管理画面の「案件」タブです。",
+  "",
+  "**★ ShareASale は 2025-10-06 に閉鎖され、Awin に統合されました。**",
+  "ShareASale のアカウントとリンクは Awin へ自動移行されています。",
+  "新しく使うなら Awin 側です。`api.shareasale.com` はもう動きません。",
+  "",
+  "```bash",
+  "npm run co -- links:how               # いま何が自動で何が手作業かを見る",
+  "npm run co -- links:sync --dry-run    # 何が起きるか確かめるだけ",
+  "npm run co -- links:sync              # 発行して全記事のリンクに反映",
+  "```",
+].join("\n");
 
 /**
  * Pinterest Standard access の審査動画の撮り方。

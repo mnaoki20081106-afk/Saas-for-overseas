@@ -74,5 +74,47 @@
     "id": "dec_mtidvv673kc5wx",
     "at": "2026-09-01T08:06:50.767Z",
     "outcomeAt": null
+  },
+  {
+    "by": "yukichi",
+    "kind": "config_change",
+    "summary": "アフィリエイトURLの発行を自動化する。提携申請は自動化しない（できない・規約違反にもなる）",
+    "reasoning": "オーナーの依頼で4社（Impact / ShareASale / PartnerStack / Rewardful）を実地調査した。「提携申請」と「リンク発行」は別作業で、後者は自動化できる。Impact は Campaigns API が承認済みプログラムと使えるトラッキングリンクを返し、TrackingLinks API でページ指定もできる。Awin は Link Builder API で広告主IDと行き先URLからリンクを生成できる。PartnerStack はパートナー側APIが非公開、Rewardful のAPIはマーチャント専用のため、案件ごとに1回だけ手でIDを控える必要があるが、それ以降は文字列で組めるので自動になる。提携申請は相手企業の人間が審査し本人確認と税務情報が要るため自動化できず、自動化の試み自体が各社規約に反するので実装しない。調査中に ShareASale が 2025-10-06 に閉鎖され Awin に統合されていたことが判明し、既存の ShareASale 連携は死んでいた。",
+    "evidence": [
+      {
+        "source": "Impact Publisher API ドキュメント",
+        "value": "GET /Mediapartners/{SID}/Campaigns が承認済みプログラムと TrackingLink を返す / POST /Programs/{id}/TrackingLinks が DeepLink 対応"
+      },
+      {
+        "source": "Awin help.awin.com/apidocs/generatelink",
+        "value": "publisher の Link Builder API。広告主IDと行き先URLから awin1.com/cread.php を生成。1回100本まで"
+      },
+      {
+        "source": "PartnerStack サポート文書",
+        "value": "パートナー向けの公開APIなし。ディープリンクはベンダー設定依存"
+      },
+      {
+        "source": "Rewardful developers.rewardful.com",
+        "value": "REST API はマーチャント専用。リンクは ?via=<token> を任意ページに付けるだけ"
+      },
+      {
+        "source": "hellopartner.com / awin.com 公式アナウンス",
+        "value": "ShareASale は 2025-10-06 に閉鎖。全アカウントと既存リンクは Awin へ移行済み"
+      },
+      {
+        "source": "検証: co links:sync（通信は模擬）",
+        "value": "Impact 名前照合1件 + 4社ぶんのリンク発行に成功。同名候補が2件のときは自動選択せず人に返す"
+      }
+    ],
+    "alternatives": [
+      "スクレイピングやブラウザ自動操作で提携申請まで自動化する — 各社の規約違反であり、アカウント停止で全案件を失う。実装しない",
+      "従来どおり発行URLを毎回オーナーが貼る — Impact と Awin では不要な手作業になるので却下（PartnerStack と Rewardful では初回だけ残る）",
+      "ShareASale 連携を修理する — サービス自体が閉鎖済みなので修理先が無い。Awin に置き換えた"
+    ],
+    "relatedTaskIds": [],
+    "outcome": null,
+    "id": "dec_mtii0bb39fdf0y",
+    "at": "2026-09-01T10:02:16.767Z",
+    "outcomeAt": null
   }
 ]

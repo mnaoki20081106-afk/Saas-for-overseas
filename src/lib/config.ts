@@ -144,6 +144,21 @@ export const env = {
     get token(): string | undefined { return process.env.IMPACT_AUTH_TOKEN; },
     get configured(): boolean { return Boolean(process.env.IMPACT_ACCOUNT_SID && process.env.IMPACT_AUTH_TOKEN); },
   },
+  /**
+   * Awin（旧 ShareASale）。
+   *
+   * ★ShareASale は 2025-10-06 に閉鎖され、Awin に統合されました。
+   *   api.shareasale.com は動きません。新規はすべて Awin 側で扱います。
+   *   下の shareasale ブロックは、過去データを読むためだけに残しています。
+   *
+   * トークンは https://ui.awin.com/awin-api で自分で発行します（OAuth2 のアクセストークン）。
+   */
+  awin: {
+    get token(): string | undefined { return process.env.AWIN_API_TOKEN; },
+    get publisherId(): string | undefined { return process.env.AWIN_PUBLISHER_ID; },
+    get configured(): boolean { return Boolean(process.env.AWIN_API_TOKEN && process.env.AWIN_PUBLISHER_ID); },
+  },
+  /** @deprecated ShareASale は 2025-10-06 に閉鎖。Awin を使ってください。 */
   shareasale: {
     get affiliateId(): string | undefined { return process.env.SHAREASALE_AFFILIATE_ID; },
     get token(): string | undefined { return process.env.SHAREASALE_API_TOKEN; },

@@ -18,6 +18,7 @@ import {
 } from "./commands/approvals";
 import { addDecision, handleError, pruneErrors, recordOutcome, renderDecisions, renderErrors } from "./commands/records";
 import { autonomyReadiness } from "./autonomy";
+import { explainAutomation, syncLinksSafely } from "./commands/links";
 import { RESEARCH_TEMPLATE, researcherContext, researcherSubmit } from "./commands/researcher";
 import { writerContext, writerCheck, writerSubmit } from "./commands/writer";
 import { REVIEW_TEMPLATE, editorContext, editorSubmit } from "./commands/editor";
@@ -100,13 +101,16 @@ AI会社の司令台
 ── 機械的な処理（Actions が実行する） ──────────
   pins:render                             画像のないピンを Chromium で描画
   autonomy                                投稿の承認（GO）を外してよい状態かを見る
+  links:how                               アフィリエイトURLの自動化はどこまでできるか
+  links:sync [--dry-run] [--force] [--only slug]
+                                          承認済み案件のアフィリエイトURLを自動発行する
 `;
 
 type Handler = (args: string[]) => Promise<number> | number;
 
 /** 読み取り専用のコマンド。killSwitch が有効でも実行してよい。 */
 const READ_ONLY = new Set([
-  "status", "check", "help", "--help", "-h", "autonomy",
+  "status", "check", "help", "--help", "-h", "autonomy", "links:how",
   "task:list", "task:next", "approval:list", "approval:show", "approval:template",
   "decision:list", "error:list",
   "researcher:context", "researcher:template",
@@ -313,6 +317,27 @@ const COMMANDS: Record<string, Handler> = {
     }
     console.log("外すのは、なおきさん本人の操作です。AI は config/limits.json を書き換えられません。\n");
     return 0;
+  },
+
+  /** アフィリエイトURLの自動化の説明（読むだけ） */
+  "links:how"() {
+    explainAutomation();
+    return 0;
+  },
+
+  /**
+   * 承認済み案件のアフィリエイトURLを自動発行する。
+   *
+   * 提携申請は対象外です（相手企業の審査は人間が行うため）。
+   * ここがやるのは「承認されたあとの、リンクをもらう作業」だけです。
+   */
+  async "links:sync"(args) {
+    const r = await syncLinksSafely({
+      dryRun: args.includes("--dry-run"),
+      force: args.includes("--force"),
+      only: flag(args, "only"),
+    });
+    return r.failed > 0 && r.issued === 0 ? 1 : 0;
   },
 
   "decision:add"(args) {
