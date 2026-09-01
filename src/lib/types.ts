@@ -141,6 +141,15 @@ export interface Pin {
   lastError?: string;
   metrics?: PinMetrics;
 
+  /**
+   * どうやって投稿したか。
+   *   api      … GitHub Actions が Pinterest API で投稿した（Standard access が要る）
+   *   manual   … なおきさんが管理画面から手で投稿した（審査待ちのあいだの逃げ道）
+   *   external … Tailwind などの外部予約ツールに渡した
+   * 手で投稿したピンは pinterestPinId を持たないので、数値の自動取得はできません。
+   */
+  postedVia?: "api" | "manual" | "external";
+
   /* ── なおきさんが管理画面から取り消したときの記録 ── */
   /** 予約を取り消した時刻（まだ投稿していないピン） */
   cancelledAt?: string | null;

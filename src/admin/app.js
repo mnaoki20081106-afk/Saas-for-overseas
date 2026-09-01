@@ -524,6 +524,110 @@ function viewReview() {
   return intro + artSection + pinSection;
 }
 
+
+/* ------------------------------------------------------- 手動で投稿タブ */
+
+/**
+ * Pinterest の投稿画面を、内容を入れた状態で開くURL。
+ * 画像は自分のサイトのものを渡します（自分のドメインの画像のほうが確実に通ります）。
+ */
+function pinterestComposeUrl(p) {
+  const media = BASE_URL + "/" + String(p.imagePath).replace(/^\/+/, "");
+  const u = new URL("https://www.pinterest.com/pin/create/button/");
+  u.searchParams.set("url", p.destinationUrl);
+  u.searchParams.set("media", media);
+  u.searchParams.set("description", p.description || p.title || "");
+  return u.toString();
+}
+
+/** 外部の予約ツール（Tailwind など）に貼るための1行 */
+function csvRow(cells) {
+  return cells.map((c) => '"' + String(c === null || c === undefined ? "" : c).replace(/"/g, '""') + '"').join(",");
+}
+
+function manualPinCard(p) {
+  const img = BASE_URL + "/" + String(p.imagePath).replace(/^\/+/, "");
+  return `<div class="pin" data-manual="${esc(p.id)}">
+    <img src="${esc(img)}" alt="" loading="lazy" onerror="this.src='${esc(RAW_BASE + p.imagePath)}'">
+    <div class="body">
+      <div class="t">${esc(p.title)}</div>
+      <div class="d">${esc(p.description)}</div>
+      <div class="meta">ボード「${esc(p.boardName)}」 · 予約 ${esc(when(p.scheduledAt))}</div>
+      <div class="meta">リンク先: ${esc(maskUrl(p.destinationUrl))}</div>
+
+      <div class="row">
+        <a href="${esc(pinterestComposeUrl(p))}" target="_blank" rel="noopener">
+          <button class="primary">① Pinterestを開いて投稿する ↗</button></a>
+      </div>
+      <div class="note">
+        画像・リンク先・説明文を入れた状態で開きます。<b>ボードだけ選んで保存してください。</b><br>
+        画像が入らなかったときは、下のボタンで画像を開いて長押し保存 → 手で添付してください。
+      </div>
+      <div class="row">
+        <a href="${esc(img)}" target="_blank" rel="noopener">画像を開く ↗</a>
+        <button class="copyBtn" data-copy="${esc(p.title)}">タイトルをコピー</button>
+        <button class="copyBtn" data-copy="${esc(p.description)}">説明をコピー</button>
+        <button class="copyBtn" data-copy="${esc(p.destinationUrl)}">リンク先をコピー</button>
+      </div>
+      <div class="row">
+        <button class="primary markPostedBtn" data-id="${esc(p.id)}">② 投稿した（記録する）</button>
+        <button class="skipPinBtn" data-id="${esc(p.id)}">これは投稿しない</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function viewManual() {
+  const pins = STATE.pins.json || [];
+  const todo = pins
+    .filter((p) => ["draft", "queued", "scheduled"].includes(p.status))
+    .sort((a, b) => String(a.scheduledAt).localeCompare(String(b.scheduledAt)));
+  const doneManual = pins.filter((p) => p.postedVia === "manual");
+
+  const intro = `<div class="banner warn">
+    <b>Pinterest の審査（Standard access）が通るまでの、手で投稿するための画面です。</b><br>
+    審査が通れば、この作業は自動になります。それまでの代わりの手です。<br>
+    1枚あたり <b>①開いて保存 → ②「投稿した」を押す</b> の2手で終わります。
+  </div>`;
+
+  if (todo.length === 0) {
+    return intro + `<div class="empty">
+      いま投稿できるピンはありません。英世（CMO）がピン文案を作るとここに出ます。
+    </div>` + manualDoneSection(doneManual);
+  }
+
+  return intro + `
+    <div class="section-title">投稿していないピン<span class="count">${todo.length}枚</span></div>
+    <div class="card">
+      <h3>外部の予約ツールを使う場合</h3>
+      <div class="meta">
+        Tailwind などに一括で取り込みたいときは、下のボタンで全部まとめてコピーできます。
+      </div>
+      <div class="row">
+        <button id="csvBtn">${todo.length}枚ぶんをCSVでコピー</button>
+      </div>
+    </div>
+    ${todo.map(manualPinCard).join("")}
+    ${manualDoneSection(doneManual)}`;
+}
+
+function manualDoneSection(done) {
+  if (done.length === 0) return "";
+  return `<div class="section-title">手で投稿したピン<span class="count">${done.length}枚</span></div>
+    ${done.slice(0, 20).map((p) => `<div class="pin gone">
+      <img src="${esc(BASE_URL + "/" + String(p.imagePath).replace(/^\/+/, ""))}" alt="" loading="lazy">
+      <div class="body">
+        <div class="t">${esc(p.title)}
+          <span class="pill" style="background:#16a34a">手で投稿済み</span></div>
+        <div class="meta">${esc(when(p.publishedAt))}</div>
+        <div class="note">
+          手で投稿したピンは、Pinterest の数値（表示数・クリック数）を自動で取れません。
+          審査が通ってからの投稿ぶんだけが自動集計されます。
+        </div>
+      </div>
+    </div>`).join("")}`;
+}
+
 /* -------------------------------------------------------------- 他のタブ */
 
 function viewApprovals() {
@@ -646,8 +750,11 @@ function viewPrograms() {
 function render(flash) {
   const pendingCount = (STATE.approvals.json || []).filter((a) => a.status === "pending").length;
   const killed = STATE.limits.json && STATE.limits.json.killSwitch && STATE.limits.json.killSwitch.enabled;
+  const toPost = (STATE.pins.json || []).filter((p) =>
+    ["draft", "queued", "scheduled"].includes(p.status)).length;
   const tabs = [
     ["review", "投稿の確認", 0],
+    ["manual", "手で投稿", toPost],
     ["approvals", "承認", pendingCount],
     ["programs", "案件（応募）", 0],
     ["status", "状態", 0],
@@ -656,6 +763,7 @@ function render(flash) {
   const view = TAB === "approvals" ? viewApprovals()
     : TAB === "status" ? viewStatus()
     : TAB === "programs" ? viewPrograms()
+    : TAB === "manual" ? viewManual()
     : viewReview();
 
   app.innerHTML = `
@@ -726,6 +834,26 @@ function render(flash) {
   document.querySelectorAll(".takedownBtn").forEach((btn) => {
     btn.onclick = () => requestTakedown(btn.dataset.id);
   });
+  document.querySelectorAll(".copyBtn").forEach((btn) => {
+    btn.onclick = async () => {
+      const label = btn.textContent;
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy);
+        btn.textContent = "コピーしました";
+      } catch {
+        btn.textContent = "コピーできませんでした";
+      }
+      setTimeout(() => { btn.textContent = label; }, 1500);
+    };
+  });
+  document.querySelectorAll(".markPostedBtn").forEach((btn) => {
+    btn.onclick = () => markPostedManually(btn.dataset.id);
+  });
+  document.querySelectorAll(".skipPinBtn").forEach((btn) => {
+    btn.onclick = () => cancelPin(btn.dataset.id);
+  });
+  const csv = document.getElementById("csvBtn");
+  if (csv) csv.onclick = () => copyCsv(csv);
 }
 
 /* --------------------------------------------------------------- 読み込み */
@@ -827,6 +955,47 @@ async function toggleKillSwitch() {
   } catch (err) {
     render({ kind: "bad", text: String(err.message || err) });
   }
+}
+
+/**
+ * 手で投稿したことを記録する。
+ *
+ * ★承認ボタンより強い記録です。「なおきさんが実際に自分の手で投稿した」ので、
+ *   承認ゲートの検査もこれを違反として数えません（AI はこの値を書けません）。
+ * 手で投稿したピンは Pinterest 側のIDが分からないため、数値の自動取得はできません。
+ */
+async function markPostedManually(id) {
+  render({ kind: "warn", text: "記録しています…", busy: true });
+  try {
+    const p = (STATE.pins.json || []).find((x) => x.id === id);
+    if (!p) throw new Error("ピンが見つかりません。ページを再読み込みしてください。");
+    p.status = "published";
+    p.publishedAt = new Date().toISOString();
+    p.postedVia = "manual";
+    p.lastError = undefined;
+    await savePins("admin: ピン " + id + " を手で投稿したことを記録");
+    render({ kind: "ok", text: "記録しました。同じピンを二重に投稿しないための記録です。" });
+  } catch (err) {
+    render({ kind: "bad", text: String(err.message || err) });
+  }
+}
+
+/** 外部の予約ツール用に、投稿待ちのピンをまとめてCSVでコピーする */
+async function copyCsv(btn) {
+  const rows = [csvRow(["scheduledAt", "board", "title", "description", "altText", "link", "imageUrl"])];
+  for (const p of (STATE.pins.json || []).filter((x) => ["draft", "queued", "scheduled"].includes(x.status))) {
+    rows.push(csvRow([
+      p.scheduledAt || "", p.boardName, p.title, p.description, p.altText || "",
+      p.destinationUrl, BASE_URL + "/" + String(p.imagePath).replace(/^\/+/, ""),
+    ]));
+  }
+  try {
+    await navigator.clipboard.writeText(rows.join("\r\n"));
+    btn.textContent = "コピーしました（表計算ソフトに貼れます）";
+  } catch {
+    btn.textContent = "コピーできませんでした";
+  }
+  setTimeout(() => { render(); }, 2000);
 }
 
 async function savePins(message) {

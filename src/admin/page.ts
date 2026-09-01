@@ -38,7 +38,10 @@ const CSS = `
 body{margin:0;background:var(--bg);color:var(--ink);
   font:14px/1.55 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   -webkit-text-size-adjust:100%}
-.wrap{max-width:1080px;margin:0 auto;padding:1.5rem 1.25rem 5rem}
+/* ホーム画面から開いたときは、ノッチとホームバーの分だけ余白を足す */
+.wrap{max-width:1080px;margin:0 auto;
+  padding:calc(1.5rem + env(safe-area-inset-top)) calc(1.25rem + env(safe-area-inset-right))
+          calc(5rem + env(safe-area-inset-bottom)) calc(1.25rem + env(safe-area-inset-left))}
 header{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1rem;flex-wrap:wrap}
 h1{font-size:1.3rem;margin:0}
 h4{margin:0 0 .3rem;font-size:.86rem;color:var(--muted);font-weight:700;letter-spacing:.03em}
@@ -179,6 +182,17 @@ export function buildAdminPage(branch: string): string {
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <title>${escapeHtml(c.site.name)} — 代表取締役デスク</title>
+
+<!-- ホーム画面に追加すると、ブラウザのバーが消えてアプリのように開きます。
+     iPhone は manifest を見ないので、apple-* のメタタグも要ります。 -->
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#0b0f14">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="${escapeHtml(c.site.name)}">
+<link rel="apple-touch-icon" href="/assets/app/icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/assets/app/icon-192.png">
 <style>${CSS}</style></head><body><div class="wrap">
 ${ownerRepoWarning}
 <div id="app"><div class="empty">読み込み中…</div></div>

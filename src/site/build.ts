@@ -410,6 +410,21 @@ function write(rel: string, contents: string): void {
   fs.writeFileSync(full, contents, "utf8");
 }
 
+/** ディレクトリを丸ごと public/ へコピーする（画像などのバイナリ用）。 */
+function copyDir(srcAbs: string, destRel: string): number {
+  if (!fs.existsSync(srcAbs)) return 0;
+  const dest = path.join(P.publicDir, destRel);
+  fs.mkdirSync(dest, { recursive: true });
+  let n = 0;
+  for (const name of fs.readdirSync(srcAbs)) {
+    const from = path.join(srcAbs, name);
+    if (!fs.statSync(from).isFile()) continue;
+    fs.copyFileSync(from, path.join(dest, name));
+    n++;
+  }
+  return n;
+}
+
 export interface BuildResult {
   pages: number;
   articles: number;
@@ -503,6 +518,32 @@ on this site.</p>
   ));
   pages += 3;
 
+  // ピン画像をサイト自身のドメインから配れるようにする。
+  //
+  //   ★手動投稿のときに効きます。Pinterest の投稿画面に画像URLを渡すとき、
+  //     自分のドメインの画像であるほうが確実です（ドメイン所有者が一致するため）。
+  //   ★管理画面のプレビューも、GitHub 経由より速く出ます。
+  const pinImages = copyDir(P.pinAssets, "assets/pins");
+  copyDir(path.join(P.root, "assets", "app"), "assets/app");
+
+  // ホーム画面に追加したときのアプリ定義（iPhone / Android 共通）
+  write("manifest.webmanifest", JSON.stringify({
+    name: `${c.site.name} — 代表取締役デスク`,
+    short_name: c.site.name,
+    description: "AI社員の成果を確認し、GO / STOP を出すための画面",
+    start_url: "/admin/",
+    scope: "/admin/",
+    display: "standalone",
+    orientation: "portrait",
+    background_color: "#0b0f14",
+    theme_color: "#0b0f14",
+    icons: [
+      { src: "/assets/app/icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
+      { src: "/assets/app/icon-512.png", sizes: "512x512", type: "image/png", purpose: "any" },
+      { src: "/assets/app/icon-512.png", sizes: "512x512", type: "image/png", purpose: "maskable" },
+    ],
+  }, null, 2));
+
   write("admin/index.html", buildAdminPage(c.admin.branch));
   write("pinterest-connect/index.html", buildPinterestConnectPage(c.site.baseUrl));
   write("pinterest-callback/index.html", buildPinterestCallbackPage());
@@ -521,7 +562,7 @@ on this site.</p>
     liveAffiliateLinks: redirects - pending.length,
     pendingAffiliateLinks: pending,
   };
-  log.ok(`${pages} ページ + 中継リンク ${redirects} 本を public/ に出力しました`);
+  log.ok(`${pages} ページ + 中継リンク ${redirects} 本 + ピン画像 ${pinImages} 枚を public/ に出力しました`);
   if (!gate.ok) {
     log.warn(`⚠ ${gate.reason}`);
     log.warn("  全ページを noindex にし、robots.txt で全拒否にしました（デプロイしても検索には出ません）。");

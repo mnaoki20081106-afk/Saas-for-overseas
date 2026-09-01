@@ -116,5 +116,39 @@
     "id": "dec_mtii0bb39fdf0y",
     "at": "2026-09-01T10:02:16.767Z",
     "outcomeAt": null
+  },
+  {
+    "by": "yukichi",
+    "kind": "config_change",
+    "summary": "Pinterest審査待ちのあいだの手動投稿を管理画面から行えるようにし、画面をホーム画面に追加できるアプリ形式にした",
+    "reasoning": "オーナーの依頼。Standard access の再提出から承認まで数週間かかる見込みで、その間ピンの自動投稿が止まる。従来は pins:export で書き出したCSVと画像をパソコンで扱う前提だったが、オーナーはiPhoneしか使わないため実質的に使えなかった。Pinterest の pin/create/button は url / media / description を渡すと投稿画面を埋めた状態で開けるので、1枚あたり2タップで投稿できる。ピン画像をサイト自身のドメインから配るようにしたのは、自分のドメインの画像のほうが確実に読み込まれるため。手で投稿したものは postedVia=manual として記録し、二重投稿を防ぐ。この値は管理画面からしか書けず、AIは書けない。承認ゲートの検査では manual を違反として数えない。「本人が実際に自分の手で投稿した」ことは、承認ボタンより強い意思表示だからである。あわせて manifest と apple-touch-icon を追加し、ホーム画面から開けるようにした。オーナーが唯一使う端末がiPhoneであり、ブラウザのタブを探す手間が毎回発生していたため。",
+    "evidence": [
+      {
+        "source": "Pinterest 公式 web-features/buttons",
+        "value": "pin/create/button/?url=&media=&description= で投稿画面を事前入力できる（2026年時点で有効）"
+      },
+      {
+        "source": "src/stages/export.ts",
+        "value": "既存の逃げ道はCSVと画像の書き出しで、パソコン前提だった"
+      },
+      {
+        "source": "src/company/commands/check.ts",
+        "value": "published かつ承認なしは error。manual を除外しないと手動投稿のたびに検査が落ちる"
+      },
+      {
+        "source": "検証: Chromium で描画",
+        "value": "投稿URLが正しく組まれ、コピー3種と記録ボタンが動作。PWAのメタタグも出力を確認"
+      }
+    ],
+    "alternatives": [
+      "従来どおり pins:export のCSVを使う — パソコンが要り、オーナーの運用（iPhoneのみ）に合わない",
+      "外部の自動投稿サービス（Tailwind等）に任せる — 有料で、コスト最優先の方針に反する。ただしCSVコピーで併用はできるようにした",
+      "手動投稿ぶんも承認ゲートを通す — 本人が自分の手で投稿する行為自体が承認より強いので、二度手間になるだけと判断"
+    ],
+    "relatedTaskIds": [],
+    "outcome": null,
+    "id": "dec_mtj4xfxjwwha2x",
+    "at": "2026-09-01T20:43:53.959Z",
+    "outcomeAt": null
   }
 ]

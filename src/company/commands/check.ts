@@ -72,6 +72,11 @@ function checkApprovalGate(issues: CheckIssue[]): number {
     const approvalId = pin.approvalId as string | null | undefined;
     if (approvalId && approvedIds.has(approvalId)) continue;
 
+    // なおきさんが管理画面から自分の手で投稿したもの。
+    // 承認ボタンより強い「本人が実際に投稿した」という記録なので、違反ではない。
+    // （AI はここに manual を書けません。管理画面からしか書き込まれない値です）
+    if (pin.postedVia === "manual") continue;
+
     if (status === "published") {
       // ★実際に外へ出てしまっている。これが本当の事故。
       violations++;
