@@ -19,7 +19,7 @@
       "ピン文案生成"
     ],
     "status": "open",
-    "createdAt": "2026-08-31T09:01:41.105Z"
+    "createdAt": "2026-09-01T08:06:00.636Z"
   },
   {
     "id": "setup-pages",
@@ -68,7 +68,7 @@
       "ピンの投稿全般"
     ],
     "status": "open",
-    "createdAt": "2026-08-30T10:48:38.499Z"
+    "createdAt": "2026-09-01T08:06:00.637Z"
   },
   {
     "id": "setup-pinterest-claim",
@@ -92,13 +92,13 @@
       "アナリティクスの精度"
     ],
     "status": "open",
-    "createdAt": "2026-08-30T10:48:38.499Z"
+    "createdAt": "2026-09-01T08:06:00.637Z"
   },
   {
     "id": "cred-pinterest-api",
     "kind": "credential",
     "title": "Pinterest API アプリを作り、Standard access まで通す",
-    "whyItCannotBeAutomated": "アプリ作成・OAuth 承認・審査申請は本人操作が必須です。さらに Trial access のまま API で作ったピンは『自分にしか見えない Sandbox ピン』になるため、流入源にするには Standard access の審査を通す必要があります（審査には OAuth フローの録画提出が必要で、数日〜数週間かかることがあります）。",
+    "whyItCannotBeAutomated": "アプリ作成・OAuth 承認・審査申請は本人操作が必須です。さらに Trial access のまま API で作ったピンは『自分にしか見えない Sandbox ピン』になるため、流入源にするには Standard access の審査を通す必要があります（審査には録画の提出が必要で、数日〜数週間かかることがあります）。",
     "minutes": 40,
     "url": "https://developers.pinterest.com/apps/",
     "steps": [
@@ -109,7 +109,8 @@
       "その URL を App の Redirect URIs に一字一句そのまま登録",
       "もう一度 pinterest:auth を実行 → 表示された URL をブラウザで開いて承認 → PINTEREST_REFRESH_TOKEN を控える",
       "GitHub Secrets に PINTEREST_APP_ID / PINTEREST_APP_SECRET / PINTEREST_REFRESH_TOKEN を登録",
-      "続けて Standard access を申請する（OAuth フローを画面録画した動画の提出が必要。自分ひとりで使う場合でも必要です）",
+      "続けて Standard access を申請する（動画の提出が必要。自分ひとりで使う場合でも必要です）",
+      "★★ 動画は『3点セット』で撮ること。①許可画面 ②コードをトークンに交換 ③APIで実際にピンを作る。この3つが1本に入っていないと落ちます（下の『審査動画の撮り方』を読んでから撮ってください）",
       "★ 審査待ちの間も止まりません: `npm run autopilot pins:export` で CSV と画像を書き出し、手動投稿か外部の予約ツール（Tailwind など）で回せます"
     ],
     "blocks": [
@@ -118,7 +119,8 @@
       "勝ち型の自動検出"
     ],
     "status": "open",
-    "createdAt": "2026-08-30T10:48:38.499Z"
+    "createdAt": "2026-09-01T08:06:00.637Z",
+    "appendix": "### ★ 審査動画の撮り方（ここを間違えると落ちます）\n\nPinterest が見たいのは **「アプリが Pinterest API を使って、実際に何かを完了するところ」** です。\n許可画面までを撮っただけでは足りません。**次の3つを1本の動画に入れてください。**\n\n| # | 撮るもの | 画面に何が映っていればよいか |\n| --- | --- | --- |\n| ① | 許可を求める画面 | `/pinterest-connect/` →「Pinterestに接続する」→ Pinterest の「アクセスを許可する」を押すところ |\n| ② | コードをトークンに交換するところ | GitHub → Actions →「Pinterest 認可コードをトークンに交換」→ Run workflow →<br>緑のチェックと「PINTEREST_REFRESH_TOKEN を Secrets に登録しました」の行 |\n| ③ | API で実際にピンを作るところ | Actions →「Autopilot / 3時間おき（予約したピンを投稿）」→ Run workflow →<br>ログの「投稿: ... → pin 12345」の行 → **Pinterest を開いて、そのピンが実在することを見せる** |\n\n③ は **Trial access のままで撮れます。** Trial でも API でピンは作れます\n（作ったピンが自分にしか見えないだけで、これは審査の妨げになりません）。\n\n**撮り方のコツ**\n\n- **縦のスマホ画面をそのまま出さない。** 左右が黒帯になって文字が読めません。\n  横向きで撮るか、縦のまま撮ったなら黒帯を切り落としてから出す\n- **端末の言語を英語にしてから撮る。** 審査する人は日本語を読みません。\n  難しければ、動画に英語の字幕を1行ずつ入れる\n- **秘密情報を映さない。** App Secret とアクセストークンは絶対に映さない\n  （App ID と Redirect URI は公開情報なので映って構いません）\n- 長さは1〜3分で十分。無言でも構いません\n\n**やってはいけないこと（落ちる理由になります）**\n\n- Pinterest の ID とパスワードを、自分のアプリの画面で入力する\n- すでにトークンを持っている状態から動画を始める（①が無いとみなされます）\n- 画面を撮らず、説明文だけで済ませる\n\n**③ を撮るには、投稿できるピンが1枚必要です。**\nいま記事もピンも0件なので、撮影の前に諭吉に「撮影用のピンを用意して」と言ってください。"
   },
   {
     "id": "cred-networks",
@@ -138,6 +140,6 @@
       "週次レポートの収益セクション"
     ],
     "status": "open",
-    "createdAt": "2026-08-31T09:01:41.105Z"
+    "createdAt": "2026-09-01T08:06:00.637Z"
   }
 ]

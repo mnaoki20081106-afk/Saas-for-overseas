@@ -36,5 +36,43 @@
     "id": "dec_mthr8hkitywmgd",
     "at": "2026-08-31T21:32:48.498Z",
     "outcomeAt": null
+  },
+  {
+    "by": "yukichi",
+    "kind": "skip",
+    "summary": "Pinterest Standard access は、提出済みの審査結果を待つ（A案）。撮り直しはしない",
+    "reasoning": "オーナーの判断。提出済みの動画は OAuth の許可画面から認可コード受領までで終わっており、Pinterest が求める『APIを使って動作を完了するところ』が入っていないため、落ちる可能性が高い。それでも待つのが正しい理由は2つ。①いま承認済みのアフィリエイト案件が0件なので、Pinterest が通っても収益は発生しない。急ぐ理由がない。②審査中に出し直すと審査の列に並び直しになる可能性があり、かえって遅くなる。待機中の準備として、審査動画の撮り方を TODO-HUMAN.md の生成元に固定した。撮影準備のうち『撮影用のピンを作る』は意図的にやっていない。トップページが『No articles published yet.』の状態でピンを作って審査官に見せると、中身のないサイトへのリンクを見せることになり、かえって不利になるため。③の撮影は、本物の記事が1本公開されてからが正しい順序である。",
+    "evidence": [
+      {
+        "source": "提出済み動画（30.55秒 1920x1080 iPhone画面録画）",
+        "value": "許可画面あり / トークン交換なし / API呼び出しなし"
+      },
+      {
+        "source": "Pinterest 公式 access-tiers ドキュメント",
+        "value": "『アプリが Pinterest API を使って動作を完了する録画』の提出を要求"
+      },
+      {
+        "source": "public/index.html",
+        "value": "No articles published yet.（記事0本）"
+      },
+      {
+        "source": "data/programs.json",
+        "value": "承認済み案件 0 件（Pinterest が通っても収益は0）"
+      },
+      {
+        "source": "src/stages/publish.ts",
+        "value": "投稿成功時に『投稿: ... → pin <ID>』を出力する（③の証拠として撮影できる）"
+      }
+    ],
+    "alternatives": [
+      "B案（すぐ撮り直して再提出）— 審査の列に並び直しになる可能性があり、急ぐ理由もないため却下",
+      "撮影用のピンをいま用意しておく — トップページが空なので、審査官に空のサイトを見せることになる。記事が1本できてからにする",
+      "デモ専用のピン投稿経路を新設する — 外部に出る新しい経路を増やすことになり、いま作る利益がない"
+    ],
+    "relatedTaskIds": [],
+    "outcome": null,
+    "id": "dec_mtidvv673kc5wx",
+    "at": "2026-09-01T08:06:50.767Z",
+    "outcomeAt": null
   }
 ]

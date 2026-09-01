@@ -195,6 +195,8 @@ export interface HumanTask {
   url?: string;
   steps: string[];
   prefilledAnswers?: Record<string, string>;
+  /** 手順のあとに丸ごと差し込む解説（Markdown）。長い注意書きを steps に押し込まないため。 */
+  appendix?: string;
   blocks: string[];
   status: "open" | "done";
   createdAt: string;
