@@ -210,5 +210,78 @@
         "sample-flowdesk"
       ]
     }
+  },
+  {
+    "slug": "sample-kanbanly-vs-competitor-a-tir4",
+    "title": "Sample Kanbanly vs Competitor A: which one small teams actually keep",
+    "metaTitle": "Sample Kanbanly vs Competitor A: an honest comparison",
+    "metaDescription": "A hands-on comparison of Sample Kanbanly and its main alternative for small teams, including the setup costs and the cases where neither is the right answer.",
+    "primaryKeyword": "sample kanbanly vs competitor a",
+    "secondaryKeywords": [
+      "Sample Kanbanly pricing",
+      "Sample Kanbanly review",
+      "project management for small teams"
+    ],
+    "category": "project management",
+    "programSlugs": [
+      "sample-kanbanly"
+    ],
+    "filePath": "content/articles/sample-kanbanly-vs-competitor-a-tir4.md",
+    "words": 2891,
+    "status": "published",
+    "createdAt": "2026-09-02T07:24:42.262Z",
+    "updatedAt": "2026-09-02T07:24:42.262Z",
+    "qualityIssues": [],
+    "internalLinks": [
+      "sample-kanbanly-vs-competitor-a",
+      "sample-rankwise-vs-competitor-a",
+      "sample-flowdesk-vs-competitor-a"
+    ],
+    "brief": {
+      "title": "Sample Kanbanly vs Competitor A: which one small teams actually keep",
+      "metaTitle": "Sample Kanbanly vs Competitor A: an honest comparison",
+      "metaDescription": "A hands-on comparison of Sample Kanbanly and its main alternative for small teams, including the setup costs and the cases where neither is the right answer.",
+      "slug": "sample-kanbanly-vs-competitor-a-tir4",
+      "primaryKeyword": "sample kanbanly vs competitor a",
+      "secondaryKeywords": [
+        "Sample Kanbanly pricing",
+        "Sample Kanbanly review",
+        "project management for small teams"
+      ],
+      "searchIntent": "Choosing between two shortlisted tools before starting a trial.",
+      "painPoints": [
+        "paying for three overlapping tools",
+        "cannot see which channel actually produced revenue",
+        "onboarding a new contractor takes a full day"
+      ],
+      "angle": "Sample DRY_RUN brief. Not for publication.",
+      "outline": [
+        {
+          "heading": "The short answer",
+          "purpose": "state the recommendation",
+          "bullets": [
+            "who each tool suits"
+          ]
+        },
+        {
+          "heading": "Who should not buy it",
+          "purpose": "honesty",
+          "bullets": [
+            "team size limits",
+            "migration cost"
+          ]
+        }
+      ],
+      "faq": [
+        {
+          "q": "Is there a free plan?",
+          "a": "Sample answer for DRY_RUN mode."
+        }
+      ],
+      "audience": "freelancers, small agencies and 2-20 person SaaS/e-commerce teams in the US, UK, Canada and Australia",
+      "programSlugs": [
+        "sample-kanbanly"
+      ]
+    }
   }
 ]
