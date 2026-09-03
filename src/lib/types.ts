@@ -103,6 +103,20 @@ export interface Article {
   internalLinks: string[];
   brief?: ArticleBrief;
 
+  /**
+   * この本文を誰が書いたか。**公開してよいかの判定に使う、いちばん大事な項目です。**
+   *
+   *   ai-employee          … CTO一葉が書き、CQO梅子の検品を通ったもの。公開してよい
+   *   api                  … Claude API が書いたもの（従来の経路）。公開してよい
+   *   dry-run-placeholder  … APIキーが無いときに出る「サンプル文」。**絶対に公開しない**
+   *
+   * 以前、この判定を「APIキーがあるか」で代用していたため、
+   *   ・サンプル文が本番ドメインに毎日公開される
+   *   ・逆に、AI社員が書いた本物の記事は永久に公開できない
+   * という2つの事故が同時に起きていました。**中身の出所で判定します。**
+   */
+  writtenBy?: "ai-employee" | "api" | "dry-run-placeholder";
+
   /* ── なおきさんが管理画面から取り下げたときの記録 ── */
   withdrawnAt?: string | null;
   withdrawnReason?: string | null;

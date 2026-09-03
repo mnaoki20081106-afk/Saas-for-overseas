@@ -3,7 +3,7 @@ import path from "node:path";
 import { marked } from "marked";
 import { config, affiliateLinks } from "../lib/config";
 import { log } from "../lib/log";
-import { publishGate } from "../lib/guard";
+import { isPublishableArticle, publishGate } from "../lib/guard";
 import { P } from "../lib/paths";
 import { articles as articleStore, pins as pinStore, programs } from "../lib/store";
 import type { Article } from "../lib/types";
@@ -442,7 +442,8 @@ export function buildSite(): BuildResult {
   const list = articleStore
     .all()
     // 品質ゲートに落ちた記事は公開しない（ドメイン全体の評価を守るため）
-    .filter((a) => a.status === "published")
+    // 出所が本物の記事だけを出す。サンプル文は公開ゲートと二重に弾く。
+    .filter(isPublishableArticle)
     .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
 
   let pages = 0;

@@ -1,4 +1,5 @@
-import { env } from "./config";
+import { articles } from "./store";
+import type { Article } from "./types";
 
 /**
  * 公開ゲート — 「この実行で作ったものを、外の世界に出してよいか」を1箇所で判定する。
@@ -25,19 +26,64 @@ export interface PublishGate {
   howToFix: string[];
 }
 
+/**
+ * この記事を外に出してよいか。**中身の出所だけで決めます。**
+ *
+ * 以前は「ANTHROPIC_API_KEY があるか」で代用していましたが、これは二重に間違いでした。
+ *   ・キーがあれば、サンプル文でも公開してしまう
+ *   ・キーが無ければ、AI社員が手で書いた本物も永久に公開できない
+ * 判定するのは鍵の有無ではなく、**その記事が本物かどうか**です。
+ */
+export function isPublishableArticle(a: Article): boolean {
+  if (a.status !== "published") return false;
+  // 出所が分からない古い記事は出さない（安全側に倒す）。
+  // co migrate で writtenBy を埋めるか、書き直してください。
+  return a.writtenBy === "ai-employee" || a.writtenBy === "api";
+}
+
 export function publishGate(): PublishGate {
-  if (env.dryRun) {
+  const all = articles.all();
+  const placeholders = all.filter(
+    (a) => a.status === "published" && a.writtenBy === "dry-run-placeholder",
+  );
+  if (placeholders.length > 0) {
     return {
       ok: false,
-      reason: "DRY_RUN で動いているため、生成物はサンプル文です。公開しません。",
+      reason: `サンプル文の記事が ${placeholders.length} 本あります。1本でも残っている間は公開しません。`,
       howToFix: [
-        "本物の文章を生成するには、次のどちらかを行ってください。",
-        "  A) GitHub Secrets に ANTHROPIC_API_KEY を登録する（Claude API を使う。従来どおり）",
-        "  B) AI会社化（Claude Code の Routines）へ移行する。→ ROADMAP.md の Phase 1",
-        "DRY_RUN=1 を明示的に設定している場合は、それを外してください。",
+        "DRY_RUN（APIキー未設定）で生成されたサンプル記事が残っています。",
+        `対象: ${placeholders.slice(0, 5).map((a) => a.slug).join(", ")}`,
+        "管理画面の「投稿の確認」から取り下げるか、本物の記事に書き直してください。",
       ],
     };
   }
+
+  const ready = all.filter(isPublishableArticle);
+  if (ready.length === 0) {
+    return {
+      ok: false,
+      reason: "公開できる記事がまだ1本もありません。",
+      howToFix: [
+        "CTO一葉が記事を書き、CQO梅子の検品を通すと、ここが開きます。",
+        "  npm run co -- task:next --assignee ichiyo",
+        "空のサイトを検索エンジンに登録させないため、それまでは閉じたままにします。",
+      ],
+    };
+  }
+
+  const unknown = all.filter((a) => a.status === "published" && !a.writtenBy).length;
+  if (unknown > 0) {
+    return {
+      ok: false,
+      reason: `出所の分からない記事が ${unknown} 本あります。安全のため公開しません。`,
+      howToFix: [
+        "この設計より前に作られた記事です。本物かサンプル文かを機械では判定できません。",
+        "推測で公開すると、サンプル文を本番に出す事故に戻ります。",
+        "管理画面の「投稿の確認」で本文を読み、取り下げるか書き直してください。",
+      ],
+    };
+  }
+
   return { ok: true, reason: "", howToFix: [] };
 }
 

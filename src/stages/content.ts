@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { z } from "zod";
-import { config } from "../lib/config";
+import { config, env } from "../lib/config";
 import { longform, structured, withFixture } from "../lib/claude";
 import { log } from "../lib/log";
 import { articles, programs, state } from "../lib/store";
@@ -536,6 +536,8 @@ export async function writeOneArticle(): Promise<WriteResult | null> {
     filePath: path.join("content", "articles", `${slug}.md`),
     words: quality.words,
     status: quality.ok ? "published" : "needs_review",
+    // DRY_RUN のときはサンプル文なので、そう記録する。これが公開を止める唯一の根拠になる。
+    writtenBy: env.dryRun ? "dry-run-placeholder" : "api",
     createdAt: nowISO(),
     updatedAt: nowISO(),
     qualityIssues: quality.issues,

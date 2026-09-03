@@ -150,5 +150,43 @@
     "id": "dec_mtj4xfxjwwha2x",
     "at": "2026-09-01T20:43:53.959Z",
     "outcomeAt": null
+  },
+  {
+    "by": "yukichi",
+    "kind": "escalate",
+    "summary": "記事生産に着手できない。このセッションのネットワーク制限で、案件の一次情報を1件も開けないため",
+    "reasoning": "オーナーから記事生産の指示を受けたが、着手できなかった。理由は事業判断ではなく環境の制限。このセッションのネットワークは、GitHub 以外のほぼ全ドメインへの接続を拒否する（CONNECT に 403 = ポリシー拒否）。実測で helpscout / zendesk / freshworks / notion / stripe / slack / airtable / clickup / hubspot / wikipedia / google のすべてが到達不能。WebSearch（検索結果の要約）は使えるが、一次情報のページを開けない。この会社の鉄のルール第1項は『出典のない数値を書かない』であり、ResearchCandidate の Evidence は url と『実際に書かれていた文の引用』を必須にしている。ページを開けない以上、英世は正当な引用を作れず、すべて unverified になる。unverified だらけの案件は足切りを通らず、オーナーに応募を勧める根拠もない。さらに梅子の検品の中核は『出典URLを実際に開いて数値を突き合わせる』ことで、これも同じ理由で実行できない。つまり書き手も検品者も機能しない。検索結果の要約だけで数値を書けば、誤った報酬条件を公開してアフィリエイト提携を切られる危険を冒すことになり、これは記事1本の価値を大きく上回る損失である。したがって着手せず、オーナーに環境設定の変更を求める。",
+    "evidence": [
+      {
+        "source": "curl による実測（11ドメイン）",
+        "value": "github.com 以外はすべて到達不能。エージェントプロキシが CONNECT に 403 を返す"
+      },
+      {
+        "source": "$HTTPS_PROXY/__agentproxy/status",
+        "value": "connect_rejected / 'gateway answered 403 to CONNECT (policy denial)'"
+      },
+      {
+        "source": "src/company/schemas.ts#Evidence",
+        "value": "url と quote（要約ではなく引用）が必須"
+      },
+      {
+        "source": "rules.md 絶対にやってはいけないこと 第1項",
+        "value": "出典のない数値を書く。誤った報酬条件はアフィリエイト提携の解除につながる"
+      },
+      {
+        "source": "data/programs.json",
+        "value": "案件0件。企画も記事も、案件が1件も無い状態では作れない"
+      }
+    ],
+    "alternatives": [
+      "検索結果の要約だけを根拠に記事を書く — 一次情報の裏取りが無いまま報酬条件や価格を書くことになり、提携解除のリスクを負う。却下",
+      "数値を一切書かない記事にする — 品質ゲートが比較テーブルを必須にしており、そもそも案件が0件なのでアフィリエイトリンクを置けない。事業上の意味がない",
+      "案件情報を推測で埋めて後から直す — 鉄のルール第1項に正面から反する。却下"
+    ],
+    "relatedTaskIds": [],
+    "outcome": null,
+    "id": "dec_mtldtk0t8hwe26",
+    "at": "2026-09-03T10:28:21.533Z",
+    "outcomeAt": null
   }
 ]

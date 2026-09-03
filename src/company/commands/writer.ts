@@ -261,6 +261,8 @@ export function writerSubmit(slug: string): Article {
     filePath: path.join("content", "drafts", `${slug}.md`),
     words: wordCount(markdown),
     status: "drafted",
+    // 一葉が自分の手で書いた本物。サンプル文ではない。
+    writtenBy: "ai-employee",
     createdAt: nowISO(),
     updatedAt: nowISO(),
     qualityIssues: [],
