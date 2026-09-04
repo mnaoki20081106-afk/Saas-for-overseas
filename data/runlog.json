@@ -1,5 +1,20 @@
 [
   {
+    "at": "2026-09-04T07:31:15.223Z",
+    "command": "daily",
+    "ok": true,
+    "summary": "案件リサーチ: 新規 0 件 / 人間タスク: 未完了 9 件 / 記事: Sample Flowdesk vs Competitor A: which one small teams actually keep（2891 words） / ピン: 10 枚を作成・予約 / Pinterest 投稿: 0 枚（残り 0 枚） / サイト: 13 ページ / 中継リンク 3 本 / 予約中 43 枚（2026-09-04 13:00 UTC 〜 2026-09-15 まで）",
+    "details": [
+      "案件リサーチ: 新規 0 件",
+      "人間タスク: 未完了 9 件",
+      "記事: Sample Flowdesk vs Competitor A: which one small teams actually keep（2891 words）",
+      "ピン: 10 枚を作成・予約",
+      "Pinterest 投稿: 0 枚（残り 0 枚）",
+      "サイト: 13 ページ / 中継リンク 3 本",
+      "予約中 43 枚（2026-09-04 13:00 UTC 〜 2026-09-15 まで）"
+    ]
+  },
+  {
     "at": "2026-09-03T07:28:21.512Z",
     "command": "daily",
     "ok": true,
