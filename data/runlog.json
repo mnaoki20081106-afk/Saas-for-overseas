@@ -1,5 +1,20 @@
 [
   {
+    "at": "2026-09-05T07:11:49.015Z",
+    "command": "daily",
+    "ok": true,
+    "summary": "案件リサーチ: 新規 0 件 / 人間タスク: 未完了 9 件 / 記事: Sample Kanbanly vs Competitor A: which one small teams actually keep（2891 words） / ピン: 10 枚を作成・予約 / Pinterest 投稿: 0 枚（残り 0 枚） / サイト: 14 ページ / 中継リンク 3 本 / 予約中 50 枚（2026-09-05 13:00 UTC 〜 2026-09-17 まで）",
+    "details": [
+      "案件リサーチ: 新規 0 件",
+      "人間タスク: 未完了 9 件",
+      "記事: Sample Kanbanly vs Competitor A: which one small teams actually keep（2891 words）",
+      "ピン: 10 枚を作成・予約",
+      "Pinterest 投稿: 0 枚（残り 0 枚）",
+      "サイト: 14 ページ / 中継リンク 3 本",
+      "予約中 50 枚（2026-09-05 13:00 UTC 〜 2026-09-17 まで）"
+    ]
+  },
+  {
     "at": "2026-09-04T07:31:15.223Z",
     "command": "daily",
     "ok": true,
