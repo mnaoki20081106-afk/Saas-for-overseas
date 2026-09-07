@@ -1,10 +1,18 @@
 {
-  "updatedAt": "2026-08-31T10:11:35.972Z",
+  "updatedAt": "2026-09-07T08:42:08.459Z",
   "pinMetrics": {},
   "affiliate": [],
   "history": [
     {
       "date": "2026-08-31",
+      "impressions": 0,
+      "outboundClicks": 0,
+      "ctrPct": 0,
+      "monthlyRecurringUsd": 0,
+      "activeSubscriptions": 0
+    },
+    {
+      "date": "2026-09-07",
       "impressions": 0,
       "outboundClicks": 0,
       "ctrPct": 0,
