@@ -1230,12 +1230,13 @@
     "boardName": "Email Marketing Tools",
     "imagePath": "assets/pins/pin_mtmmwt1xqhvjrs.png",
     "destinationUrl": "https://worked-for-us.com/articles/sample-flowdesk-vs-competitor-a-wsxm/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-flowdesk-vs-competitor-a-wsxm",
-    "status": "scheduled",
+    "status": "failed",
     "scheduledAt": "2026-09-15T17:00:00.000Z",
     "publishedAt": null,
     "pinterestPinId": null,
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "lastError": "Pinterest POST /pins → 403: {\"code\":29,\"message\":\"Apps with Trial access may not create Pins in production https://api.pinterest.com - use API Sandbox https://api-sandbox.pinterest.com instead.\"}"
   },
   {
     "id": "pin_mtmmwt1xtsfgyl",
@@ -1250,12 +1251,13 @@
     "boardName": "Email Marketing Tools",
     "imagePath": "assets/pins/pin_mtmmwt1xtsfgyl.png",
     "destinationUrl": "https://worked-for-us.com/articles/sample-flowdesk-vs-competitor-a-wsxm/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-flowdesk-vs-competitor-a-wsxm",
-    "status": "scheduled",
+    "status": "failed",
     "scheduledAt": "2026-09-15T19:00:00.000Z",
     "publishedAt": null,
     "pinterestPinId": null,
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "lastError": "Pinterest POST /pins → 403: {\"code\":29,\"message\":\"Apps with Trial access may not create Pins in production https://api.pinterest.com - use API Sandbox https://api-sandbox.pinterest.com instead.\"}"
   },
   {
     "id": "pin_mto1o2eao85amw",
