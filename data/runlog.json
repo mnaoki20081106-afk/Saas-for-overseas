@@ -1,5 +1,20 @@
 [
   {
+    "at": "2026-09-18T07:42:45.384Z",
+    "command": "daily",
+    "ok": true,
+    "summary": "案件リサーチ: 新規 0 件 / 人間タスク: 未完了 9 件 / 記事: Sample Rankwise vs Competitor A: which one small teams actually keep（2891 words） / ピン: 10 枚を作成・予約 / Pinterest 投稿: 0 枚（残り 0 枚） / サイト: 27 ページ / 中継リンク 3 本 / 予約中 129 枚（2026-09-18 13:00 UTC 〜 2026-10-09 まで）",
+    "details": [
+      "案件リサーチ: 新規 0 件",
+      "人間タスク: 未完了 9 件",
+      "記事: Sample Rankwise vs Competitor A: which one small teams actually keep（2891 words）",
+      "ピン: 10 枚を作成・予約",
+      "Pinterest 投稿: 0 枚（残り 0 枚）",
+      "サイト: 27 ページ / 中継リンク 3 本",
+      "予約中 129 枚（2026-09-18 13:00 UTC 〜 2026-10-09 まで）"
+    ]
+  },
+  {
     "at": "2026-09-17T08:07:02.851Z",
     "command": "daily",
     "ok": true,
