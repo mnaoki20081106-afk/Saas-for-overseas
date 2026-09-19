@@ -1692,12 +1692,13 @@
     "boardName": "Email Marketing Tools",
     "imagePath": "assets/pins/pin_mtqxjkibc5bf9v.png",
     "destinationUrl": "https://worked-for-us.com/articles/sample-flowdesk-vs-competitor-a-jke0/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-flowdesk-vs-competitor-a-jke0",
-    "status": "scheduled",
+    "status": "failed",
     "scheduledAt": "2026-09-19T21:00:00.000Z",
     "publishedAt": null,
     "pinterestPinId": null,
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "lastError": "Pinterest POST /pins → 403: {\"code\":29,\"message\":\"Apps with Trial access may not create Pins in production https://api.pinterest.com - use API Sandbox https://api-sandbox.pinterest.com instead.\"}"
   },
   {
     "id": "pin_mtqxjkic6jw5sc",
