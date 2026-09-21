@@ -1,13 +1,13 @@
-# 週次レポート — 2026-09-14
+# 週次レポート — 2026-09-21
 
 ## いま何が積み上がっているか
 
 | 指標 | 数値 |
 | --- | --- |
-| 公開記事 | 16 本 |
+| 公開記事 | 23 本 |
 | 要確認で未公開の記事 | 0 本 |
 | 投稿済みピン | 0 枚 |
-| 予約待ちピン | 108 枚 |
+| 予約待ちピン | 143 枚 |
 | ピン表示数（直近30日） | 0 |
 | ピン→記事クリック | 0 |
 | **クリック率（追うべき指標）** | **0%** |
@@ -23,7 +23,7 @@
 
 ## 投稿に失敗したピン
 
-52 枚。`npm run autopilot pins:requeue` で再予約できます。
+87 枚。`npm run autopilot pins:requeue` で再予約できます。
 
 - pin_mtfos8m2k6can3: Pinterest POST /pins → 403: {"code":29,"message":"Apps with Trial access may not create Pins in production https://api.pinterest.com - use API Sandbox https://a
 - pin_mtfos8m2xb1mjo: Pinterest POST /pins → 403: {"code":29,"message":"Apps with Trial access may not create Pins in production https://api.pinterest.com - use API Sandbox https://a
