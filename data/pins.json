@@ -2049,12 +2049,13 @@
     "boardName": "Project Management Tools",
     "imagePath": "assets/pins/pin_mtscpa27yrqm1m.png",
     "destinationUrl": "https://worked-for-us.com/articles/sample-kanbanly-vs-competitor-a-p9xv/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-kanbanly-vs-competitor-a-p9xv",
-    "status": "scheduled",
+    "status": "failed",
     "scheduledAt": "2026-09-22T21:00:00.000Z",
     "publishedAt": null,
     "pinterestPinId": null,
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "lastError": "Pinterest POST /pins → 403: {\"code\":29,\"message\":\"Apps with Trial access may not create Pins in production https://api.pinterest.com - use API Sandbox https://api-sandbox.pinterest.com instead.\"}"
   },
   {
     "id": "pin_mtscpa27844buo",
@@ -2069,12 +2070,13 @@
     "boardName": "Project Management Tools",
     "imagePath": "assets/pins/pin_mtscpa27844buo.png",
     "destinationUrl": "https://worked-for-us.com/articles/sample-kanbanly-vs-competitor-a-p9xv/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-kanbanly-vs-competitor-a-p9xv",
-    "status": "scheduled",
+    "status": "failed",
     "scheduledAt": "2026-09-22T23:00:00.000Z",
     "publishedAt": null,
     "pinterestPinId": null,
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "lastError": "Pinterest POST /pins → 403: {\"code\":29,\"message\":\"Apps with Trial access may not create Pins in production https://api.pinterest.com - use API Sandbox https://api-sandbox.pinterest.com instead.\"}"
   },
   {
     "id": "pin_mtscpa27u2pcfu",
