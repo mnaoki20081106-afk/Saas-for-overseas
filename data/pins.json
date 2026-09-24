@@ -2259,12 +2259,13 @@
     "boardName": "Seo Tools Tools",
     "imagePath": "assets/pins/pin_mttsfmfpg5dlx8.png",
     "destinationUrl": "https://worked-for-us.com/articles/sample-rankwise-vs-competitor-a-fmbe/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-rankwise-vs-competitor-a-fmbe",
-    "status": "scheduled",
+    "status": "failed",
     "scheduledAt": "2026-09-24T17:00:00.000Z",
     "publishedAt": null,
     "pinterestPinId": null,
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "lastError": "Pinterest POST /pins → 403: {\"code\":29,\"message\":\"Apps with Trial access may not create Pins in production https://api.pinterest.com - use API Sandbox https://api-sandbox.pinterest.com instead.\"}"
   },
   {
     "id": "pin_mttsfmfp5v4bvu",
@@ -2279,12 +2280,13 @@
     "boardName": "Seo Tools Tools",
     "imagePath": "assets/pins/pin_mttsfmfp5v4bvu.png",
     "destinationUrl": "https://worked-for-us.com/articles/sample-rankwise-vs-competitor-a-fmbe/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-rankwise-vs-competitor-a-fmbe",
-    "status": "scheduled",
+    "status": "failed",
     "scheduledAt": "2026-09-24T19:00:00.000Z",
     "publishedAt": null,
     "pinterestPinId": null,
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "lastError": "Pinterest POST /pins → 403: {\"code\":29,\"message\":\"Apps with Trial access may not create Pins in production https://api.pinterest.com - use API Sandbox https://api-sandbox.pinterest.com instead.\"}"
   },
   {
     "id": "pin_mttsfmfpuplfkw",
@@ -2299,12 +2301,13 @@
     "boardName": "Seo Tools Tools",
     "imagePath": "assets/pins/pin_mttsfmfpuplfkw.png",
     "destinationUrl": "https://worked-for-us.com/articles/sample-rankwise-vs-competitor-a-fmbe/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-rankwise-vs-competitor-a-fmbe",
-    "status": "scheduled",
+    "status": "failed",
     "scheduledAt": "2026-09-24T21:00:00.000Z",
     "publishedAt": null,
     "pinterestPinId": null,
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "lastError": "Pinterest POST /pins → 403: {\"code\":29,\"message\":\"Apps with Trial access may not create Pins in production https://api.pinterest.com - use API Sandbox https://api-sandbox.pinterest.com instead.\"}"
   },
   {
     "id": "pin_mtv7qs9uhpe9kh",
