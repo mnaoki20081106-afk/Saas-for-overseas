@@ -2847,12 +2847,13 @@
     "boardName": "Seo Tools Tools",
     "imagePath": "assets/pins/pin_mty29k3qwdo48k.png",
     "destinationUrl": "https://worked-for-us.com/articles/sample-rankwise-vs-competitor-a-9jze/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-rankwise-vs-competitor-a-9jze",
-    "status": "scheduled",
+    "status": "failed",
     "scheduledAt": "2026-09-29T13:00:00.000Z",
     "publishedAt": null,
     "pinterestPinId": null,
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "lastError": "Pinterest POST /pins → 403: {\"code\":29,\"message\":\"Apps with Trial access may not create Pins in production https://api.pinterest.com - use API Sandbox https://api-sandbox.pinterest.com instead.\"}"
   },
   {
     "id": "pin_mty29k3q3ljxaw",
@@ -2867,12 +2868,13 @@
     "boardName": "Seo Tools Tools",
     "imagePath": "assets/pins/pin_mty29k3q3ljxaw.png",
     "destinationUrl": "https://worked-for-us.com/articles/sample-rankwise-vs-competitor-a-9jze/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-rankwise-vs-competitor-a-9jze",
-    "status": "scheduled",
+    "status": "failed",
     "scheduledAt": "2026-09-29T15:00:00.000Z",
     "publishedAt": null,
     "pinterestPinId": null,
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "lastError": "Pinterest POST /pins → 403: {\"code\":29,\"message\":\"Apps with Trial access may not create Pins in production https://api.pinterest.com - use API Sandbox https://api-sandbox.pinterest.com instead.\"}"
   },
   {
     "id": "pin_mty29k3qzzbs0l",
@@ -2887,12 +2889,13 @@
     "boardName": "Seo Tools Tools",
     "imagePath": "assets/pins/pin_mty29k3qzzbs0l.png",
     "destinationUrl": "https://worked-for-us.com/articles/sample-rankwise-vs-competitor-a-9jze/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-rankwise-vs-competitor-a-9jze",
-    "status": "scheduled",
+    "status": "failed",
     "scheduledAt": "2026-09-29T17:00:00.000Z",
     "publishedAt": null,
     "pinterestPinId": null,
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "lastError": "Pinterest POST /pins → 403: {\"code\":29,\"message\":\"Apps with Trial access may not create Pins in production https://api.pinterest.com - use API Sandbox https://api-sandbox.pinterest.com instead.\"}"
   },
   {
     "id": "pin_mty29k3qpt6t33",
@@ -2907,12 +2910,13 @@
     "boardName": "Seo Tools Tools",
     "imagePath": "assets/pins/pin_mty29k3qpt6t33.png",
     "destinationUrl": "https://worked-for-us.com/articles/sample-rankwise-vs-competitor-a-9jze/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-rankwise-vs-competitor-a-9jze",
-    "status": "scheduled",
+    "status": "failed",
     "scheduledAt": "2026-09-29T19:00:00.000Z",
     "publishedAt": null,
     "pinterestPinId": null,
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "lastError": "Pinterest POST /pins → 403: {\"code\":29,\"message\":\"Apps with Trial access may not create Pins in production https://api.pinterest.com - use API Sandbox https://api-sandbox.pinterest.com instead.\"}"
   },
   {
     "id": "pin_mty29k3qdsow27",
