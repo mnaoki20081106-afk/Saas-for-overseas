@@ -3624,12 +3624,13 @@
     "boardName": "Email Marketing Tools",
     "imagePath": "assets/pins/pin_mu3t9tby4s8ju6.png",
     "destinationUrl": "https://worked-for-us.com/articles/sample-flowdesk-vs-competitor-a-9t7n/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-flowdesk-vs-competitor-a-9t7n",
-    "status": "scheduled",
+    "status": "failed",
     "scheduledAt": "2026-10-05T15:00:00.000Z",
     "publishedAt": null,
     "pinterestPinId": null,
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "lastError": "Pinterest POST /pins → 403: {\"code\":29,\"message\":\"Apps with Trial access may not create Pins in production https://api.pinterest.com - use API Sandbox https://api-sandbox.pinterest.com instead.\"}"
   },
   {
     "id": "pin_mu3t9tby7fgl7t",
@@ -3644,12 +3645,13 @@
     "boardName": "Email Marketing Tools",
     "imagePath": "assets/pins/pin_mu3t9tby7fgl7t.png",
     "destinationUrl": "https://worked-for-us.com/articles/sample-flowdesk-vs-competitor-a-9t7n/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-flowdesk-vs-competitor-a-9t7n",
-    "status": "scheduled",
+    "status": "failed",
     "scheduledAt": "2026-10-05T17:00:00.000Z",
     "publishedAt": null,
     "pinterestPinId": null,
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "lastError": "Pinterest POST /pins → 403: {\"code\":29,\"message\":\"Apps with Trial access may not create Pins in production https://api.pinterest.com - use API Sandbox https://api-sandbox.pinterest.com instead.\"}"
   },
   {
     "id": "pin_mu3t9tbypq94gf",
@@ -3664,12 +3666,13 @@
     "boardName": "Email Marketing Tools",
     "imagePath": "assets/pins/pin_mu3t9tbypq94gf.png",
     "destinationUrl": "https://worked-for-us.com/articles/sample-flowdesk-vs-competitor-a-9t7n/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-flowdesk-vs-competitor-a-9t7n",
-    "status": "scheduled",
+    "status": "failed",
     "scheduledAt": "2026-10-05T19:00:00.000Z",
     "publishedAt": null,
     "pinterestPinId": null,
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "lastError": "Pinterest POST /pins → 403: {\"code\":29,\"message\":\"Apps with Trial access may not create Pins in production https://api.pinterest.com - use API Sandbox https://api-sandbox.pinterest.com instead.\"}"
   },
   {
     "id": "pin_mu3t9tbyvb6v4a",
@@ -3684,12 +3687,13 @@
     "boardName": "Email Marketing Tools",
     "imagePath": "assets/pins/pin_mu3t9tbyvb6v4a.png",
     "destinationUrl": "https://worked-for-us.com/articles/sample-flowdesk-vs-competitor-a-9t7n/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-flowdesk-vs-competitor-a-9t7n",
-    "status": "scheduled",
+    "status": "failed",
     "scheduledAt": "2026-10-05T21:00:00.000Z",
     "publishedAt": null,
     "pinterestPinId": null,
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "lastError": "Pinterest POST /pins → 403: {\"code\":29,\"message\":\"Apps with Trial access may not create Pins in production https://api.pinterest.com - use API Sandbox https://api-sandbox.pinterest.com instead.\"}"
   },
   {
     "id": "pin_mu3t9tbyted2l1",
