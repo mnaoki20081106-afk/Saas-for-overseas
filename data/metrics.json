@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-28T10:14:42.737Z",
+  "updatedAt": "2026-10-05T10:55:52.039Z",
   "pinMetrics": {},
   "affiliate": [],
   "history": [
@@ -37,6 +37,14 @@
     },
     {
       "date": "2026-09-28",
+      "impressions": 0,
+      "outboundClicks": 0,
+      "ctrPct": 0,
+      "monthlyRecurringUsd": 0,
+      "activeSubscriptions": 0
+    },
+    {
+      "date": "2026-10-05",
       "impressions": 0,
       "outboundClicks": 0,
       "ctrPct": 0,
