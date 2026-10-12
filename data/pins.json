@@ -3860,7 +3860,14 @@
     "publishedAt": "2026-10-07T18:27:34.784Z",
     "pinterestPinId": "1114781714045248150",
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "metrics": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-12T11:24:23.940Z"
+    }
   },
   {
     "id": "pin_mu58xcqzhjjseh",
@@ -3880,7 +3887,14 @@
     "publishedAt": "2026-10-07T18:27:38.567Z",
     "pinterestPinId": "1114781714045248153",
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "metrics": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-12T11:24:24.634Z"
+    }
   },
   {
     "id": "pin_mu58xcqz47h3x6",
@@ -3900,7 +3914,14 @@
     "publishedAt": "2026-10-07T18:27:42.374Z",
     "pinterestPinId": "1114781714045248155",
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "metrics": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-12T11:24:25.329Z"
+    }
   },
   {
     "id": "pin_mu58xcqze5ze9e",
@@ -3920,7 +3941,14 @@
     "publishedAt": "2026-10-08T00:42:58.180Z",
     "pinterestPinId": "1114781714045271337",
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "metrics": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-12T11:24:26.070Z"
+    }
   },
   {
     "id": "pin_mu58xcqzxvwdva",
@@ -3940,7 +3968,14 @@
     "publishedAt": "2026-10-08T00:43:02.011Z",
     "pinterestPinId": "1114781714045271347",
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "metrics": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-12T11:24:26.781Z"
+    }
   },
   {
     "id": "pin_mu58xcqzqvfryr",
@@ -3960,7 +3995,14 @@
     "publishedAt": "2026-10-08T00:43:05.688Z",
     "pinterestPinId": "1114781714045271354",
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "metrics": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-12T11:24:27.521Z"
+    }
   },
   {
     "id": "pin_mu58xcqzhpi7p6",
@@ -3980,7 +4022,14 @@
     "publishedAt": "2026-10-08T18:26:55.056Z",
     "pinterestPinId": "1114781714045334283",
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "metrics": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-12T11:24:28.204Z"
+    }
   },
   {
     "id": "pin_mu6nhs99seygt7",
@@ -4000,7 +4049,14 @@
     "publishedAt": "2026-10-08T18:26:58.977Z",
     "pinterestPinId": "1114781714045334290",
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "metrics": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-12T11:24:28.894Z"
+    }
   },
   {
     "id": "pin_mu6nhs99i2e42x",
@@ -4020,7 +4076,14 @@
     "publishedAt": "2026-10-08T18:27:02.857Z",
     "pinterestPinId": "1114781714045334302",
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "metrics": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-12T11:24:29.680Z"
+    }
   },
   {
     "id": "pin_mu6nhs994ibgqy",
@@ -4040,7 +4103,14 @@
     "publishedAt": "2026-10-09T00:59:03.071Z",
     "pinterestPinId": "1114781714045359936",
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "metrics": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-12T11:24:30.387Z"
+    }
   },
   {
     "id": "pin_mu6nhs99m1eqe9",
@@ -4060,7 +4130,14 @@
     "publishedAt": "2026-10-09T00:59:06.921Z",
     "pinterestPinId": "1114781714045359939",
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "metrics": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-12T11:24:31.108Z"
+    }
   },
   {
     "id": "pin_mu6nhs99nl0w9j",
@@ -4080,7 +4157,14 @@
     "publishedAt": "2026-10-09T00:59:10.574Z",
     "pinterestPinId": "1114781714045359943",
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "metrics": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-12T11:24:31.786Z"
+    }
   },
   {
     "id": "pin_mu6nhs99kc1yzz",
@@ -4100,7 +4184,14 @@
     "publishedAt": "2026-10-09T17:59:06.463Z",
     "pinterestPinId": "1114781714045417700",
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "metrics": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-12T11:24:32.490Z"
+    }
   },
   {
     "id": "pin_mu6nhs99p24us3",
@@ -4120,7 +4211,14 @@
     "publishedAt": "2026-10-09T17:59:10.418Z",
     "pinterestPinId": "1114781714045417711",
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "metrics": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-12T11:24:33.205Z"
+    }
   },
   {
     "id": "pin_mu6nhs99pamfsp",
@@ -4140,7 +4238,14 @@
     "publishedAt": "2026-10-09T17:59:14.174Z",
     "pinterestPinId": "1114781714045417720",
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "metrics": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-12T11:24:33.882Z"
+    }
   },
   {
     "id": "pin_mu6nhs99tzkn0c",
@@ -4160,7 +4265,14 @@
     "publishedAt": "2026-10-09T22:32:49.062Z",
     "pinterestPinId": "1114781714045437296",
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "metrics": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-12T11:24:34.614Z"
+    }
   },
   {
     "id": "pin_mu6nhs991zt7g7",
@@ -4180,7 +4292,14 @@
     "publishedAt": "2026-10-09T22:32:52.925Z",
     "pinterestPinId": "1114781714045437302",
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "metrics": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-12T11:24:35.412Z"
+    }
   },
   {
     "id": "pin_mu82s2k1a41707",
@@ -4200,7 +4319,14 @@
     "publishedAt": "2026-10-10T04:26:23.602Z",
     "pinterestPinId": "1114781714045456578",
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "metrics": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-12T11:24:36.077Z"
+    }
   },
   {
     "id": "pin_mu82s2k10m20p4",
@@ -4220,7 +4346,14 @@
     "publishedAt": "2026-10-10T17:07:08.372Z",
     "pinterestPinId": "1114781714045507545",
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "metrics": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-12T11:24:36.783Z"
+    }
   },
   {
     "id": "pin_mu82s2k1x97qxv",
@@ -4240,7 +4373,14 @@
     "publishedAt": "2026-10-10T17:07:12.678Z",
     "pinterestPinId": "1114781714045507555",
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "metrics": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-12T11:24:37.477Z"
+    }
   },
   {
     "id": "pin_mu82s2k1vpw7jp",
@@ -4260,7 +4400,14 @@
     "publishedAt": "2026-10-10T17:07:16.650Z",
     "pinterestPinId": "1114781714045507561",
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "metrics": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-12T11:24:38.212Z"
+    }
   },
   {
     "id": "pin_mu82s2k1ek9g7n",
@@ -4280,7 +4427,14 @@
     "publishedAt": "2026-10-10T21:11:35.323Z",
     "pinterestPinId": "1114781714045526493",
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "metrics": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-12T11:24:38.940Z"
+    }
   },
   {
     "id": "pin_mu82s2k19i67im",
@@ -4300,7 +4454,14 @@
     "publishedAt": "2026-10-10T21:11:39.031Z",
     "pinterestPinId": "1114781714045526496",
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "metrics": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-12T11:24:39.987Z"
+    }
   },
   {
     "id": "pin_mu82s2k1hsoj68",
@@ -4320,7 +4481,14 @@
     "publishedAt": "2026-10-11T04:08:29.210Z",
     "pinterestPinId": "1114781714045549959",
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "metrics": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-12T11:24:40.668Z"
+    }
   },
   {
     "id": "pin_mu82s2k12yrhov",
@@ -4340,7 +4508,14 @@
     "publishedAt": "2026-10-11T19:20:33.694Z",
     "pinterestPinId": "1114781714045611491",
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "metrics": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-12T11:24:41.723Z"
+    }
   },
   {
     "id": "pin_mu82s2k19gcgq4",
@@ -4360,7 +4535,14 @@
     "publishedAt": "2026-10-11T19:20:37.557Z",
     "pinterestPinId": "1114781714045611499",
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "metrics": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-12T11:24:42.400Z"
+    }
   },
   {
     "id": "pin_mu82s2k1w405ax",
@@ -4380,7 +4562,14 @@
     "publishedAt": "2026-10-11T19:20:41.543Z",
     "pinterestPinId": "1114781714045611511",
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "metrics": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-12T11:24:43.090Z"
+    }
   },
   {
     "id": "pin_mu9j284ybp5blh",
@@ -4400,7 +4589,14 @@
     "publishedAt": "2026-10-11T19:20:45.745Z",
     "pinterestPinId": "1114781714045611519",
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "metrics": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-12T11:24:43.776Z"
+    }
   },
   {
     "id": "pin_mu9j284yx5kjjt",
@@ -4420,7 +4616,14 @@
     "publishedAt": "2026-10-12T00:14:10.688Z",
     "pinterestPinId": "1114781714045632287",
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "metrics": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-12T11:24:44.448Z"
+    }
   },
   {
     "id": "pin_mu9j284ydgw45s",
@@ -4440,7 +4643,14 @@
     "publishedAt": "2026-10-12T00:14:14.309Z",
     "pinterestPinId": "1114781714045632292",
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "metrics": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-12T11:24:45.142Z"
+    }
   },
   {
     "id": "pin_mu9j284ycbttj8",
