@@ -1,215 +1,509 @@
 {
-  "updatedAt": "2026-10-12T11:24:45.548Z",
+  "updatedAt": "2026-10-19T09:23:39.888Z",
   "pinMetrics": {
     "pin_mu58xcqzws8mra": {
       "impressions": 0,
       "outboundClicks": 0,
       "saves": 0,
       "ctrPct": 0,
-      "fetchedAt": "2026-10-12T11:24:23.940Z"
+      "fetchedAt": "2026-10-19T09:22:45.335Z"
     },
     "pin_mu58xcqzhjjseh": {
       "impressions": 0,
       "outboundClicks": 0,
       "saves": 0,
       "ctrPct": 0,
-      "fetchedAt": "2026-10-12T11:24:24.634Z"
+      "fetchedAt": "2026-10-19T09:22:46.034Z"
     },
     "pin_mu58xcqz47h3x6": {
       "impressions": 0,
       "outboundClicks": 0,
       "saves": 0,
       "ctrPct": 0,
-      "fetchedAt": "2026-10-12T11:24:25.329Z"
+      "fetchedAt": "2026-10-19T09:22:46.778Z"
     },
     "pin_mu58xcqze5ze9e": {
       "impressions": 0,
       "outboundClicks": 0,
       "saves": 0,
       "ctrPct": 0,
-      "fetchedAt": "2026-10-12T11:24:26.070Z"
+      "fetchedAt": "2026-10-19T09:22:47.560Z"
     },
     "pin_mu58xcqzxvwdva": {
       "impressions": 0,
       "outboundClicks": 0,
       "saves": 0,
       "ctrPct": 0,
-      "fetchedAt": "2026-10-12T11:24:26.781Z"
+      "fetchedAt": "2026-10-19T09:22:48.281Z"
     },
     "pin_mu58xcqzqvfryr": {
       "impressions": 0,
       "outboundClicks": 0,
       "saves": 0,
       "ctrPct": 0,
-      "fetchedAt": "2026-10-12T11:24:27.521Z"
+      "fetchedAt": "2026-10-19T09:22:49.120Z"
     },
     "pin_mu58xcqzhpi7p6": {
       "impressions": 0,
       "outboundClicks": 0,
       "saves": 0,
       "ctrPct": 0,
-      "fetchedAt": "2026-10-12T11:24:28.204Z"
+      "fetchedAt": "2026-10-19T09:22:49.884Z"
     },
     "pin_mu6nhs99seygt7": {
       "impressions": 0,
       "outboundClicks": 0,
       "saves": 0,
       "ctrPct": 0,
-      "fetchedAt": "2026-10-12T11:24:28.894Z"
+      "fetchedAt": "2026-10-19T09:22:50.596Z"
     },
     "pin_mu6nhs99i2e42x": {
       "impressions": 0,
       "outboundClicks": 0,
       "saves": 0,
       "ctrPct": 0,
-      "fetchedAt": "2026-10-12T11:24:29.680Z"
+      "fetchedAt": "2026-10-19T09:22:51.297Z"
     },
     "pin_mu6nhs994ibgqy": {
       "impressions": 0,
       "outboundClicks": 0,
       "saves": 0,
       "ctrPct": 0,
-      "fetchedAt": "2026-10-12T11:24:30.387Z"
+      "fetchedAt": "2026-10-19T09:22:52.047Z"
     },
     "pin_mu6nhs99m1eqe9": {
       "impressions": 0,
       "outboundClicks": 0,
       "saves": 0,
       "ctrPct": 0,
-      "fetchedAt": "2026-10-12T11:24:31.108Z"
+      "fetchedAt": "2026-10-19T09:22:52.754Z"
     },
     "pin_mu6nhs99nl0w9j": {
       "impressions": 0,
       "outboundClicks": 0,
       "saves": 0,
       "ctrPct": 0,
-      "fetchedAt": "2026-10-12T11:24:31.786Z"
+      "fetchedAt": "2026-10-19T09:22:53.491Z"
     },
     "pin_mu6nhs99kc1yzz": {
       "impressions": 0,
       "outboundClicks": 0,
       "saves": 0,
       "ctrPct": 0,
-      "fetchedAt": "2026-10-12T11:24:32.490Z"
+      "fetchedAt": "2026-10-19T09:22:54.228Z"
     },
     "pin_mu6nhs99p24us3": {
       "impressions": 0,
       "outboundClicks": 0,
       "saves": 0,
       "ctrPct": 0,
-      "fetchedAt": "2026-10-12T11:24:33.205Z"
+      "fetchedAt": "2026-10-19T09:22:54.962Z"
     },
     "pin_mu6nhs99pamfsp": {
       "impressions": 0,
       "outboundClicks": 0,
       "saves": 0,
       "ctrPct": 0,
-      "fetchedAt": "2026-10-12T11:24:33.882Z"
+      "fetchedAt": "2026-10-19T09:22:55.714Z"
     },
     "pin_mu6nhs99tzkn0c": {
       "impressions": 0,
       "outboundClicks": 0,
       "saves": 0,
       "ctrPct": 0,
-      "fetchedAt": "2026-10-12T11:24:34.614Z"
+      "fetchedAt": "2026-10-19T09:22:56.436Z"
     },
     "pin_mu6nhs991zt7g7": {
       "impressions": 0,
       "outboundClicks": 0,
       "saves": 0,
       "ctrPct": 0,
-      "fetchedAt": "2026-10-12T11:24:35.412Z"
+      "fetchedAt": "2026-10-19T09:22:57.192Z"
     },
     "pin_mu82s2k1a41707": {
       "impressions": 0,
       "outboundClicks": 0,
       "saves": 0,
       "ctrPct": 0,
-      "fetchedAt": "2026-10-12T11:24:36.077Z"
+      "fetchedAt": "2026-10-19T09:22:57.896Z"
     },
     "pin_mu82s2k10m20p4": {
       "impressions": 0,
       "outboundClicks": 0,
       "saves": 0,
       "ctrPct": 0,
-      "fetchedAt": "2026-10-12T11:24:36.783Z"
+      "fetchedAt": "2026-10-19T09:22:58.594Z"
     },
     "pin_mu82s2k1x97qxv": {
       "impressions": 0,
       "outboundClicks": 0,
       "saves": 0,
       "ctrPct": 0,
-      "fetchedAt": "2026-10-12T11:24:37.477Z"
+      "fetchedAt": "2026-10-19T09:22:59.371Z"
     },
     "pin_mu82s2k1vpw7jp": {
       "impressions": 0,
       "outboundClicks": 0,
       "saves": 0,
       "ctrPct": 0,
-      "fetchedAt": "2026-10-12T11:24:38.212Z"
+      "fetchedAt": "2026-10-19T09:23:00.161Z"
     },
     "pin_mu82s2k1ek9g7n": {
       "impressions": 0,
       "outboundClicks": 0,
       "saves": 0,
       "ctrPct": 0,
-      "fetchedAt": "2026-10-12T11:24:38.940Z"
+      "fetchedAt": "2026-10-19T09:23:00.902Z"
     },
     "pin_mu82s2k19i67im": {
       "impressions": 0,
       "outboundClicks": 0,
       "saves": 0,
       "ctrPct": 0,
-      "fetchedAt": "2026-10-12T11:24:39.987Z"
+      "fetchedAt": "2026-10-19T09:23:01.617Z"
     },
     "pin_mu82s2k1hsoj68": {
       "impressions": 0,
       "outboundClicks": 0,
       "saves": 0,
       "ctrPct": 0,
-      "fetchedAt": "2026-10-12T11:24:40.668Z"
+      "fetchedAt": "2026-10-19T09:23:02.521Z"
     },
     "pin_mu82s2k12yrhov": {
-      "impressions": 0,
+      "impressions": 2,
       "outboundClicks": 0,
       "saves": 0,
       "ctrPct": 0,
-      "fetchedAt": "2026-10-12T11:24:41.723Z"
+      "fetchedAt": "2026-10-19T09:23:03.292Z"
     },
     "pin_mu82s2k19gcgq4": {
-      "impressions": 0,
+      "impressions": 2,
       "outboundClicks": 0,
       "saves": 0,
       "ctrPct": 0,
-      "fetchedAt": "2026-10-12T11:24:42.400Z"
+      "fetchedAt": "2026-10-19T09:23:04.014Z"
     },
     "pin_mu82s2k1w405ax": {
-      "impressions": 0,
+      "impressions": 2,
       "outboundClicks": 0,
       "saves": 0,
       "ctrPct": 0,
-      "fetchedAt": "2026-10-12T11:24:43.090Z"
+      "fetchedAt": "2026-10-19T09:23:04.810Z"
     },
     "pin_mu9j284ybp5blh": {
-      "impressions": 0,
+      "impressions": 2,
       "outboundClicks": 0,
       "saves": 0,
       "ctrPct": 0,
-      "fetchedAt": "2026-10-12T11:24:43.776Z"
+      "fetchedAt": "2026-10-19T09:23:05.545Z"
     },
     "pin_mu9j284yx5kjjt": {
-      "impressions": 0,
+      "impressions": 2,
       "outboundClicks": 0,
       "saves": 0,
       "ctrPct": 0,
-      "fetchedAt": "2026-10-12T11:24:44.448Z"
+      "fetchedAt": "2026-10-19T09:23:06.560Z"
     },
     "pin_mu9j284ydgw45s": {
+      "impressions": 2,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:07.310Z"
+    },
+    "pin_mu9j284ycbttj8": {
       "impressions": 0,
       "outboundClicks": 0,
       "saves": 0,
       "ctrPct": 0,
-      "fetchedAt": "2026-10-12T11:24:45.142Z"
+      "fetchedAt": "2026-10-19T09:23:08.027Z"
+    },
+    "pin_mu9j284y1ukiwt": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:08.755Z"
+    },
+    "pin_mu9j284ydg5qww": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:09.467Z"
+    },
+    "pin_mu9j284y0rmzva": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:10.214Z"
+    },
+    "pin_mu9j284yr07l88": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:10.991Z"
+    },
+    "pin_mu9j284yvnjcit": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:11.801Z"
+    },
+    "pin_mu9j284yv7q4s2": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:12.522Z"
+    },
+    "pin_muaz5k4kmivfcx": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:13.258Z"
+    },
+    "pin_muaz5k4kq3fjwm": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:13.957Z"
+    },
+    "pin_muaz5k4kso9z9u": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:14.690Z"
+    },
+    "pin_muaz5k4khwiopz": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:15.446Z"
+    },
+    "pin_muaz5k4k6f8obx": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:16.226Z"
+    },
+    "pin_muaz5k4kgi1f5l": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:17.009Z"
+    },
+    "pin_muaz5k4kcup655": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:17.806Z"
+    },
+    "pin_muaz5k4kb99oow": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:18.680Z"
+    },
+    "pin_muaz5k4k7a3cjw": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:19.435Z"
+    },
+    "pin_muaz5k4ksakzmi": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:20.154Z"
+    },
+    "pin_mucdz5q8qmezg1": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:20.873Z"
+    },
+    "pin_mucdz5q9xy4z8l": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:21.697Z"
+    },
+    "pin_mucdz5q9ici28g": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:22.404Z"
+    },
+    "pin_mucdz5q94tfeyv": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:23.207Z"
+    },
+    "pin_mucdz5q913ooc9": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:23.940Z"
+    },
+    "pin_mucdz5q9vhfbr8": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:24.643Z"
+    },
+    "pin_mucdz5q9aoqfox": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:25.465Z"
+    },
+    "pin_mucdz5q9yy075a": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:26.249Z"
+    },
+    "pin_mucdz5q9h3uhcw": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:26.970Z"
+    },
+    "pin_mucdz5q9gg3rac": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:28.359Z"
+    },
+    "pin_mudthy0rxofaii": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:29.063Z"
+    },
+    "pin_mudthy0r3zp31f": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:29.780Z"
+    },
+    "pin_mudthy0ra9op4j": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:30.532Z"
+    },
+    "pin_mudthy0r3xtryx": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:31.254Z"
+    },
+    "pin_mudthy0rbu3pnb": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:31.955Z"
+    },
+    "pin_mudthy0rl7xx1s": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:32.707Z"
+    },
+    "pin_mudthy0r7k02zi": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:33.472Z"
+    },
+    "pin_mudthy0r3p3hp2": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:34.226Z"
+    },
+    "pin_mudthy0rw84syi": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:34.995Z"
+    },
+    "pin_mudthy0rnqwmb4": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:35.701Z"
+    },
+    "pin_muf8lb7rh2pg69": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:36.417Z"
+    },
+    "pin_muf8lb7rqqmway": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:37.195Z"
+    },
+    "pin_muf8lb7rqhcj8d": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:37.935Z"
+    },
+    "pin_muf8lb7rsrr0y4": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:38.752Z"
+    },
+    "pin_muf8lb7rwn8pej": {
+      "impressions": 0,
+      "outboundClicks": 0,
+      "saves": 0,
+      "ctrPct": 0,
+      "fetchedAt": "2026-10-19T09:23:39.482Z"
     }
   },
   "affiliate": [],
@@ -265,6 +559,14 @@
     {
       "date": "2026-10-12",
       "impressions": 0,
+      "outboundClicks": 0,
+      "ctrPct": 0,
+      "monthlyRecurringUsd": 0,
+      "activeSubscriptions": 0
+    },
+    {
+      "date": "2026-10-19",
+      "impressions": 12,
       "outboundClicks": 0,
       "ctrPct": 0,
       "monthlyRecurringUsd": 0,
