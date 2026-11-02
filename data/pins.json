@@ -7665,12 +7665,13 @@
     "boardName": "Project Management Tools",
     "imagePath": "assets/pins/pin_muqqr31y4b91ps.png",
     "destinationUrl": "https://worked-for-us.com/articles/sample-kanbanly-vs-competitor-a-r2xk/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-kanbanly-vs-competitor-a-r2xk",
-    "status": "scheduled",
+    "status": "failed",
     "scheduledAt": "2026-11-01T13:00:00.000Z",
     "publishedAt": null,
     "pinterestPinId": null,
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "lastError": "アクセストークンの更新に失敗しました: {\"code\":28,\"message\":\"Refresh token is expired.\"}"
   },
   {
     "id": "pin_muqqr31ytya0hu",
