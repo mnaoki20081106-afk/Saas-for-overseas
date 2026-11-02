@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-26T09:27:41.916Z",
+  "updatedAt": "2026-11-02T11:45:28.734Z",
   "pinMetrics": {
     "pin_mu58xcqzws8mra": {
       "impressions": 0,
@@ -869,6 +869,14 @@
     {
       "date": "2026-10-26",
       "impressions": 14,
+      "outboundClicks": 0,
+      "ctrPct": 0,
+      "monthlyRecurringUsd": 0,
+      "activeSubscriptions": 0
+    },
+    {
+      "date": "2026-11-02",
+      "impressions": 0,
       "outboundClicks": 0,
       "ctrPct": 0,
       "monthlyRecurringUsd": 0,
