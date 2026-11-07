@@ -8127,12 +8127,13 @@
     "boardName": "Email Marketing Tools",
     "imagePath": "assets/pins/pin_mutl7bitqt0vce.png",
     "destinationUrl": "https://worked-for-us.com/articles/sample-flowdesk-vs-competitor-a-7bef/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-flowdesk-vs-competitor-a-7bef",
-    "status": "scheduled",
+    "status": "failed",
     "scheduledAt": "2026-11-04T21:00:00.000Z",
     "publishedAt": null,
     "pinterestPinId": null,
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "lastError": "アクセストークンの更新に失敗しました: {\"code\":28,\"message\":\"Refresh token is expired.\"}"
   },
   {
     "id": "pin_mutl7bit27xxq4",
