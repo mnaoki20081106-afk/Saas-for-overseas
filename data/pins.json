@@ -8337,12 +8337,13 @@
     "boardName": "Project Management Tools",
     "imagePath": "assets/pins/pin_muv2ezl09cqtcc.png",
     "destinationUrl": "https://worked-for-us.com/articles/sample-kanbanly-vs-competitor-a-ezej/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-kanbanly-vs-competitor-a-ezej",
-    "status": "scheduled",
+    "status": "failed",
     "scheduledAt": "2026-11-06T17:00:00.000Z",
     "publishedAt": null,
     "pinterestPinId": null,
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "lastError": "アクセストークンの更新に失敗しました: {\"code\":28,\"message\":\"Refresh token is expired.\"}"
   },
   {
     "id": "pin_muv2ezl0tx7a8a",
