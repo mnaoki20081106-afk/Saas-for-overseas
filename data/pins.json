@@ -9681,12 +9681,13 @@
     "boardName": "Project Management Tools",
     "imagePath": "assets/pins/pin_mv3mciyg1i653y.png",
     "destinationUrl": "https://worked-for-us.com/articles/sample-kanbanly-vs-competitor-a-ciu3/?utm_source=pinterest&utm_medium=social&utm_campaign=sample-kanbanly-vs-competitor-a-ciu3",
-    "status": "scheduled",
+    "status": "failed",
     "scheduledAt": "2026-11-17T13:00:00.000Z",
     "publishedAt": null,
     "pinterestPinId": null,
     "parentPinId": null,
-    "generation": 0
+    "generation": 0,
+    "lastError": "アクセストークンの更新に失敗しました: {\"code\":28,\"message\":\"Refresh token is expired.\"}"
   },
   {
     "id": "pin_mv52vu54x82kq5",
